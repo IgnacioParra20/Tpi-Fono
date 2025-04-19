@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f7f7f7;
+    color: #333;
+  }
+  
+  .section {
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  button {
+    margin: 10px 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  
