@@ -1,33 +1,58 @@
 let usuario = null;
 let contenidos = [];
 
-    async function login() {
-const nameInput = document.getElementById('username');
-usuario = nameInput.value.trim();
+// Función de inicio de sesión
+async function login() {
+  const nameInput = document.getElementById('username');
+  usuario = nameInput.value.trim();
 
-if (!usuario) {
+  if (!usuario) {
     alert("Por favor, ingresa tu nombre.");
     return;
+  }
+
+  // Guardamos el nombre en localStorage y mostramos la sección del cuestionario
+  localStorage.setItem("usuario", usuario);
+  document.getElementById('login-section').classList.add("hidden");
+  document.getElementById('content-section').classList.remove("hidden");
+  document.getElementById('welcome').innerText = `¡Bienvenido/a, ${usuario}!`;
+
+  await cargarContenidos();
+  mostrarMenuNiveles();
 }
 
-localStorage.setItem("usuario", usuario);
-document.getElementById('login-section').classList.add("hidden");
-document.getElementById('content-section').classList.remove("hidden");
-document.getElementById('welcome').innerText = `¡Bienvenido/a, ${usuario}!`;
-
-await cargarContenidos();
-}
-
+// Cargar los contenidos desde la API
 async function cargarContenidos() {
+  try {
     const response = await fetch('/api/contenidos');
     contenidos = await response.json();
+  } catch (error) {
+    console.error("Error al cargar contenidos:", error);
+  }
 }
 
+// Mostrar botones de niveles disponibles
+function mostrarMenuNiveles() {
+  const menu = document.getElementById('niveles');
+  menu.innerHTML = ''; // Limpiar contenido anterior
 
+  const nivelesUnicos = [...new Set(contenidos.map(c => c.nivel))];
+  nivelesUnicos.forEach(nivel => {
+    const btn = document.createElement('button');
+    btn.textContent = `Nivel ${nivel}`;
+    btn.className = 'btn-nivel';
+    btn.onclick = () => loadLevel(nivel);
+    menu.appendChild(btn);
+  });
+}
+
+// Cargar contenido del nivel seleccionado
 function loadLevel(nivel) {
-  const item = contenidos.find(c => c.nivel === nivel + 1);
+  const item = contenidos.find(c => c.nivel === nivel);
+  const contentContainer = document.getElementById('content');
+
   if (!item) {
-    document.getElementById('content').innerHTML = "<p>Contenido no disponible.</p>";
+    contentContainer.innerHTML = "<p>Contenido no disponible.</p>";
     return;
   }
 
@@ -36,17 +61,19 @@ function loadLevel(nivel) {
     <p>${item.teoria}</p>
     <hr>
     <p><strong>${item.pregunta}</strong></p>
-    ${item.opciones.map(op => `
-      <button onclick="evaluarRespuesta('${op}', '${item.respuesta}')">${op}</button>
-    `).join("")}
+    <div class="opciones">
+      ${item.opciones.map(op => `
+        <button class="btn-opcion" onclick="evaluarRespuesta('${op}', '${item.respuesta}')">${op}</button>
+      `).join("")}
+    </div>
   `;
-  document.getElementById('content').innerHTML = html;
+  contentContainer.innerHTML = html;
 }
 
-function evaluarRespuesta(opcion, correcta) {
-  if (opcion === correcta) {
-    alert("✅ ¡Correcto!");
-  } else {
-    alert("❌ Incorrecto. La respuesta correcta es: " + correcta);
-  }
+// Verificar si la respuesta es correcta
+function evaluarRespuesta(seleccionada, correcta) {
+  const mensaje = seleccionada === correcta
+    ? "✅ ¡Correcto!"
+    : `❌ Incorrecto. La respuesta correcta es: ${correcta}`;
+  alert(mensaje);
 }

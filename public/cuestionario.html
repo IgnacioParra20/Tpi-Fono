@@ -3,164 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cuestionario - FonoApp</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background: #f0f2f5;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    }
-
-    .titulo {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #333;
-    }
-
-    .saludo {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 1.1rem;
-      color: #555;
-    }
-
-    .pregunta {
-      margin-bottom: 1.5rem;
-    }
-
-    .pregunta h4 {
-      margin-bottom: 0.5rem;
-      color: #444;
-    }
-
-    .opcion {
-      margin: 0.3rem 0;
-    }
-
-    .opcion input {
-      margin-right: 0.5rem;
-    }
-
-    .btn-enviar {
-      display: block;
-      margin: 2rem auto;
-      padding: 0.8rem 2rem;
-      background-color: #7F7FD5;
-      color: white;
-      font-size: 1rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn-enviar:hover {
-      background-color: #6b6bcf;
-    }
-
-    #resultado {
-      text-align: center;
-      font-size: 1.2rem;
-      margin-top: 2rem;
-      color: #333;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 1.5rem;
-      }
-    }
-  </style>
+  <title>FonoApp - Cuestionario</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <h2 class="titulo">Cuestionario General de Fonoaudiología</h2>
-    <div class="saludo">Hola, <span id="nombreUsuario">Estudiante</span>. Responde las siguientes preguntas:</div>
-
+    <p class="saludo">Hola, <span id="nombreUsuario">Estudiante</span>. Responde las siguientes preguntas:</p>
+    
     <form id="formCuestionario">
-      <div class="pregunta">
-        <h4>1. ¿Qué órgano se encarga de la producción vocal?</h4>
-        <label class="opcion"><input type="radio" name="p1" value="Laringe"> Laringe</label><br>
-        <label class="opcion"><input type="radio" name="p1" value="Lengua"> Lengua</label><br>
-        <label class="opcion"><input type="radio" name="p1" value="Labios"> Labios</label><br>
-        <label class="opcion"><input type="radio" name="p1" value="Nariz"> Nariz</label>
-      </div>
-
-      <div class="pregunta">
-        <h4>2. ¿Cuál de los siguientes NO es un órgano articulador?</h4>
-        <label class="opcion"><input type="radio" name="p2" value="Lengua"> Lengua</label><br>
-        <label class="opcion"><input type="radio" name="p2" value="Dientes"> Dientes</label><br>
-        <label class="opcion"><input type="radio" name="p2" value="Tráquea"> Tráquea</label><br>
-        <label class="opcion"><input type="radio" name="p2" value="Labios"> Labios</label>
-      </div>
-
-      <div class="pregunta">
-        <h4>3. ¿Qué especialidad trata los trastornos del lenguaje?</h4>
-        <label class="opcion"><input type="radio" name="p3" value="Neurología"> Neurología</label><br>
-        <label class="opcion"><input type="radio" name="p3" value="Fonoaudiología"> Fonoaudiología</label><br>
-        <label class="opcion"><input type="radio" name="p3" value="Psicología"> Psicología</label><br>
-        <label class="opcion"><input type="radio" name="p3" value="Otorrinolaringología"> Otorrinolaringología</label>
-      </div>
-
+      <div id="cuestionario"></div>
       <button type="submit" class="btn-enviar">Enviar respuestas</button>
     </form>
 
     <div id="resultado"></div>
   </div>
 
-  <script>
-    // Mostrar nombre desde localStorage
-    window.onload = () => {
-      const nombre = localStorage.getItem('usuario');
-      if (nombre) {
-        document.getElementById('nombreUsuario').innerText = nombre;
-      }
-    };
-
-    document.getElementById('formCuestionario').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const respuestasCorrectas = {
-        p1: 'Laringe',
-        p2: 'Tráquea',
-        p3: 'Fonoaudiología'
-      };
-
-      let puntaje = 0;
-      let total = 3;
-
-      Object.keys(respuestasCorrectas).forEach(pregunta => {
-        const seleccionada = document.querySelector(`input[name="${pregunta}"]:checked`);
-        if (seleccionada && seleccionada.value === respuestasCorrectas[pregunta]) {
-          puntaje++;
-        }
-      });
-
-      const resultado = document.getElementById('resultado');
-      resultado.innerHTML = `<p><strong>Obtuviste ${puntaje} de ${total} respuestas correctas.</strong></p>`;
-
-      if (puntaje === total) {
-        resultado.innerHTML += `<p>¡Excelente trabajo! 🎉</p>`;
-      } else if (puntaje === 0) {
-        resultado.innerHTML += `<p>No te preocupes, ¡podés intentarlo nuevamente! 💪</p>`;
-      } else {
-        resultado.innerHTML += `<p>¡Vas por buen camino!</p>`;
-      }
-    });
-  </script>
+  <script src="cuestionario.js"></script>
 </body>
 </html>
