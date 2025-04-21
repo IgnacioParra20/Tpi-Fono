@@ -1,22 +1,67 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background: #f7f7f7;
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background: #f0f2f5;
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  .titulo {
+    text-align: center;
+    margin-bottom: 1rem;
     color: #333;
   }
   
-  .section {
-    max-width: 600px;
-    margin: auto;
+  .saludo {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: #555;
   }
   
-  .hidden {
-    display: none;
+  .pregunta {
+    margin-bottom: 2rem;
   }
   
-  button {
-    margin: 10px 5px;
-    padding: 10px 15px;
+  .opcion {
+    display: block;
+    margin: 0.4rem 0;
+    font-size: 1rem;
+  }
+  
+  .btn-enviar {
+    display: block;
+    margin: 2rem auto;
+    padding: 0.8rem 2rem;
+    background-color: #7F7FD5;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-enviar:hover {
+    background-color: #6b6bcf;
+  }
+  
+  #resultado {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    color: #333;
   }
   

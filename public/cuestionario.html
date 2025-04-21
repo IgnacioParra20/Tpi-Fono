@@ -3,65 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cuestionario - FonoApp</title>
+  <title>FonoApp - Cuestionario</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
     body {
       margin: 0;
       padding: 0;
-      background: #f0f2f5;
+      background: linear-gradient(to right, #83a4d4, #b6fbff);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
 
     .container {
-      max-width: 800px;
-      margin: 2rem auto;
+      background: white;
       padding: 2rem;
-      background-color: #ffffff;
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      max-width: 700px;
+      width: 100%;
     }
 
     .titulo {
       text-align: center;
+      font-size: 1.8rem;
+      color: #2c3e50;
       margin-bottom: 1rem;
-      color: #333;
     }
 
     .saludo {
-      text-align: center;
-      margin-bottom: 2rem;
       font-size: 1.1rem;
-      color: #555;
+      color: #34495e;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    #cuestionario {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
 
     .pregunta {
-      margin-bottom: 1.5rem;
+      background: #f9f9f9;
+      padding: 1.2rem;
+      border-radius: 12px;
+      border-left: 6px solid #7F7FD5;
     }
 
     .pregunta h4 {
-      margin-bottom: 0.5rem;
-      color: #444;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #2c3e50;
     }
 
     .opcion {
-      margin: 0.3rem 0;
+      display: block;
+      margin-bottom: 0.6rem;
+      padding: 0.6rem;
+      background-color: #eef1ff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
     }
 
-    .opcion input {
-      margin-right: 0.5rem;
+    .opcion:hover {
+      background-color: #dcdfff;
     }
 
     .btn-enviar {
-      display: block;
-      margin: 2rem auto;
-      padding: 0.8rem 2rem;
+      margin-top: 2rem;
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1.1rem;
       background-color: #7F7FD5;
       color: white;
-      font-size: 1rem;
       border: none;
       border-radius: 10px;
       cursor: pointer;
@@ -69,53 +88,39 @@
     }
 
     .btn-enviar:hover {
-      background-color: #6b6bcf;
+      background-color: #6c6cc5;
     }
 
     #resultado {
-      text-align: center;
-      font-size: 1.2rem;
       margin-top: 2rem;
-      color: #333;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #2c3e50;
     }
 
     @media (max-width: 600px) {
       .container {
-        padding: 1.5rem;
+        padding: 1.2rem;
+      }
+
+      .titulo {
+        font-size: 1.4rem;
+      }
+
+      .btn-enviar {
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2 class="titulo">Cuestionario General de Fonoaudiología</h2>
-    <div class="saludo">Hola, <span id="nombreUsuario">Estudiante</span>. Responde las siguientes preguntas:</div>
-
+    <h2 class="titulo">🧠 Cuestionario de Fonoaudiología</h2>
+    <p class="saludo">Hola, <span id="nombreUsuario">Estudiante</span>. Responde las siguientes preguntas:</p>
+    
     <form id="formCuestionario">
-      <div class="pregunta">
-        <h4>1. ¿Qué órgano se encarga de la producción vocal?</h4>
-        <label class="opcion"><input type="radio" name="p1" value="Laringe"> Laringe</label><br>
-        <label class="opcion"><input type="radio" name="p1" value="Lengua"> Lengua</label><br>
-        <label class="opcion"><input type="radio" name="p1" value="Labios"> Labios</label><br>
-        <label class="opcion"><input type="radio" name="p1" value="Nariz"> Nariz</label>
-      </div>
-
-      <div class="pregunta">
-        <h4>2. ¿Cuál de los siguientes NO es un órgano articulador?</h4>
-        <label class="opcion"><input type="radio" name="p2" value="Lengua"> Lengua</label><br>
-        <label class="opcion"><input type="radio" name="p2" value="Dientes"> Dientes</label><br>
-        <label class="opcion"><input type="radio" name="p2" value="Tráquea"> Tráquea</label><br>
-        <label class="opcion"><input type="radio" name="p2" value="Labios"> Labios</label>
-      </div>
-
-      <div class="pregunta">
-        <h4>3. ¿Qué especialidad trata los trastornos del lenguaje?</h4>
-        <label class="opcion"><input type="radio" name="p3" value="Neurología"> Neurología</label><br>
-        <label class="opcion"><input type="radio" name="p3" value="Fonoaudiología"> Fonoaudiología</label><br>
-        <label class="opcion"><input type="radio" name="p3" value="Psicología"> Psicología</label><br>
-        <label class="opcion"><input type="radio" name="p3" value="Otorrinolaringología"> Otorrinolaringología</label>
-      </div>
-
+      <div id="cuestionario"></div>
       <button type="submit" class="btn-enviar">Enviar respuestas</button>
     </form>
 
@@ -123,43 +128,56 @@
   </div>
 
   <script>
-    // Mostrar nombre desde localStorage
-    window.onload = () => {
-      const nombre = localStorage.getItem('usuario');
-      if (nombre) {
-        document.getElementById('nombreUsuario').innerText = nombre;
+    const preguntas = [
+      {
+        pregunta: "¿Qué órgano se encarga de la producción vocal?",
+        opciones: ["Laringe", "Lengua", "Labios", "Nariz"],
+        correcta: "Laringe"
+      },
+      {
+        pregunta: "¿Cuál de los siguientes NO es un órgano articulador?",
+        opciones: ["Lengua", "Dientes", "Tráquea", "Labios"],
+        correcta: "Tráquea"
+      },
+      {
+        pregunta: "¿Qué especialidad trata los trastornos del lenguaje?",
+        opciones: ["Neurología", "Fonoaudiología", "Psicología", "Otorrinolaringología"],
+        correcta: "Fonoaudiología"
       }
-    };
+    ];
+
+    const cuestionarioDiv = document.getElementById('cuestionario');
+    const nombreUsuario = localStorage.getItem('usuario') || 'Estudiante';
+    document.getElementById('nombreUsuario').textContent = nombreUsuario;
+
+    preguntas.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.classList.add('pregunta');
+      div.innerHTML = `<h4>${index + 1}. ${q.pregunta}</h4>`;
+      q.opciones.forEach(opcion => {
+        div.innerHTML += `
+          <label>
+            <input type="radio" name="pregunta${index}" value="${opcion}" required>
+            ${opcion}
+          </label><br>`;
+      });
+      cuestionarioDiv.appendChild(div);
+    });
 
     document.getElementById('formCuestionario').addEventListener('submit', function (e) {
       e.preventDefault();
+      let correctas = 0;
 
-      const respuestasCorrectas = {
-        p1: 'Laringe',
-        p2: 'Tráquea',
-        p3: 'Fonoaudiología'
-      };
-
-      let puntaje = 0;
-      let total = 3;
-
-      Object.keys(respuestasCorrectas).forEach(pregunta => {
-        const seleccionada = document.querySelector(`input[name="${pregunta}"]:checked`);
-        if (seleccionada && seleccionada.value === respuestasCorrectas[pregunta]) {
-          puntaje++;
+      preguntas.forEach((q, index) => {
+        const seleccionada = document.querySelector(`input[name="pregunta${index}"]:checked`);
+        if (seleccionada && seleccionada.value === q.correcta) {
+          correctas++;
         }
       });
 
-      const resultado = document.getElementById('resultado');
-      resultado.innerHTML = `<p><strong>Obtuviste ${puntaje} de ${total} respuestas correctas.</strong></p>`;
-
-      if (puntaje === total) {
-        resultado.innerHTML += `<p>¡Excelente trabajo! 🎉</p>`;
-      } else if (puntaje === 0) {
-        resultado.innerHTML += `<p>No te preocupes, ¡podés intentarlo nuevamente! 💪</p>`;
-      } else {
-        resultado.innerHTML += `<p>¡Vas por buen camino!</p>`;
-      }
+      const total = preguntas.length;
+      const porcentaje = Math.round((correctas / total) * 100);
+      document.getElementById('resultado').textContent = `✅ Obtuviste ${correctas} de ${total} respuestas correctas (${porcentaje}%).`;
     });
   </script>
 </body>
