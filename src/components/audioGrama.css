@@ -1,37 +1,34 @@
 .audiograma-container-grid {
-    max-width: 1200px; /* Ajustamos el ancho máximo */
+    max-width: 1200px;
     margin: 40px auto;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     background-color: #f7f9fb;
-    display: grid; /* Usamos Grid para la disposición */
-    grid-template-columns: 2fr 1fr; /* El gráfico ocupa 2/3 y el panel 1/3 del espacio */
-    gap: 30px; /* Espacio entre las columnas */
-    align-items: start; /* Alinea los elementos al inicio */
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    align-items: start;
   }
   
   .audiograma-grafico {
-    /* Mantiene los estilos anteriores */
     border-radius: 8px;
     overflow: hidden;
-    background-color: white; /* Añadimos un fondo blanco para el gráfico */
-    padding: 20px; /* Añadimos un poco de padding al gráfico */
+    background-color: white;
+    padding: 20px;
   }
   
   .audiograma-interactivo-panel {
-    /* Estilos para el panel de la derecha */
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Espacio entre los elementos del panel */
+    gap: 20px;
   }
   
   .pregunta-audiograma {
-    /* Mantiene los estilos anteriores */
     padding: 20px;
     background-color: #f0f0f0;
     border-radius: 10px;
-    text-align: left; /* Alineamos el texto a la izquierda en el panel */
+    text-align: left;
   }
   
   .pregunta-audiograma p {
@@ -43,8 +40,8 @@
   
   .opciones-audiograma {
     display: flex;
-    flex-direction: column; /* Apilamos los botones verticalmente */
-    gap: 10px; /* Reducimos el espacio entre los botones */
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 20px;
   }
   
@@ -59,7 +56,7 @@
     transition: background-color 0.3s ease;
     font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centramos el texto de los botones */
+    text-align: center;
   }
   
   .opciones-audiograma button:hover {
@@ -75,7 +72,7 @@
     margin-top: 10px;
     font-size: 1.1rem;
     font-weight: bold;
-    text-align: left; /* Alineamos el resultado a la izquierda */
+    text-align: left;
   }
   
   .resultado.correcto {
@@ -86,7 +83,14 @@
     color: #dc3545;
   }
   
-  .audiograma-container-grid button {
+  .audiograma-botones {
+    display: flex;
+    gap: 15px; /* Espacio entre los botones "Volver" y "Siguiente" */
+    margin-top: 20px; /* Espacio superior para los botones */
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+  }
+  
+  .audiograma-botones button {
     padding: 10px 20px;
     background-color: #007bff;
     color: white;
@@ -97,9 +101,9 @@
     transition: background-color 0.3s ease;
     font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centramos el texto del botón general */
+    text-align: center;
   }
   
-  .audiograma-container-grid button:hover {
+  .audiograma-botones button:hover {
     background-color: #0056b3;
   }

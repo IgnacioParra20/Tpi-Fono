@@ -92,7 +92,7 @@ import './audioGrama.css';
   
     const opciones = {
       responsive: true,
-      maintainAspectRatio: false, // Permite ajustar la altura
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: true,
@@ -123,11 +123,11 @@ import './audioGrama.css';
     };
   
     return (
-      <div className="audiograma-container-grid"> {/* Nuevo contenedor */}
+      <div className="audiograma-container-grid">
         <div className="audiograma-grafico">
-          <Line data={data} options={opciones} height={300} /> {/* Ajustamos la altura */}
+          <Line data={data} options={opciones} height={300} />
         </div>
-        <div className="audiograma-interactivo-panel"> {/* Panel para la pregunta y respuestas */}
+        <div className="audiograma-interactivo-panel">
           <div className="pregunta-audiograma">
             <p>¿Qué tipo de pérdida auditiva presenta este paciente?</p>
             <div className="opciones-audiograma">
@@ -148,7 +148,10 @@ import './audioGrama.css';
               </p>
             )}
           </div>
-          <button onClick={onVolver}>Volver al Cuestionario</button>
+          <div className="audiograma-botones"> 
+            <button onClick={onVolver}>Volver al Cuestionario</button>
+            <button>Siguiente</button> 
+          </div>
         </div>
       </div>
     );
