@@ -1,73 +1,117 @@
 .login {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    color: white;
+    min-height: 100vh;
+    /* El degradado se mantiene, pero le añadiremos una capa de transparencia */
+    background: linear-gradient(to right, rgba(37, 117, 252, 0.6), rgba(106, 17, 203, 0.6)), url('../assets/fondo-textura.png'); /* Reemplaza con la ruta de tu imagen */
+    background-size: cover; /* La imagen cubre toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    color: #333;
     font-family: 'Segoe UI', sans-serif;
+    padding: 2rem;
+    box-sizing: border-box;
   }
   
-  .login-logo {
-    width: 150px; /* Ajusta el tamaño de la imagen según necesites */
-    height: auto; /* Mantiene la proporción de la imagen */
-    margin-bottom: 2rem; /* Espacio entre la imagen y el título */
-  }
-  
-  .login h2 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .login form {
+  .login-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    padding: 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.15);
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 100%;
   }
   
-  .login input,
-  .login select {
-    padding: 0.8rem 1.2rem;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 6px;
-    margin-bottom: 1.2rem;
-    width: 300px;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: white;
+  .login-logo {
+    width: 110px;
+    height: auto;
+    margin-bottom: 2.5rem;
   }
   
-  .login select {
+  .login h2 {
+    font-size: 2.3rem;
+    margin-bottom: 2.5rem;
+    color: #2c3e50;
+    text-align: center;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .login-form .input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.75rem;
+    width: 100%;
+  }
+  
+  .login-form label {
+    margin-bottom: 0.6rem;
+    color: #555;
+    font-weight: 600;
+    text-align: left;
+  }
+  
+  .login-form input,
+  .login-form select {
+    padding: 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .login-form input:focus,
+  .login-form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 7px rgba(0, 123, 255, 0.3);
+  }
+  
+  .login-form select {
     appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
     background-repeat: no-repeat;
     background-position-x: 95%;
     background-position-y: 50%;
+    background-color: #fff;
+    color: #333;
   }
   
-  .login input::placeholder,
-  .login select option {
-    color: rgba(0, 0, 0, 0.7);
-  }
-  
-  .login button {
-    padding: 0.8rem 1.8rem;
-    background-color: #ffffff;
-    color: #2575fc;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+  .login-form button {
+    padding: 1rem 2rem;
     font-size: 1.1rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    margin-top: 2rem;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  .login button:hover {
-    background-color: #e0e0e0;
+  .login-form button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .error-message {
+    color: #dc3545;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
   }
