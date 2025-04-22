@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import preguntas from '../../../data/preguntas';
+import preguntas from '../data/preguntas';
 import './cuestionario.css';
 import Pregunta from '../../../shared/components/pregunta';
 
