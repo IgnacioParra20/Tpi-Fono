@@ -7,14 +7,23 @@ function App() {
   const [usuario, setUsuario] = useState('');
   const [cuestionarioFinalizado, setCuestionarioFinalizado] = useState(false);
 
+  const volverAlLogin = () => {
+    setUsuario('');
+    setCuestionarioFinalizado(false);
+  };
+
   return (
     <div className="App">
       {!usuario ? (
         <Login onLogin={setUsuario} />
       ) : !cuestionarioFinalizado ? (
-        <Cuestionario usuario={usuario} onFinalizar={() => setCuestionarioFinalizado(true)} />
+        <Cuestionario
+          usuario={usuario}
+          onFinalizar={() => setCuestionarioFinalizado(true)}
+          onVolver={volverAlLogin}
+        />
       ) : (
-        <AudiogramaInteractivo />
+        <AudiogramaInteractivo onVolver={() => setCuestionarioFinalizado(false)} />
       )}
     </div>
   );
