@@ -1,0 +1,11 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #91EAE4, #86A8E7, #7F7FD5);
+    min-height: 100vh;
+  }
+  
+  .container {
+    padding: 2rem;
+  }
+  
