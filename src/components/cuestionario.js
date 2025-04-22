@@ -46,12 +46,12 @@ function Cuestionario({ usuario, onFinalizar, onVolver }) {
           <button className="btn-audiograma" onClick={onFinalizar}>
             Ver Audiograma
           </button>
-          <button onClick={onVolver}>Volver Atrás</button> 
+          <button onClick={onVolver}>Volver Atrás</button>
         </div>
       )}
 
       {!enviado && (
-        <button onClick={onVolver}>Volver Atrás</button> 
+        <button onClick={onVolver}>Volver Atrás</button>
       )}
     </div>
   );

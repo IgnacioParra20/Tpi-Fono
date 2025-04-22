@@ -4,21 +4,25 @@ import Cuestionario from './components/cuestionario';
 import Login from './components/login';
 
 function App() {
-  const [usuario, setUsuario] = useState('');
+  const [usuarioInfo, setUsuarioInfo] = useState(null);
   const [cuestionarioFinalizado, setCuestionarioFinalizado] = useState(false);
 
+  const handleLogin = (infoUsuario) => {
+    setUsuarioInfo(infoUsuario);
+  };
+
   const volverAlLogin = () => {
-    setUsuario('');
+    setUsuarioInfo(null);
     setCuestionarioFinalizado(false);
   };
 
   return (
     <div className="App">
-      {!usuario ? (
-        <Login onLogin={setUsuario} />
+      {!usuarioInfo ? (
+        <Login onLogin={handleLogin} />
       ) : !cuestionarioFinalizado ? (
         <Cuestionario
-          usuario={usuario}
+          usuario={usuarioInfo.nombre}
           onFinalizar={() => setCuestionarioFinalizado(true)}
           onVolver={volverAlLogin}
         />
