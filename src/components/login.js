@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from '../assets/logo.png'; // Importa tu imagen
 import './login.css';
 
 function Login({ onLogin }) {
@@ -17,6 +18,7 @@ function Login({ onLogin }) {
 
   return (
     <div className="login">
+      <img src={logo} alt="Logo de FonoApp" className="login-logo" /> {/* Agrega la imagen */}
       <h2>Bienvenido a FonoApp</h2>
       <form onSubmit={handleSubmit}>
         <input

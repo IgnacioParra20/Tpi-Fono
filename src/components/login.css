@@ -9,35 +9,41 @@
     font-family: 'Segoe UI', sans-serif;
   }
   
+  .login-logo {
+    width: 150px; /* Ajusta el tamaño de la imagen según necesites */
+    height: auto; /* Mantiene la proporción de la imagen */
+    margin-bottom: 2rem; /* Espacio entre la imagen y el título */
+  }
+  
   .login h2 {
-    font-size: 2.5rem; /* Aumentamos un poco el tamaño del título */
-    margin-bottom: 2rem; /* Aumentamos el margen inferior */
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
   }
   
   .login form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.15); /* Ligeramente más opaco */
-    padding: 2.5rem; /* Aumentamos el padding */
-    border-radius: 12px; /* Bordes más redondeados */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
   }
   
   .login input,
   .login select {
-    padding: 0.8rem 1.2rem; /* Aumentamos el padding */
-    font-size: 1.1rem; /* Aumentamos el tamaño de la fuente */
+    padding: 0.8rem 1.2rem;
+    font-size: 1.1rem;
     border: none;
-    border-radius: 6px; /* Bordes más redondeados */
-    margin-bottom: 1.2rem; /* Aumentamos el margen inferior */
-    width: 300px; /* Aumentamos el ancho de los campos */
-    background-color: rgba(255, 255, 255, 0.2); /* Fondo semitransparente */
-    color: white; /* Texto blanco */
+    border-radius: 6px;
+    margin-bottom: 1.2rem;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
   }
   
   .login select {
-    appearance: none; /* Quita los estilos por defecto del select */
+    appearance: none;
     background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
     background-repeat: no-repeat;
     background-position-x: 95%;
@@ -46,20 +52,20 @@
   
   .login input::placeholder,
   .login select option {
-    color: rgba(0, 0, 0, 0.7); /* Placeholder y opciones con texto un poco más claro */
+    color: rgba(0, 0, 0, 0.7);
   }
   
   .login button {
-    padding: 0.8rem 1.8rem; /* Aumentamos el padding */
+    padding: 0.8rem 1.8rem;
     background-color: #ffffff;
     color: #2575fc;
     font-weight: bold;
     border: none;
-    border-radius: 6px; /* Bordes más redondeados */
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    font-size: 1.1rem; /* Aumentamos el tamaño de la fuente */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Añadimos una ligera sombra al botón */
+    font-size: 1.1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   }
   
   .login button:hover {
