@@ -3,7 +3,7 @@ import preguntas from '../data/preguntas';
 import './cuestionario.css';
 import Pregunta from './pregunta';
 
-function Cuestionario({ usuario, onFinalizar }) {
+function Cuestionario({ usuario, onFinalizar, onVolver }) {
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(null));
   const [enviado, setEnviado] = useState(false);
 
@@ -46,7 +46,12 @@ function Cuestionario({ usuario, onFinalizar }) {
           <button className="btn-audiograma" onClick={onFinalizar}>
             Ver Audiograma
           </button>
+          <button onClick={onVolver}>Volver Atrás</button>
         </div>
+      )}
+
+      {!enviado && (
+        <button onClick={onVolver}>Volver Atrás</button>
       )}
     </div>
   );
