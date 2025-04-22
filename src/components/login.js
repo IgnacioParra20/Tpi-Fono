@@ -1,42 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './login.css';
 
-const Login = () => {
-  const [usuario, setUsuario] = useState('');
-  const navigate = useNavigate();
+function Login({ onLogin }) {
+  const [nombre, setNombre] = useState('');
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!usuario.trim()) {
-      alert('Por favor, ingresa tu nombre.');
-      return;
+    if (nombre.trim()) {
+      onLogin(nombre.trim());
     }
-    localStorage.setItem('usuario', usuario);
-    navigate('/cuestionario');
   };
 
   return (
-    <div className="login-container">
-      <h2 className="login-title">Bienvenido a FonoApp</h2>
-      <form onSubmit={handleLogin}>
-        <div className="form-group">
-          <label htmlFor="username">Nombre de usuario</label>
-          <input
-            type="text"
-            id="username"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
-            placeholder="Ej: Ana Pérez"
-          />
-        </div>
-        <button type="submit" className="login-btn">Ingresar</button>
+    <div className="login">
+      <h2>Bienvenido a FonoApp</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Ingresa tu nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
+        <button type="submit">Comenzar cuestionario</button>
       </form>
-      <div className="footer-text">
-        Aplicación educativa para estudiantes de Fonoaudiología
-      </div>
     </div>
   );
-};
+}
 
 export default Login;

@@ -1,71 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import preguntas from '../data/preguntas';
 import './cuestionario.css';
 import Pregunta from './pregunta';
 
-const preguntas = [
-  {
-    pregunta: "¿Qué órgano se encarga de la producción vocal?",
-    opciones: ["Laringe", "Lengua", "Labios", "Nariz"],
-    correcta: "Laringe"
-  },
-  {
-    pregunta: "¿Cuál de los siguientes NO es un órgano articulador?",
-    opciones: ["Lengua", "Dientes", "Tráquea", "Labios"],
-    correcta: "Tráquea"
-  },
-  {
-    pregunta: "¿Qué especialidad trata los trastornos del lenguaje?",
-    opciones: ["Neurología", "Fonoaudiología", "Psicología", "Otorrinolaringología"],
-    correcta: "Fonoaudiología"
-  }
-];
-
-const Questionnaire = () => {
-  const [usuario, setUsuario] = useState('');
+function Cuestionario({ usuario, onFinalizar }) {
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(null));
-  const [resultado, setResultado] = useState(null);
+  const [enviado, setEnviado] = useState(false);
 
-  useEffect(() => {
-    const nombre = localStorage.getItem('usuario') || 'Estudiante';
-    setUsuario(nombre);
-  }, []);
-
-  const handleOpcionChange = (index, opcion) => {
-    const nuevasRespuestas = [...respuestas];
-    nuevasRespuestas[index] = opcion;
-    setRespuestas(nuevasRespuestas);
+  const handleRespuesta = (indice, respuesta) => {
+    const nuevas = [...respuestas];
+    nuevas[indice] = respuesta;
+    setRespuestas(nuevas);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let correctas = 0;
-    respuestas.forEach((respuesta, i) => {
-      if (respuesta === preguntas[i].correcta) {
-        correctas++;
-      }
-    });
-    setResultado(`Respuestas correctas: ${correctas} de ${preguntas.length}`);
+  const handleEnviar = () => {
+    setEnviado(true);
   };
 
   return (
-    <div className="questionnaire-container">
-      <h2 className="titulo">Cuestionario General de Fonoaudiología</h2>
-      <p className="saludo">Hola, <strong>{usuario}</strong>. Responde las siguientes preguntas:</p>
-      <form onSubmit={handleSubmit}>
-        {preguntas.map((item, index) => (
-          <Pregunta
-            key={index}
-            index={index}
-            data={item}
-            seleccion={respuestas[index]}
-            onSelect={handleOpcionChange}
-          />
-        ))}
-        <button type="submit" className="btn-enviar">Enviar respuestas</button>
-      </form>
-      {resultado && <div className="resultado">{resultado}</div>}
+    <div className="cuestionario">
+      <h2>Hola {usuario}, responde las siguientes preguntas:</h2>
+      {preguntas.map((p, i) => (
+        <Pregunta
+          key={i}
+          indice={i}
+          pregunta={p}
+          seleccion={respuestas[i]}
+          onSeleccionar={handleRespuesta}
+        />
+      ))}
+
+      <button onClick={handleEnviar}>Enviar respuestas</button>
+
+      {enviado && (
+        <div className="resultado">
+          <h3>Resultados:</h3>
+          <ul>
+            {preguntas.map((p, i) => (
+              <li key={i}>
+                {p.texto} - {respuestas[i] === p.correcta ? '✅ Correcta' : '❌ Incorrecta'}
+              </li>
+            ))}
+          </ul>
+
+          <button className="btn-audiograma" onClick={onFinalizar}>
+            Ver Audiograma
+          </button>
+        </div>
+      )}
     </div>
   );
-};
+}
 
-export default Questionnaire;
+export default Cuestionario;

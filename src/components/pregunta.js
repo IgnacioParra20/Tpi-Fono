@@ -1,24 +1,28 @@
 import React from 'react';
 import './pregunta.css';
 
-const Pregunta = ({ index, data, seleccion, onSelect }) => {
+function Pregunta({ indice, pregunta, seleccion, onSeleccionar }) {
   return (
     <div className="pregunta">
-      <h4>{index + 1}. {data.pregunta}</h4>
-      {data.opciones.map((opcion, i) => (
-        <label key={i} className="opcion">
-          <input
-            type="radio"
-            name={`pregunta-${index}`}
-            value={opcion}
-            checked={seleccion === opcion}
-            onChange={() => onSelect(index, opcion)}
-          />
-          {opcion}
-        </label>
-      ))}
+      <h3>{indice + 1}. {pregunta.texto}</h3>
+      <ul>
+        {pregunta.opciones.map((opcion, i) => (
+          <li key={i}>
+            <label>
+              <input
+                type="radio"
+                name={`pregunta-${indice}`}
+                value={opcion}
+                checked={seleccion === opcion}
+                onChange={() => onSeleccionar(indice, opcion)}
+              />
+              {opcion}
+            </label>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
+}
 
 export default Pregunta;

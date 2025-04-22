@@ -1,18 +1,20 @@
-export default [
+const preguntas = [
     {
-      pregunta: "¿Qué órgano se encarga de la producción vocal?",
-      opciones: ["Laringe", "Lengua", "Labios", "Nariz"],
+      texto: "¿Cuál es la función principal del oído medio?",
+      opciones: ["Transmitir sonidos", "Detectar sabores", "Regular la temperatura", "Producir saliva"],
+      correcta: "Transmitir sonidos"
+    },
+    {
+      texto: "¿Qué estructura forma parte del sistema fonatorio?",
+      opciones: ["Laringe", "Hígado", "Estómago", "Riñón"],
       correcta: "Laringe"
     },
     {
-      pregunta: "¿Cuál de los siguientes NO es un órgano articulador?",
-      opciones: ["Lengua", "Dientes", "Tráquea", "Labios"],
-      correcta: "Tráquea"
-    },
-    {
-      pregunta: "¿Qué especialidad trata los trastornos del lenguaje?",
-      opciones: ["Neurología", "Fonoaudiología", "Psicología", "Otorrinolaringología"],
+      texto: "¿Qué especialidad estudia los trastornos del lenguaje?",
+      opciones: ["Fonoaudiología", "Oftalmología", "Dermatología", "Cardiología"],
       correcta: "Fonoaudiología"
     }
   ];
+  
+  export default preguntas;
   

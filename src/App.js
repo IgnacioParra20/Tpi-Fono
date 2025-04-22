@@ -1,24 +1,20 @@
-import { useEffect, useState } from "react";
-import "./assets/global.css";
-import Cuestionario from "./components/cuestionario";
-import Login from "./components/login";
+import React, { useState } from 'react';
+import AudiogramaInteractivo from './components/audioGrama';
+import Cuestionario from './components/cuestionario';
+import Login from './components/login';
 
 function App() {
-  const [usuario, setUsuario] = useState(localStorage.getItem("usuario") || "");
-  const [contenidos, setContenidos] = useState([]);
-
-  useEffect(() => {
-    fetch("/contenidos.json")
-      .then(res => res.json())
-      .then(data => setContenidos(data));
-  }, []);
+  const [usuario, setUsuario] = useState('');
+  const [cuestionarioFinalizado, setCuestionarioFinalizado] = useState(false);
 
   return (
-    <div className="app-container">
-      {usuario ? (
-        <Cuestionario usuario={usuario} contenidos={contenidos} />
+    <div className="App">
+      {!usuario ? (
+        <Login onLogin={setUsuario} />
+      ) : !cuestionarioFinalizado ? (
+        <Cuestionario usuario={usuario} onFinalizar={() => setCuestionarioFinalizado(true)} />
       ) : (
-        <Login setUsuario={setUsuario} />
+        <AudiogramaInteractivo />
       )}
     </div>
   );
