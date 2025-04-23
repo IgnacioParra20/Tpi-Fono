@@ -4,6 +4,7 @@ import './cuestionario.css';
 import Pregunta from './pregunta';
 
 function Cuestionario({ usuario, onFinalizar, onVolver }) {
+  const [preguntaActual, setPreguntaActual] = useState(0);
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(null));
   const [enviado, setEnviado] = useState(false);
 
@@ -13,24 +14,48 @@ function Cuestionario({ usuario, onFinalizar, onVolver }) {
     setRespuestas(nuevas);
   };
 
+  const siguientePregunta = () => {
+    if (preguntaActual < preguntas.length - 1) {
+      setPreguntaActual(preguntaActual + 1);
+    }
+  };
+
+  const anteriorPregunta = () => {
+    if (preguntaActual > 0) {
+      setPreguntaActual(preguntaActual - 1);
+    }
+  };
+
   const handleEnviar = () => {
     setEnviado(true);
   };
 
+  const pregunta = preguntas[preguntaActual];
+
   return (
     <div className="cuestionario">
       <h2>Hola {usuario}, responde las siguientes preguntas:</h2>
-      {preguntas.map((p, i) => (
+
+      {pregunta && (
         <Pregunta
-          key={i}
-          indice={i}
-          pregunta={p}
-          seleccion={respuestas[i]}
+          key={preguntaActual}
+          indice={preguntaActual}
+          pregunta={pregunta}
+          seleccion={respuestas[preguntaActual]}
           onSeleccionar={handleRespuesta}
         />
-      ))}
+      )}
 
-      <button onClick={handleEnviar}>Enviar respuestas</button>
+      <div className="navegacion-preguntas">
+        {preguntaActual > 0 && (
+          <button onClick={anteriorPregunta}>Anterior Pregunta</button>
+        )}
+        {preguntaActual < preguntas.length - 1 ? (
+          <button onClick={siguientePregunta}>Siguiente Pregunta</button>
+        ) : (
+          <button onClick={handleEnviar}>Enviar respuestas</button>
+        )}
+      </div>
 
       {enviado && (
         <div className="resultado">

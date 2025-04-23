@@ -61,3 +61,24 @@
   .btn-audiograma:hover {
     background-color: #27ae60;
   }
+  .navegacion-preguntas {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: space-between; /* Espacia los botones */
+  }
+  
+  .navegacion-preguntas button {
+    padding: 0.7rem 1.5rem;
+    background-color: #5a6268; /* Un color diferente para los botones de navegación */
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .navegacion-preguntas button:hover {
+    background-color: #444b50;
+  }
