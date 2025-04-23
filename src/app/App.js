@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import AudiogramaInteractivo from './components/audioGrama';
-import Cuestionario from './components/cuestionario';
-import Login from './components/login';
+import AudiogramaInteractivo from '../shared/components/audioGramaGlobal';
+import Cuestionario from '../features/level1/components/cuestionario';
+import Login from '../features/auth/components/login';
 
 function App() {
   const [usuarioInfo, setUsuarioInfo] = useState(null);

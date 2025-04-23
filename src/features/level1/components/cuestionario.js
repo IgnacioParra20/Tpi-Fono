@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import preguntas from '../data/preguntas';
 import './cuestionario.css';
-import Pregunta from './pregunta';
+import Pregunta from '../../../shared/components/pregunta';
 
 function Cuestionario({ usuario, onFinalizar, onVolver }) {
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(null));
