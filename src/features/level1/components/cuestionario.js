@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import preguntas from '../data/preguntas';
 import './cuestionario.css';
-import Pregunta from './pregunta';
+import Pregunta from '../../../shared/components/pregunta';
 
 function Cuestionario({ usuario, onFinalizar, onVolver }) {
+<<<<<<< HEAD:src/components/cuestionario.js
   const [preguntaActual, setPreguntaActual] = useState(0);
+=======
+>>>>>>> d38545138343060f51ed177d99ccc9ec0ebc1db0:src/features/level1/components/cuestionario.js
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(null));
   const [enviado, setEnviado] = useState(false);
 
