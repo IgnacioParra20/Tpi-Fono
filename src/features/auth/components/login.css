@@ -1,0 +1,117 @@
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  /* El degradado se mantiene, pero le añadiremos una capa de transparencia */
+  background: linear-gradient(to right, rgba(37, 117, 252, 0.6), rgba(106, 17, 203, 0.6)), url('../../../assets/fondo-textura.png'); /* Reemplaza con la ruta de tu imagen */
+  background-size: cover; /* La imagen cubre toda la pantalla */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.login-container {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 350px;
+  width: 100%;
+}
+
+.login-logo {
+  width: 110px;
+  height: auto;
+  margin-bottom: 2.5rem;
+}
+
+.login h2 {
+  font-size: 2.3rem;
+  margin-bottom: 2.5rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.login-form .input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.75rem;
+  width: 100%;
+}
+
+.login-form label {
+  margin-bottom: 0.6rem;
+  color: #555;
+  font-weight: 600;
+  text-align: left;
+}
+
+.login-form input,
+.login-form select {
+  padding: 0.9rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-form input:focus,
+.login-form select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 7px rgba(0, 123, 255, 0.3);
+}
+
+.login-form select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: 50%;
+  background-color: #fff;
+  color: #333;
+}
+
+.login-form button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  margin-top: 2rem;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.login-form button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.error-message {
+  color: #dc3545;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
