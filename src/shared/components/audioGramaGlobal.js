@@ -91,54 +91,75 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
   };
 
   return (
-    <div className="audiograma-container-grid">
-      <div className="audiograma-grafico">
-        <Line data={data} options={opciones} height={300} />
-      </div>
-      <div className="audiograma-interactivo-panel">
+    <div className="audiograma-wrapper">
+      {/* TÍTULO CENTRAL */}
+      <div className="titulo-central">
         <h3>Modificar puntos del audiograma</h3>
-
-        <div className="sliders-audiograma">
-          {frecuencias.map((freq, i) => (
-            <div key={freq} className="slider-group">
-              <p><strong>{freq} Hz</strong></p>
-              <label>
-                Aire:
-                <input
-                  type="range"
-                  min="0"
-                  max="120"
-                  step="1"
-                  value={airData[i]}
-                  onChange={(e) => handleSliderChange(i, 'air', e.target.value)}
-                />
-                {airData[i]} dB
-              </label>
-              <label>
-                Hueso:
-                <input
-                  type="range"
-                  min="0"
-                  max="120"
-                  step="1"
-                  value={boneData[i]}
-                  onChange={(e) => handleSliderChange(i, 'bone', e.target.value)}
-                />
-                {boneData[i]} dB
-              </label>
-            </div>
-          ))}
+      </div>
+  
+      <div className="audiograma-container-grid">
+        {/* Panel izquierdo: sliders de Aire */}
+        <div className="audiograma-panel-sliders">
+          <div className="bloque-sliders">
+            <h4>Conducción Aérea (Aire)</h4>
+            {frecuencias.map((freq, i) => (
+              <div key={freq} className="slider-group">
+                <p><strong>{freq} Hz</strong></p>
+                <label>
+                  Aire:
+                  <input
+                    type="range"
+                    min="0"
+                    max="120"
+                    step="1"
+                    value={airData[i]}
+                    onChange={(e) => handleSliderChange(i, 'air', e.target.value)}
+                  />
+                  {airData[i]} dB
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
-
-        {/* Botón de siguiente nivel */}
-        <div style={{ marginTop: '20px', textAlign: 'right' }}>
-          <button className="btn-next" onClick={onSiguienteNivel}>
-            Siguiente Nivel →
-          </button>
+  
+        {/* Gráfico central */}
+        <div className="audiograma-grafico">
+          <Line data={data} options={opciones} height={300} />
         </div>
+  
+        {/* Panel derecho: sliders de Hueso */}
+        <div className="audiograma-panel-sliders">
+          <div className="bloque-sliders">
+            <h4>Conducción Ósea (Hueso)</h4>
+            {frecuencias.map((freq, i) => (
+              <div key={freq} className="slider-group">
+                <p><strong>{freq} Hz</strong></p>
+                <label>
+                  Hueso:
+                  <input
+                    type="range"
+                    min="0"
+                    max="120"
+                    step="1"
+                    value={boneData[i]}
+                    onChange={(e) => handleSliderChange(i, 'bone', e.target.value)}
+                  />
+                  {boneData[i]} dB
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+  
+      {/* BOTÓN SEPARADO */}
+      <div className="boton-siguiente-wrapper">
+        <button className="btn-next" onClick={onSiguienteNivel}>
+          Siguiente Nivel →
+        </button>
       </div>
     </div>
-  );
+  );  
 };
 
 export default AudiogramaInteractivo;
