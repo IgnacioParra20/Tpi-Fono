@@ -34,11 +34,19 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
     tipo === 'air' ? setAirData(update) : setBoneData(update);
   };
 
+  const handleVolver = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = '/'; // Ruta segura por si no hay historial
+    }
+  };
+
   const data = {
     labels: frecuencias,
     datasets: [
       {
-        label: 'Air Conduction',
+        label: 'Conducción Aérea',
         data: airData,
         borderColor: 'red',
         backgroundColor: 'red',
@@ -47,7 +55,7 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
         tension: 0.3
       },
       {
-        label: 'Bone Conduction',
+        label: 'Conducción Ósea',
         data: boneData,
         borderColor: 'blue',
         backgroundColor: 'blue',
@@ -92,13 +100,11 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
 
   return (
     <div className="audiograma-wrapper">
-      {/* TÍTULO CENTRAL */}
       <div className="titulo-central">
         <h3>Modificar puntos del audiograma</h3>
       </div>
 
       <div className="audiograma-container-grid">
-        {/* Panel izquierdo: sliders de Aire */}
         <div className="audiograma-panel-sliders">
           <div className="bloque-sliders">
             <h4>Conducción Aérea (Aire)</h4>
@@ -122,12 +128,10 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
           </div>
         </div>
 
-        {/* Gráfico central */}
         <div className="audiograma-grafico">
           <Line data={data} options={opciones} height={300} />
         </div>
 
-        {/* Panel derecho: sliders de Hueso */}
         <div className="audiograma-panel-sliders">
           <div className="bloque-sliders">
             <h4>Conducción Ósea (Hueso)</h4>
@@ -152,9 +156,8 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
         </div>
       </div>
 
-      {/* BOTONES DE NAVEGACIÓN */}
       <div className="botones-navegacion">
-        <button className="btn-volver" onClick={() => window.history.back()}>
+        <button className="btn-volver" onClick={handleVolver}>
           ← Volver
         </button>
         <button className="btn-next" onClick={onSiguienteNivel}>
