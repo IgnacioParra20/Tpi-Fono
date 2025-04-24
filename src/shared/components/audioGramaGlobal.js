@@ -96,7 +96,7 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
       <div className="titulo-central">
         <h3>Modificar puntos del audiograma</h3>
       </div>
-  
+
       <div className="audiograma-container-grid">
         {/* Panel izquierdo: sliders de Aire */}
         <div className="audiograma-panel-sliders">
@@ -121,12 +121,12 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
             ))}
           </div>
         </div>
-  
+
         {/* Gráfico central */}
         <div className="audiograma-grafico">
           <Line data={data} options={opciones} height={300} />
         </div>
-  
+
         {/* Panel derecho: sliders de Hueso */}
         <div className="audiograma-panel-sliders">
           <div className="bloque-sliders">
@@ -151,15 +151,18 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
           </div>
         </div>
       </div>
-  
-      {/* BOTÓN SEPARADO */}
-      <div className="boton-siguiente-wrapper">
+
+      {/* BOTONES DE NAVEGACIÓN */}
+      <div className="botones-navegacion">
+        <button className="btn-volver" onClick={() => window.history.back()}>
+          ← Volver
+        </button>
         <button className="btn-next" onClick={onSiguienteNivel}>
           Siguiente Nivel →
         </button>
       </div>
     </div>
-  );  
+  );
 };
 
 export default AudiogramaInteractivo;

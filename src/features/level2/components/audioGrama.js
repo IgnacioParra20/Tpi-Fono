@@ -151,7 +151,7 @@ const Audiograma = ({ onVolver, onVolverAlInicio }) => {
           )}
         </div>
         <div className="audiograma-botones">
-          <button onClick={onVolver}>Volver al Cuestionario</button>
+          <button onClick={onVolver}>Volver al Audiograma interactivo</button>
           <button onClick={onVolverAlInicio}>Volver al Inicio</button>
         </div>
       </div>

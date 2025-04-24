@@ -219,13 +219,42 @@ body {
   font-weight: 600;
 }
 
-.boton-siguiente-wrapper {
+.botones-navegacion {
   margin-top: 30px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.boton-siguiente-wrapper .btn-next {
+.btn-next,
+.btn-volver {
   padding: 12px 28px;
   font-size: 1.1rem;
+  font-weight: 600;
+  background-color: #1976d2;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.btn-next:hover,
+.btn-volver:hover {
+  background-color: #155ab0;
+  transform: translateY(-2px);
+}
+
+.btn-next:active,
+.btn-volver:active {
+  background-color: #0f3d80;
+  transform: translateY(0);
+}
+
+.btn-next:focus,
+.btn-volver:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.3);
+}
