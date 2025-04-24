@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Login from '../features/auth/components/login';
 import Cuestionario from '../features/level1/components/cuestionario';
-import Audiograma from '../features/level2/components/audioGrama'; // Ejemplo: siguiente nivel tras el editor
-import AudiogramaInteractivo from '../shared/components/audioGramaGlobal';
+import Audiograma from '../features/level2/components/audioGrama'; // Simulador
+import AudiogramaInteractivo from '../shared/components/audioGramaGlobal'; // Editor
 
 function App() {
   const [usuarioInfo, setUsuarioInfo] = useState(null);
-  const [fase, setFase] = useState('login'); // login, cuestionario, editor, simulador, etc.
+  const [fase, setFase] = useState('login'); // login, cuestionario, editor, simulador
 
   const handleLogin = (infoUsuario) => {
     setUsuarioInfo(infoUsuario);
@@ -27,7 +27,7 @@ function App() {
   };
 
   const handleVolverDelSimulador = () => {
-    setFase('editor'); // o cuestionario si prefieres volver atrás más
+    setFase('editor'); // O 'cuestionario' si prefieres retroceder más
   };
 
   return (
@@ -47,7 +47,10 @@ function App() {
       )}
 
       {fase === 'simulador' && (
-        <Audiograma onVolver={handleVolverDelSimulador} />
+        <Audiograma
+          onVolver={handleVolverDelSimulador}
+          onVolverAlInicio={volverAlLogin}
+        />
       )}
     </div>
   );
