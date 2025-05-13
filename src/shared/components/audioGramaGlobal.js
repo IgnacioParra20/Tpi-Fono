@@ -8,9 +8,11 @@ import {
   Title,
   Tooltip
 } from 'chart.js';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import './audioGramaGlobal.css';
+import PanelControl from './PanelControl';
+
 
 ChartJS.register(
   LineElement,
@@ -103,7 +105,6 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
       <div className="titulo-central">
         <h3>Modificar puntos del audiograma</h3>
       </div>
-
       <div className="audiograma-container-grid">
         <div className="audiograma-panel-sliders">
           <div className="bloque-sliders">
@@ -155,7 +156,7 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
           </div>
         </div>
       </div>
-
+<PanelControl />
       <div className="botones-navegacion">
         <button className="btn-volver" onClick={handleVolver}>
           ← Volver
