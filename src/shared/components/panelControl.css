@@ -1,18 +1,16 @@
 .panel-control-container {
-  background-color: #f8f9fb;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap; /* Permite que bajen a otra línea si no caben */
+  justify-content: space-between;
   padding: 1rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
+  background-color: #f8f9fb;
+  border-top: 2px solid #ccc;
+  overflow-x: hidden; /* Elimina el scroll horizontal */
 }
 
 .panel-titulo {
-  grid-column: 1 / -1;
-  margin-bottom: 0.5rem;
-  font-size: 1.2rem;
-  font-weight: bold;
+  display: none; /* Ocultamos el título si ya está en otra parte */
 }
 
 .grupo {
@@ -20,10 +18,13 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 0.8rem;
+  min-width: 240px; /* Tamaño mínimo para que las secciones no se compriman demasiado */
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0; /* Evita que se encojan cuando hay poco espacio */
 }
 
-.botones-linea, .botones-matriz {
+.botones-linea,
+.botones-matriz {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -31,14 +32,34 @@
 }
 
 .botones-matriz {
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
-.btn-azul { background: #007bff; color: white; }
-.btn-rojo { background: #dc3545; color: white; }
-.btn-morado { background: #a855f7; color: white; }
-.btn-naranja { border: 2px solid #e67e22; color: #e67e22; background: white; }
-.btn-naranja.activo { background: #e67e22; color: white; }
+.btn-azul {
+  background: #007bff;
+  color: white;
+}
+
+.btn-rojo {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-morado {
+  background: #a855f7;
+  color: white;
+}
+
+.btn-naranja {
+  border: 2px solid #e67e22;
+  color: #e67e22;
+  background: white;
+}
+
+.btn-naranja.activo {
+  background: #e67e22;
+  color: white;
+}
 
 .btn-frecuencia {
   border: 2px solid #e67e22;
@@ -46,6 +67,7 @@
   color: #e67e22;
   width: 60px;
 }
+
 .btn-frecuencia.activo {
   background: #e67e22;
   color: white;
@@ -57,6 +79,7 @@
   border: none;
   padding: 0.5rem;
 }
+
 .btn-tab.activo {
   background: white;
   border-bottom: 2px solid #007bff;
@@ -66,11 +89,15 @@
   width: 40px;
 }
 
-.btn-normal, .btn-reproducir, .btn-guardar, .btn-calibrar {
+.btn-normal,
+.btn-reproducir,
+.btn-guardar,
+.btn-calibrar {
   padding: 0.4rem 0.8rem;
   border: 1px solid #ccc;
   background: white;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .btn-reproducir {

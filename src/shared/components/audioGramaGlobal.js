@@ -129,9 +129,9 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
           </div>
         </div>
 
-        <div className="audiograma-grafico">
-          <Line data={data} options={opciones} height={300} />
-        </div>
+<div className="audiograma-grafico">
+  <Line data={data} options={opciones} height={300} />
+</div>
 
         <div className="audiograma-panel-sliders">
           <div className="bloque-sliders">
