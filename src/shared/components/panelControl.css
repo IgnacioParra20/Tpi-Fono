@@ -1,43 +1,97 @@
-.panel-control {
-  background-color: #fff;
+.panel-control-container {
+  background-color: #f8f9fb;
   border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 400px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
 }
 
-.control-group {
-  margin-bottom: 15px;
-}
-
-.control-group label {
+.panel-titulo {
+  grid-column: 1 / -1;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
-  display: block;
-  margin-bottom: 6px;
 }
 
-.botones-oido button {
-  margin-right: 8px;
-  padding: 6px 12px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  background-color: #f0f0f0;
+.grupo {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.8rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
-.botones-oido button.active {
-  background-color: #007bff;
+.botones-linea, .botones-matriz {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.botones-matriz {
+  justify-content: space-between;
+}
+
+.btn-azul { background: #007bff; color: white; }
+.btn-rojo { background: #dc3545; color: white; }
+.btn-morado { background: #a855f7; color: white; }
+.btn-naranja { border: 2px solid #e67e22; color: #e67e22; background: white; }
+.btn-naranja.activo { background: #e67e22; color: white; }
+
+.btn-frecuencia {
+  border: 2px solid #e67e22;
+  background: white;
+  color: #e67e22;
+  width: 60px;
+}
+.btn-frecuencia.activo {
+  background: #e67e22;
   color: white;
 }
 
-.btn-tone {
-  background-color: #28a745;
-  color: white;
+.btn-tab {
+  flex: 1;
+  background: #e0e6ef;
   border: none;
-  padding: 10px;
-  width: 100%;
-  border-radius: 5px;
-  cursor: pointer;
+  padding: 0.5rem;
+}
+.btn-tab.activo {
+  background: white;
+  border-bottom: 2px solid #007bff;
+}
+
+.btn-peq {
+  width: 40px;
+}
+
+.btn-normal, .btn-reproducir, .btn-guardar, .btn-calibrar {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 4px;
+}
+
+.btn-reproducir {
+  background: #276ef1;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-guardar {
+  border: 1px solid #27ae60;
+  color: #27ae60;
+}
+
+.btn-calibrar {
+  border: 1px solid #f39c12;
+  color: #f39c12;
+}
+
+.valor-dB {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #e53935;
+  font-weight: bold;
 }

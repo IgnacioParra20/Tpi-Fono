@@ -1,78 +1,95 @@
-import { useState } from 'react';
 import './panelControl.css';
 
 const PanelControl = () => {
-  const [selectedEar, setSelectedEar] = useState('both');
-  const [volume, setVolume] = useState(40);
-  const [frequency, setFrequency] = useState(1000);
-
-  const playTone = () => {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-    gainNode.gain.setValueAtTime(volume / 120, audioCtx.currentTime); // escala de 0 a 1
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 1); // tono de 1 segundo
-  };
-
   return (
-    <div className="panel-control">
-      <h4>🎛 Panel de Control</h4>
+    <div className="panel-control-container">
+      <h3 className="panel-titulo">Control Panel</h3>
 
-      <div className="control-group">
-        <label>Canal Auditivo:</label>
-        <div className="botones-oido">
-          <button
-            className={selectedEar === 'left' ? 'active' : ''}
-            onClick={() => setSelectedEar('left')}
-          >
-            Izquierdo
-          </button>
-          <button
-            className={selectedEar === 'right' ? 'active' : ''}
-            onClick={() => setSelectedEar('right')}
-          >
-            Derecho
-          </button>
-          <button
-            className={selectedEar === 'both' ? 'active' : ''}
-            onClick={() => setSelectedEar('both')}
-          >
-            Ambos
-          </button>
+      <div className="grupo seccion-canal">
+        <p><strong>🎧 Canal Auditivo</strong></p>
+        <div className="botones-linea">
+          <button className="btn-azul">Izquierdo</button>
+          <button className="btn-rojo">Derecho</button>
+          <button className="btn-morado">Ambos</button>
         </div>
       </div>
 
-      <div className="control-group">
-        <label>Volumen (dB): {volume}</label>
-        <input
-          type="range"
-          min="0"
-          max="120"
-          value={volume}
-          onChange={(e) => setVolume(Number(e.target.value))}
-        />
-      </div>
-
-      <div className="control-group">
-        <label>Frecuencia:</label>
-        <select value={frequency} onChange={(e) => setFrequency(Number(e.target.value))}>
-          {[250, 500, 1000, 2000, 4000].map((hz) => (
-            <option key={hz} value={hz}>{hz} Hz</option>
+      <div className="grupo seccion-frecuencia">
+        <p><strong>√ Frecuencia (Hz)</strong></p>
+        <div className="botones-matriz">
+          {[125, 250, 500, 750, 1000, 1500, 2000, 3000, 4000, 8000].map(freq => (
+            <button key={freq} className={`btn-frecuencia ${freq === 1000 ? 'activo' : ''}`}>{freq}</button>
           ))}
-        </select>
+        </div>
       </div>
 
-      <button className="btn-tone" onClick={playTone}>🔊 Reproducir Tono</button>
+      <div className="grupo seccion-rango">
+        <p><strong>⚙️ Rango de Frecuencias</strong></p>
+        <div className="botones-linea">
+          <button className="btn-naranja activo">Estándar</button>
+          <button className="btn-naranja">Extendido</button>
+        </div>
+      </div>
+
+      <div className="grupo seccion-intensidad">
+        <p><strong>🕨 Intensidad (dB)</strong></p>
+        <input type="range" min="0" max="120" defaultValue="40" />
+        <p className="valor-dB">40 dB</p>
+        <div className="botones-linea">
+          {[0, 20, 40, 60, 80].map(val => (
+            <button key={val} className="btn-peq">{val}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grupo seccion-modo">
+        <p><strong>🧪 Modo de Prueba</strong></p>
+        <div className="botones-linea tabs">
+          <button className="btn-tab activo">Tono</button>
+          <button className="btn-tab">Habla</button>
+          <button className="btn-tab">Enmascaramiento</button>
+        </div>
+        <div className="botones-linea">
+          <button className="btn-normal">Pulsado</button>
+          <button className="btn-normal">Warble</button>
+        </div>
+      </div>
+
+      <div className="grupo seccion-acciones">
+        <p><strong>🛠 Acciones de Prueba</strong></p>
+        <button className="btn-reproducir">🎵 Reproducir Tono</button>
+        <button className="btn-guardar">💾 Guardar Umbral</button>
+      </div>
+
+      <div className="grupo seccion-sesion">
+        <p><strong>📂 Sesión</strong></p>
+        <div className="botones-matriz">
+          <button className="btn-normal">Cargar</button>
+          <button className="btn-normal">Guardar</button>
+          <button className="btn-normal">Imprimir</button>
+          <button className="btn-normal">Exportar</button>
+        </div>
+      </div>
+
+      <div className="grupo seccion-calibracion">
+        <p><strong>🔧 Calibración</strong></p>
+        <button className="btn-calibrar">Calibrar Equipo</button>
+      </div>
+
+      <div className="grupo seccion-extra">
+        <p><strong>🧩 Extras</strong></p>
+        <div className="botones-linea">
+          <button className="btn-normal">Resetear Prueba</button>
+          <button className="btn-normal">Ver Historial</button>
+        </div>
+        <div className="botones-linea">
+          <button className="btn-normal">Ayuda</button>
+          <button className="btn-normal">Simulación</button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default PanelControl;
+
