@@ -1,0 +1,158 @@
+.panel-control-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1.5rem;
+  background-color: #f4f6f9;
+  border-top: 2px solid #ccc;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.grupo {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  min-width: 260px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.grupo:hover {
+  transform: translateY(-2px);
+}
+
+.grupo p {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+.botones-linea,
+.botones-matriz {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.botones-matriz {
+  justify-content: flex-start;
+}
+
+/* === Botones generales === */
+
+.btn-azul,
+.btn-rojo,
+.btn-morado,
+.btn-frecuencia,
+.btn-tab,
+.btn-peq,
+.btn-normal,
+.btn-calibrar {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+}
+
+/* === Botones de canal auditivo === */
+
+.btn-azul {
+  background: #007bff;
+  color: white;
+}
+
+.btn-rojo {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-morado {
+  background: #6f42c1;
+  color: white;
+}
+
+/* === Botones de frecuencia (modo prueba) === */
+
+.btn-frecuencia {
+  border: 2px solid #e67e22;
+  background: white;
+  color: #e67e22;
+  width: 64px;
+  height: 36px;
+  font-weight: 500;
+}
+
+.btn-frecuencia.activo {
+  background: #e67e22;
+  color: white;
+}
+
+/* === Botones tipo tab para modos === */
+
+.btn-tab {
+  flex: 1;
+  background: #dee2e6;
+  border: none;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.btn-tab.activo {
+  background: white;
+  border-bottom: 2px solid #007bff;
+}
+
+/* === Botones pequeños para intensidad === */
+
+.btn-peq {
+  width: 48px;
+  height: 36px;
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+}
+
+/* === Botón neutral === */
+
+.btn-normal {
+  background: #ffffff;
+  border: 1px solid #ccc;
+}
+
+/* === Botón de calibración === */
+
+.btn-calibrar {
+  background: #fffbea;
+  border: 2px solid #f39c12;
+  color: #f39c12;
+  font-weight: bold;
+}
+
+/* === Valor dB en grande === */
+
+.valor-dB {
+  text-align: center;
+  font-size: 1.4rem;
+  color: #e53935;
+  font-weight: bold;
+  margin: 0.6rem 0;
+}
+
+/* === Input tipo rango === */
+
+input[type="range"] {
+  width: 100%;
+  margin-top: 0.5rem;
+  accent-color: #007bff;
+}

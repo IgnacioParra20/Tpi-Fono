@@ -1,24 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
-body {
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
   font-family: 'Inter', sans-serif;
+  background-color: #eef1f6;
 }
 
 .audiograma-container-grid {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  background-color: #f7f9fb;
+  width: 100%;
+  max-width: 1700px;
+  min-height: 100vh;
+  padding: 40px 60px;
+  margin: 0 auto;
   display: flex;
-  gap: 30px;
+  gap: 70px; /* Aumentado para más separación entre sliders y gráfico */
   align-items: stretch;
+  justify-content: space-between;
+  background-color: #f7f9fb;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
 }
 
 @media (max-width: 1024px) {
   .audiograma-container-grid {
     flex-direction: column;
+    align-items: center;
+    gap: 30px; /* Reducción en móviles */
   }
 }
 
@@ -42,12 +54,11 @@ body {
   flex-direction: column;
   gap: 20px;
   flex: 1;
+  max-width: 300px;
   overflow-y: auto;
-  max-height: 100%;
   padding-right: 10px;
 }
 
-/* Estilo general del bloque de sliders */
 .bloque-sliders {
   background-color: #ffffff;
   border-radius: 12px;
@@ -57,13 +68,10 @@ body {
 }
 
 .bloque-sliders h4 {
-  margin-bottom: 10px;
-  color: #1976d2;
-  font-size: 1.1rem;
-  font-weight: 600;
+  text-align: center;
+  font-size: 1.2rem;
 }
 
-/* Cada grupo de slider */
 .slider-group {
   background-color: #ffffff;
   border-radius: 10px;
@@ -80,35 +88,33 @@ body {
 
 .slider-group label {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 6px 0;
+  flex-direction: column;
   font-size: 0.95rem;
-  color: #555;
+  color: #444;
+  margin-bottom: 8px;
 }
 
-/* Estilo del input tipo range */
 .slider-group input[type='range'] {
-  flex: 1;
-  margin: 0 10px;
+  width: 100%;
+  margin-top: 4px;
   appearance: none;
-  height: 6px;
-  border-radius: 3px;
+  height: 8px;
+  border-radius: 4px;
   background: #d3d3d3;
   outline: none;
-  transition: background 0.3s ease;
 }
+
 
 .slider-group input[type='range']::-webkit-slider-thumb {
   appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   background: #1976d2;
   border-radius: 50%;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-/* Scrollbar bonita para ambos paneles */
 .audiograma-panel-sliders::-webkit-scrollbar {
   width: 8px;
 }
@@ -122,79 +128,18 @@ body {
 }
 
 .audiograma-grafico {
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: white;
-  padding: 20px;
   flex: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-height: 400px;
-  height: 100%;
-}
-
-.sliders-audiograma .bloque-sliders {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
-}
-
-.bloque-sliders h4 {
-  margin-bottom: 10px;
-  color: #1976d2;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.sliders-dual {
-  display: flex;
-  gap: 20px;
-}
-
-.slider-group {
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  flex: 1;
-}
-
-.slider-group p {
-  margin: 0 0 10px;
-  font-weight: 600;
-  color: #333;
-}
-
-.slider-group label {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 6px 0;
-  font-size: 0.95rem;
-  color: #555;
-}
-
-.slider-group input[type='range'] {
-  flex: 1;
+  background-color: white;
+  padding: 20px;
   margin: 0 10px;
-  appearance: none;
-  height: 6px;
-  border-radius: 3px;
-  background: #d3d3d3;
-  outline: none;
-  transition: background 0.3s ease;
-}
-
-.slider-group input[type='range']::-webkit-slider-thumb {
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  background: #1976d2;
-  border-radius: 50%;
-  cursor: pointer;
+  min-height: 520px;
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .audiograma-wrapper {
@@ -217,6 +162,19 @@ body {
   color: #1976d2;
   font-size: 1.4rem;
   font-weight: 600;
+}
+
+.sliders-audiograma .bloque-sliders {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.sliders-dual {
+  display: flex;
+  gap: 20px;
 }
 
 .botones-navegacion {
