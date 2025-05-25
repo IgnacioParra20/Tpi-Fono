@@ -5,6 +5,7 @@ import './cuestionario.css';
 
 function Cuestionario({ usuario, onFinalizar, onVolver }) {
   const [preguntaActual, setPreguntaActual] = useState(0);
+
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(null));
   const [enviado, setEnviado] = useState(false);
 
@@ -13,7 +14,6 @@ function Cuestionario({ usuario, onFinalizar, onVolver }) {
     nuevas[indice] = respuesta;
     setRespuestas(nuevas);
   };
-
   const siguientePregunta = () => {
     if (preguntaActual < preguntas.length - 1) {
       setPreguntaActual(preguntaActual + 1);
@@ -25,10 +25,10 @@ function Cuestionario({ usuario, onFinalizar, onVolver }) {
       setPreguntaActual(preguntaActual - 1);
     }
   };
-
   const handleEnviar = () => {
     setEnviado(true);
   };
+
 
   const pregunta = preguntas[preguntaActual];
 
@@ -56,6 +56,7 @@ function Cuestionario({ usuario, onFinalizar, onVolver }) {
           <button onClick={handleEnviar}>Enviar respuestas</button>
         )}
       </div>
+
 
       {enviado && (
         <div className="resultado">

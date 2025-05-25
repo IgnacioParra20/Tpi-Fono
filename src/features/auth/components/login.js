@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import logo from '../../../assets/logo.png'; // ir 3 niveles hacia atrás hasta assets
 import './login.css'; // archivo CSS en la misma carpeta
+
 function Login({ onLogin }) {
   const [nombre, setNombre] = useState('');
   const [edad, setEdad] = useState('');
   const [genero, setGenero] = useState('');
+
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
@@ -23,6 +25,7 @@ function Login({ onLogin }) {
     }
     setError(''); // Limpiar errores
     onLogin({ nombre: nombre.trim(), edad: parseInt(edad.trim(), 10), genero: genero.trim() });
+
   };
 
   return (
@@ -63,6 +66,7 @@ function Login({ onLogin }) {
           </form>
         </div>
       </div>
+
     </div>
   );
 }

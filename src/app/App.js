@@ -11,6 +11,7 @@ function App() {
   const handleLogin = (infoUsuario) => {
     setUsuarioInfo(infoUsuario);
     setFase('cuestionario');
+
   };
 
   const volverAlLogin = () => {
@@ -28,6 +29,7 @@ function App() {
 
   const handleVolverDelSimulador = () => {
     setFase('editor'); 
+
   };
 
   return (
@@ -51,9 +53,11 @@ function App() {
           onVolver={handleVolverDelSimulador}
           onVolverAlInicio={volverAlLogin}
         />
+
       )}
     </div>
   );
 }
 
 export default App;
+

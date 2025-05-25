@@ -109,6 +109,7 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
         <div className="audiograma-panel-sliders">
           <div className="bloque-sliders">
             <h4>Conducción Aérea (Aire)</h4>
+
             {frecuencias.map((freq, i) => (
               <div key={freq} className="slider-group">
                 <p><strong>{freq} Hz</strong></p>
@@ -139,6 +140,7 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
             {frecuencias.map((freq, i) => (
               <div key={freq} className="slider-group">
                 <p><strong>{freq} Hz</strong></p>
+
                 <label>
                   Hueso:
                   <input
@@ -170,3 +172,4 @@ const AudiogramaInteractivo = ({ onSiguienteNivel }) => {
 };
 
 export default AudiogramaInteractivo;
+
