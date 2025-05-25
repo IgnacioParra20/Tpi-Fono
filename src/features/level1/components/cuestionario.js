@@ -70,7 +70,7 @@ function Cuestionario({ usuario, onFinalizar, onVolver }) {
           </ul>
 
           <button className="btn-audiograma" onClick={onFinalizar}>
-            Ver Audiograma
+            Siguiente Nivel
           </button>
           <button onClick={onVolver}>Volver Atrás</button>
         </div>
