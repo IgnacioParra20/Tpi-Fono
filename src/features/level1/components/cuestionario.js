@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Pregunta from '../../../shared/components/pregunta';
 import preguntas from '../data/preguntas';
 import './cuestionario.css';
@@ -69,7 +69,7 @@ function Cuestionario({ usuario, onFinalizar, onVolver }) {
           </ul>
 
           <button className="btn-audiograma" onClick={onFinalizar}>
-            Ver Audiograma
+            Siguiente Nivel
           </button>
           <button onClick={onVolver}>Volver Atrás</button>
         </div>
