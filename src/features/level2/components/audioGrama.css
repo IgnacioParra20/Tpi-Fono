@@ -83,30 +83,6 @@
     color: #dc3545;
   }
   
-  .audiograma-botones {
-    display: flex;
-    gap: 15px; /* Espacio entre los botones "Volver" y "Siguiente" */
-    margin-top: 20px; /* Espacio superior para los botones */
-    justify-content: flex-end; /* Alinea los botones a la derecha */
-  }
-  
-  .audiograma-botones button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .audiograma-botones button:hover {
-    background-color: #0056b3;
-  }
 
 .patologia-enunciado {
   font-size: 1.2em;
@@ -139,3 +115,58 @@
 .frecuencia-label {
   font-weight: bold;
 }
+
+.contenedor-botones {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 100%;
+  gap: 10px; /* Separación entre el botón "Verificar" y los de navegación */
+  margin-top: 20px;
+}
+
+/* Botón "Verificar configuración" */
+.boton-verificar {
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.boton-verificar:hover {
+  background-color: #0056b3;
+}
+
+/* Tus botones de navegación (actualizado solo el margen y separación) */
+.audiograma-botones {
+  display: flex;
+  gap: 10px; /* Menor espacio entre los botones */
+  justify-content: space-between;
+}
+
+
+.audiograma-botones button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  flex: 1;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.audiograma-botones button:hover {
+  background-color: #0056b3;
+}
+

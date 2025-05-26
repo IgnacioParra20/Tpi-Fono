@@ -3,6 +3,7 @@ import Login from '../features/auth/components/login';
 import Cuestionario from '../features/level1/components/cuestionario';
 import Audiograma from '../features/level2/components/audioGrama'; 
 import AudiogramaInteractivo from '../shared/components/audioGramaGlobal'; 
+import Inicio from '../features/inicio/components/inicio';
 
 function App() {
   const [usuarioInfo, setUsuarioInfo] = useState(null);
@@ -11,7 +12,10 @@ function App() {
   const handleLogin = (infoUsuario) => {
     setUsuarioInfo(infoUsuario);
     setFase('cuestionario');
+  };
 
+  const handleInicio = () => {
+    setFase('Inicio');
   };
 
   const volverAlLogin = () => {
@@ -27,7 +31,7 @@ function App() {
     setFase('simulador');
   };
 
-  const handleVolverDelSimulador = () => {
+  const handleNivel2 = () => {
     setFase('editor'); 
 
   };
@@ -35,6 +39,14 @@ function App() {
   return (
     <div className="App">
       {fase === 'login' && <Login onLogin={handleLogin} />}
+
+      {fase === 'login' && (
+        <Cuestionario
+          usuario={usuarioInfo?.nombre}
+          onFinalizar={handleFinalizarCuestionario}
+          onVolver={volverAlLogin}
+        />
+      )}
 
       {fase === 'cuestionario' && (
         <Cuestionario
@@ -50,7 +62,7 @@ function App() {
 
       {fase === 'simulador' && (
         <Audiograma
-          onVolver={handleVolverDelSimulador}
+          onVolver={handleNivel2}
           onVolverAlInicio={volverAlLogin}
         />
 
