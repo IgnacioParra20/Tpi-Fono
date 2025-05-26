@@ -41,18 +41,18 @@ body {
 
 .login h2 {
   font-size: 2.3rem;
-  margin-bottom: 0rem;
+  margin-bottom: 0; /* sin separación */
   color: #2c3e50;
   text-align: center;
 }
 
 .login h3 {
-  font-size: 2.2rem;
-  margin-bottom: 2rem;
+  font-size: 2.3rem;
+  margin-top: 0.3rem;  /* apenas un espacio para que no se toquen visualmente */
+  margin-bottom: 1rem; /* o 0 si tampoco querés separación hacia abajo */
   color: #2c3e50;
   text-align: center;
-}
-
+} 
 .login-form {
   display: flex;
   flex-direction: column;
