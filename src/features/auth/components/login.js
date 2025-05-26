@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../../assets/logo.png';
-import './login.css';
+import logo from '../../../assets/logo.png'; // ir 3 niveles hacia atrás hasta assets
+import './login.css'; // archivo CSS en la misma carpeta
 
 function Login({ onLogin }) {
   const [nombre, setNombre] = useState('');
   const [edad, setEdad] = useState('');
   const [genero, setGenero] = useState('');
+
   const [error, setError] = useState('');
 
   const navigate = useNavigate(); // 🔁 Para cambiar de ruta
@@ -25,15 +25,9 @@ function Login({ onLogin }) {
       setError('Por favor, selecciona tu género.');
       return;
     }
+    setError(''); // Limpiar errores
+    onLogin({ nombre: nombre.trim(), edad: parseInt(edad.trim(), 10), genero: genero.trim() });
 
-    setError('');
-    const datosUsuario = {
-      nombre: nombre.trim(),
-      edad: parseInt(edad.trim(), 10),
-      genero: genero.trim(),
-    };
-    onLogin(datosUsuario);
-    navigate('/cuestionario'); // 🔁 Redirigir al cuestionario
   };
 
   return (
@@ -74,6 +68,7 @@ function Login({ onLogin }) {
           </form>
         </div>
       </div>
+
     </div>
   );
 }
