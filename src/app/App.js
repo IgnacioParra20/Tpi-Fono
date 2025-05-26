@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Login from '../features/auth/components/login';
 import Cuestionario from '../features/level1/components/cuestionario';
-import Audiograma from '../features/level2/components/audioGrama';
+import Audiograma from '../features/level3/components/audioGrama';
 import AudiogramaInteractivo from '../shared/components/audioGramaGlobal';
 
 function App() {
