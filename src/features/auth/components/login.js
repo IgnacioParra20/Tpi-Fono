@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import logo from '../../../assets/logo.png'; // ir 3 niveles hacia atrás hasta assets
-import './login.css'; // archivo CSS en la misma carpeta
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import logo from '../../../assets/logo.png';
+import './login.css';
+
 function Login({ onLogin }) {
   const [nombre, setNombre] = useState('');
   const [edad, setEdad] = useState('');
   const [genero, setGenero] = useState('');
   const [error, setError] = useState('');
+
+  const navigate = useNavigate(); // 🔁 Para cambiar de ruta
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,8 +25,15 @@ function Login({ onLogin }) {
       setError('Por favor, selecciona tu género.');
       return;
     }
-    setError(''); // Limpiar errores
-    onLogin({ nombre: nombre.trim(), edad: parseInt(edad.trim(), 10), genero: genero.trim() });
+
+    setError('');
+    const datosUsuario = {
+      nombre: nombre.trim(),
+      edad: parseInt(edad.trim(), 10),
+      genero: genero.trim(),
+    };
+    onLogin(datosUsuario);
+    navigate('/cuestionario'); // 🔁 Redirigir al cuestionario
   };
 
   return (
@@ -32,7 +43,7 @@ function Login({ onLogin }) {
           <img src={logo} alt="Logo de FonoApp" className="login-logo" />
         </div>
         <div className="login-form">
-          <h2>Bienvenido a FonoApp</h2>
+          <h2>Bienvenido a Fono al día</h2>
           {error && <p className="error-message">{error}</p>}
           <form onSubmit={handleSubmit}>
             <label htmlFor="nombre">Nombre:</label>

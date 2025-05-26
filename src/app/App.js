@@ -1,58 +1,59 @@
-import React, { useState } from 'react';
+// src/app/App.js
+import { useState } from 'react';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+
 import Login from '../features/auth/components/login';
 import Cuestionario from '../features/level1/components/cuestionario';
-import Audiograma from '../features/level2/components/audioGrama'; 
-import AudiogramaInteractivo from '../shared/components/audioGramaGlobal'; 
+import Audiograma from '../features/level2/components/audioGrama';
+import AudiogramaInteractivo from '../shared/components/audioGramaGlobal';
 
 function App() {
   const [usuarioInfo, setUsuarioInfo] = useState(null);
-  const [fase, setFase] = useState('login'); 
+  const isLoggedIn = Boolean(usuarioInfo);
 
   const handleLogin = (infoUsuario) => {
     setUsuarioInfo(infoUsuario);
-    setFase('cuestionario');
-  };
-
-  const volverAlLogin = () => {
-    setUsuarioInfo(null);
-    setFase('login');
-  };
-
-  const handleFinalizarCuestionario = () => {
-    setFase('editor');
-  };
-
-  const handleSiguienteNivel = () => {
-    setFase('simulador');
-  };
-
-  const handleVolverDelSimulador = () => {
-    setFase('editor'); 
   };
 
   return (
-    <div className="App">
-      {fase === 'login' && <Login onLogin={handleLogin} />}
+    <Router>
+      <Routes>
+        {/* Página de inicio (Login) */}
+        <Route path="/" element={
+          isLoggedIn
+            ? <Navigate to="/nivel1" replace />
+            : <Login onLogin={handleLogin} />
+        } />
 
-      {fase === 'cuestionario' && (
-        <Cuestionario
-          usuario={usuarioInfo?.nombre}
-          onFinalizar={handleFinalizarCuestionario}
-          onVolver={volverAlLogin}
-        />
-      )}
+        {/* Nivel 1: Cuestionario */}
+        <Route path="/nivel1" element={
+          isLoggedIn
+            ? <Cuestionario usuario={usuarioInfo?.nombre} onFinalizar={() => {}} onVolver={() => setUsuarioInfo(null)} />
+            : <Navigate to="/" replace />
+        } />
 
-      {fase === 'editor' && (
-        <AudiogramaInteractivo onSiguienteNivel={handleSiguienteNivel} />
-      )}
+        {/* Nivel 2: Diagnóstico por audiograma */}
+        <Route path="/nivel2" element={
+          isLoggedIn
+            ? <Audiograma onVolver={() => {}} onVolverAlInicio={() => setUsuarioInfo(null)} />
+            : <Navigate to="/" replace />
+        } />
 
-      {fase === 'simulador' && (
-        <Audiograma
-          onVolver={handleVolverDelSimulador}
-          onVolverAlInicio={volverAlLogin}
-        />
-      )}
-    </div>
+        {/* Herramienta: Audiograma interactivo */}
+        <Route path="/editor" element={
+          isLoggedIn
+            ? <AudiogramaInteractivo onSiguienteNivel={() => {}} />
+            : <Navigate to="/" replace />
+        } />
+
+        {/* Rutas de prueba por separado */}
+        <Route path="/nivel1-test" element={<Cuestionario usuario="TestUser" onFinalizar={() => {}} onVolver={() => {}} />} />
+        <Route path="/nivel2-test" element={<Audiograma onVolver={() => {}} onVolverAlInicio={() => {}} />} />
+
+        {/* Ruta no encontrada */}
+        <Route path="*" element={<h1>Página no encontrada</h1>} />
+      </Routes>
+    </Router>
   );
 }
 
