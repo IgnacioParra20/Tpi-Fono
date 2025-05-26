@@ -9,61 +9,64 @@ function App() {
   const [usuarioInfo, setUsuarioInfo] = useState(null);
   const [fase, setFase] = useState('login'); 
 
-  const handleLogin = (infoUsuario) => {
+  const login = (infoUsuario) => {
     setUsuarioInfo(infoUsuario);
-    setFase('cuestionario');
+    setFase('inicio');
   };
 
   const handleInicio = () => {
-    setFase('Inicio');
+    setFase('inicio');
   };
 
   const volverAlLogin = () => {
     setUsuarioInfo(null);
     setFase('login');
   };
+  const handleNivel1 = () => {
+    setFase('nivel1');
+  };
+  /*const handleNivel2 = () => {
+    setFase('nivel2');
+  };*/
 
-  const handleFinalizarCuestionario = () => {
-    setFase('editor');
+  const handleNivel3 = () => {
+    setFase('nivel3');
   };
 
   const handleSiguienteNivel = () => {
     setFase('simulador');
   };
 
-  const handleNivel2 = () => {
-    setFase('editor'); 
-
-  };
-
   return (
     <div className="App">
-      {fase === 'login' && <Login onLogin={handleLogin} />}
+      {fase === 'login' && <Login onLogin={login} />}
 
-      {fase === 'login' && (
-        <Cuestionario
+      {fase === 'inicio' && (
+        <Inicio
           usuario={usuarioInfo?.nombre}
-          onFinalizar={handleFinalizarCuestionario}
-          onVolver={volverAlLogin}
+          onIniciarCuestionario={handleNivel1}
+          onConfigurarUsuario= {volverAlLogin}
+          onCerrarSesion= {volverAlLogin}
+
         />
       )}
 
-      {fase === 'cuestionario' && (
+      {fase === 'nivel1' && (
         <Cuestionario
           usuario={usuarioInfo?.nombre}
-          onFinalizar={handleFinalizarCuestionario}
-          onVolver={volverAlLogin}
+          onFinalizar={handleNivel3}
+          onVolver={handleInicio}
         />
       )}
 
-      {fase === 'editor' && (
+      {fase === 'audiograma' && (
         <AudiogramaInteractivo onSiguienteNivel={handleSiguienteNivel} />
       )}
 
-      {fase === 'simulador' && (
+      {fase === 'nivel3' && (
         <Audiograma
-          onVolver={handleNivel2}
-          onVolverAlInicio={volverAlLogin}
+          onVolver={handleNivel1}
+          onVolverAlInicio={handleInicio}
         />
 
       )}
