@@ -1,16 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 🧭 Importamos el hook
 import Pregunta from '../../../shared/components/pregunta';
 import preguntas from '../data/preguntas';
 import './cuestionario.css';
 
-function Cuestionario({ usuario }) {
+function Cuestionario({ usuario, onFinalizar, onVolver }) {
   const [preguntaActual, setPreguntaActual] = useState(0);
 
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(null));
   const [enviado, setEnviado] = useState(false);
-
-  const navigate = useNavigate(); // 🧭 Hook para navegar
 
   const handleRespuesta = (indice, respuesta) => {
     const nuevas = [...respuestas];
@@ -72,13 +69,15 @@ function Cuestionario({ usuario }) {
             ))}
           </ul>
 
-          <div className="botones-resultados">
-            <button onClick={volverAlInicio}>Volver Atrás</button>
-            <button className="btn-audiograma" onClick={irAlEditor}>
-              Siguiente Nivel
-            </button>
-          </div>
+          <button className="btn-audiograma" onClick={onFinalizar}>
+            Siguiente Nivel
+          </button>
+          <button onClick={onVolver}>Volver Atrás</button>
         </div>
+      )}
+
+      {!enviado && (
+        <button onClick={onVolver}>Volver Atrás</button>
       )}
     </div>
   );

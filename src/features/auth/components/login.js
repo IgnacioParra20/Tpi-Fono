@@ -9,8 +9,6 @@ function Login({ onLogin }) {
 
   const [error, setError] = useState('');
 
-  const navigate = useNavigate(); // 🔁 Para cambiar de ruta
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!nombre.trim()) {
@@ -37,7 +35,8 @@ function Login({ onLogin }) {
           <img src={logo} alt="Logo de FonoApp" className="login-logo" />
         </div>
         <div className="login-form">
-          <h2>Bienvenido a Fono al día</h2>
+          <h2>Bienvenido a </h2>
+          <h3>Fono al Día</h3>
           {error && <p className="error-message">{error}</p>}
           <form onSubmit={handleSubmit}>
             <label htmlFor="nombre">Nombre:</label>

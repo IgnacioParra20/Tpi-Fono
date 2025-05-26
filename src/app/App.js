@@ -1,61 +1,62 @@
-// src/app/App.js
 import { useState } from 'react';
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-
 import Login from '../features/auth/components/login';
 import Cuestionario from '../features/level1/components/cuestionario';
 import Audiograma from '../features/level2/components/audioGrama';
 import AudiogramaInteractivo from '../shared/components/audioGramaGlobal';
 
 function App() {
+  const [fase, setFase] = useState('login');
   const [usuarioInfo, setUsuarioInfo] = useState(null);
-  const isLoggedIn = Boolean(usuarioInfo);
 
-  const handleLogin = (infoUsuario) => {
-    setUsuarioInfo(infoUsuario);
+  const handleLogin = (info) => {
+    setUsuarioInfo(info);
+    setFase('cuestionario');
+  };
+
+  const volverAlLogin = () => {
+    setFase('login');
+    setUsuarioInfo(null);
+  };
+
+  const handleFinalizarCuestionario = () => {
+    setFase('simulador'); // Ahora va al Audiograma primero
+  };
+
+  const handleVolverDelSimulador = () => {
+    setFase('cuestionario');
+  };
+
+  const handleSiguienteNivelDesdeAudiograma = () => {
+    setFase('editor'); // Ahora va al interactivo después
   };
 
   return (
-    <Router>
-      <Routes>
-        {/* Página de inicio (Login) */}
-        <Route path="/" element={
-          isLoggedIn
-            ? <Navigate to="/nivel1" replace />
-            : <Login onLogin={handleLogin} />
-        } />
+    <div className="App">
+      {fase === 'login' && <Login onLogin={handleLogin} />}
 
-        {/* Nivel 1: Cuestionario */}
-        <Route path="/nivel1" element={
-          isLoggedIn
-            ? <Cuestionario usuario={usuarioInfo?.nombre} onFinalizar={() => {}} onVolver={() => setUsuarioInfo(null)} />
-            : <Navigate to="/" replace />
-        } />
+      {fase === 'cuestionario' && (
+        <Cuestionario
+          usuario={usuarioInfo?.nombre}
+          onFinalizar={handleFinalizarCuestionario}
+          onVolver={volverAlLogin}
+        />
+      )}
 
-        {/* Nivel 2: Diagnóstico por audiograma */}
-        <Route path="/nivel2" element={
-          isLoggedIn
-            ? <Audiograma onVolver={() => {}} onVolverAlInicio={() => setUsuarioInfo(null)} />
-            : <Navigate to="/" replace />
-        } />
+      {fase === 'simulador' && (
+        <Audiograma
+          onVolver={handleVolverDelSimulador}
+          onVolverAlInicio={volverAlLogin}
+          onSiguienteNivel={handleSiguienteNivelDesdeAudiograma} // ← Nuevo
+        />
+      )}
 
-        {/* Herramienta: Audiograma interactivo */}
-        <Route path="/editor" element={
-          isLoggedIn
-            ? <AudiogramaInteractivo onSiguienteNivel={() => {}} />
-            : <Navigate to="/" replace />
-        } />
-
-        {/* Rutas de prueba por separado */}
-        <Route path="/nivel1-test" element={<Cuestionario usuario="TestUser" onFinalizar={() => {}} onVolver={() => {}} />} />
-        <Route path="/nivel2-test" element={<Audiograma onVolver={() => {}} onVolverAlInicio={() => {}} />} />
-
-        {/* Ruta no encontrada */}
-        <Route path="*" element={<h1>Página no encontrada</h1>} />
-      </Routes>
-    </Router>
+      {fase === 'editor' && (
+        <AudiogramaInteractivo
+          onSiguienteNivel={() => console.log('Nivel final alcanzado')}
+        />
+      )}
+    </div>
   );
 }
 
 export default App;
-

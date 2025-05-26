@@ -41,7 +41,14 @@ body {
 
 .login h2 {
   font-size: 2.3rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.login h3 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
   color: #2c3e50;
   text-align: center;
 }
