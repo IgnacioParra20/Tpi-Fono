@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import './audioGramaGlobal.css';
 import PanelControl from './PanelControl';
-
+//a
 
 ChartJS.register(
   LineElement,
