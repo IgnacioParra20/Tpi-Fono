@@ -1,95 +1,95 @@
 .audiometro-container {
-  font-family: sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
-}
-
-.audiometro-container h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.audiometro-content {
-  display: flex;
-  justify-content: space-between; /* Alinea todo horizontal */
-  align-items: flex-start;
-  gap: 40px;
-  flex-wrap: nowrap;
-  width: 100%;
-}
-
-.audiometro-imagen-wrapper {
   position: relative;
-  width: 65%; /* Ajusta el ancho de la imagen */
-  max-width: 700px;
-  aspect-ratio: 16 / 9;
+  height: 90vh;
+  overflow: hidden;
 }
 
-.audiometro-img {
+.botones-prueba {
+  position: relative;
   width: 100%;
-  height: auto;
-  transform: rotate(270deg); /* Quita si la imagen ya es horizontal */
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  height: 100%;
 }
 
-/* Marcador de posición actual */
-.marcador-actual {
+.boton-prueba {
   position: absolute;
-  width: 25px;
-  height: 25px;
-  border: 3px solid red;
-  border-radius: 50%;
-  background-color: rgba(255, 0, 0, 0.2);
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-/* Caja de respuesta a la derecha */
-.respuesta-box {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  background-color: #f9f9f9;
-  min-width: 250px;
-  max-width: 300px;
-}
-
-.respuesta-box p {
-  margin: 0;
-  font-weight: bold;
-}
-
-.respuesta-box input {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #aaa;
-  border-radius: 8px;
-  width: 100%;
-}
-
-.respuesta-box button {
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #2e7d32;
-  color: white;
+  width: 60px;
+  height: 30px;
+  background-color: #666;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.2s ease;
 }
 
-.respuesta-box button:hover {
-  background-color: #1b5e20;
+.boton-prueba:hover {
+  opacity: 1;
+}
+
+.boton-prueba.acertado {
+  background-color: #4caf50;
+  opacity: 1;
+}
+
+/* Colores personalizados */
+.boton-prueba.red {
+  background-color: #c62828;
+}
+
+.boton-prueba.blue {
+  background-color: #1565c0;
+}
+
+.boton-prueba.orange {
+  background-color: #ef6c00;
+}
+
+.boton-prueba.yellow {
+  background-color: #fbc02d;
 }
 
 .finalizado-box {
   text-align: center;
   color: #2e7d32;
   font-weight: bold;
+  margin-top: 20px;
+}
+
+.botones-navegacion {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.botones-navegacion button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #2e7d32;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.botones-navegacion button:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.botones-navegacion .volver-btn {
+  background-color: #b71c1c;
+}
+
+.botones-navegacion .volver-btn:hover {
+  background-color: #7f0000;
 }

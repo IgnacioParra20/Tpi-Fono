@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Login from '../features/auth/components/login';
 import Cuestionario from '../features/level1/components/cuestionario';
-import Audiometro from '../features/level2/components/audiometro'; // ← Audiómetro
+import Audiometro from '../features/level2/components/audiometro';
 import Audiograma from '../features/level3/components/audioGrama';
 import AudiogramaInteractivo from '../shared/components/audioGramaGlobal';
 
@@ -20,7 +20,7 @@ function App() {
   };
 
   const handleFinalizarCuestionario = () => {
-    setFase('audiometro'); // ← Ahora va al Audiómetro primero
+    setFase('audiometro');
   };
 
   const handleVolverDeAudiometro = () => {
@@ -28,7 +28,7 @@ function App() {
   };
 
   const handleSiguienteDesdeAudiometro = () => {
-    setFase('simulador'); // ← Luego va al Audiograma
+    setFase('simulador');
   };
 
   const handleVolverDelSimulador = () => {
@@ -36,7 +36,7 @@ function App() {
   };
 
   const handleSiguienteNivelDesdeAudiograma = () => {
-    setFase('editor'); // Luego va al interactivo
+    setFase('editor');
   };
 
   return (
@@ -52,15 +52,10 @@ function App() {
       )}
 
       {fase === 'audiometro' && (
-        <div>
-          <Audiometro />
-          <div style={{ marginTop: '20px', textAlign: 'center' }}>
-            <button onClick={handleVolverDeAudiometro}>Volver</button>
-            <button onClick={handleSiguienteDesdeAudiometro} style={{ marginLeft: '10px' }}>
-              Siguiente
-            </button>
-          </div>
-        </div>
+        <Audiometro
+          onVolver={handleVolverDeAudiometro}
+          onSiguienteNivel={handleSiguienteDesdeAudiometro}
+        />
       )}
 
       {fase === 'simulador' && (
