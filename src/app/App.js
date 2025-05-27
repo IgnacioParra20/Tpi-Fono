@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Login from '../features/auth/components/login';
 import Inicio from '../features/inicio/components/inicio';
+import Cuestionario from '../features/level1/components/cuestionario';
 import Audiometro from '../features/level2/components/audiometro';
 import Audiograma from '../features/level3/components/audioGrama';
 import AudiogramaInteractivo from '../shared/components/audioGramaGlobal';
@@ -14,38 +15,25 @@ function App() {
     setFase('inicio');
   };
 
-  const handleInicio = () => {
-    setFase('inicio');
-  const handleLogin = (info) => {
-    setUsuarioInfo(info);
-    setFase('cuestionario');
-  };
-
   const volverAlLogin = () => {
     setFase('login');
     setUsuarioInfo(null);
   };
+
   const handleNivel1 = () => {
-    setFase('nivel1');
+    setFase('cuestionario'); // Nivel 1
   };
-  /*const handleNivel2 = () => {
-    setFase('nivel2');
-  };*/
+
+  const handleNivel2 = () => {
+    setFase('audiometro'); // Nivel 2
+  };
 
   const handleNivel3 = () => {
-    setFase('nivel3');
+    setFase('simulador'); // Nivel 3 (Audiograma)
   };
 
-  const handleVolverDeAudiometro = () => {
-    setFase('cuestionario');
-  };
-
-  const handleSiguienteDesdeAudiometro = () => {
+  const handleSiguienteNivelDesdeAudiometro = () => {
     setFase('simulador');
-  };
-
-  const handleVolverDelSimulador = () => {
-    setFase('audiometro');
   };
 
   const handleSiguienteNivelDesdeAudiograma = () => {
@@ -60,24 +48,31 @@ function App() {
         <Inicio
           usuario={usuarioInfo?.nombre}
           onIniciarCuestionario={handleNivel1}
-          onConfigurarUsuario= {volverAlLogin}
-          onCerrarSesion= {volverAlLogin}
+          onConfigurarUsuario={volverAlLogin}
+          onCerrarSesion={volverAlLogin}
+        />
+      )}
 
+      {fase === 'cuestionario' && (
+        <Cuestionario
+          usuario={usuarioInfo?.nombre}
+          onFinalizar={handleNivel2} // Avanza al nivel 2
+          onVolver={volverAlLogin}
         />
       )}
 
       {fase === 'audiometro' && (
         <Audiometro
-          onVolver={handleVolverDeAudiometro}
-          onSiguienteNivel={handleSiguienteDesdeAudiometro}
+          onVolver={handleNivel1} // Regresa a cuestionario (nivel 1)
+          onSiguienteNivel={handleSiguienteNivelDesdeAudiometro} // Avanza a nivel 3
         />
       )}
 
-      {fase === 'nivel3' && (
+      {fase === 'simulador' && (
         <Audiograma
-          onVolver={handleVolverDelSimulador}
+          onVolver={handleNivel2} // Regresa a audiometro (nivel 2)
           onVolverAlInicio={volverAlLogin}
-          onSiguienteNivel={handleSiguienteNivelDesdeAudiograma}
+          onSiguienteNivel={handleSiguienteNivelDesdeAudiograma} // Avanza al editor
         />
       )}
 
@@ -85,10 +80,9 @@ function App() {
         <AudiogramaInteractivo
           onSiguienteNivel={() => console.log('Nivel final alcanzado')}
         />
-
       )}
     </div>
   );
 }
-}
+
 export default App;
