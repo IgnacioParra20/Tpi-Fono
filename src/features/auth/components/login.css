@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
 body {
@@ -31,6 +30,8 @@ body {
   max-width: 350px;
   width: 100%;
   animation: fadeInUp 0.8s ease forwards;
+  transform: scale(0.9);
+  transform-origin: center;
 }
 
 .login-logo {
@@ -41,7 +42,15 @@ body {
 
 .login h2 {
   font-size: 2.3rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.login h3 {
+  font-size: 2.3rem;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
   color: #2c3e50;
   text-align: center;
 }

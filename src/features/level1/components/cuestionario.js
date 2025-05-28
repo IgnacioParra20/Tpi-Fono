@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Pregunta from '../../../shared/components/pregunta';
 import preguntas from '../data/preguntas';
 import './cuestionario.css';

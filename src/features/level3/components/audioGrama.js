@@ -165,18 +165,18 @@ const Audiograma = ({ onVolver, onVolverAlInicio }) => {
             ))}
           </div>
         </div>
+
+        <button onClick={verificarRespuesta}>Verificar configuración</button>
+
         {resultado !== null && (
           <p className={resultado ? 'correcto' : 'incorrecto'}>
             {resultado ? '✅ ¡Correcto!' : '❌ Incorrecto. Reintentá modificando los valores.'}
           </p>
         )}
-        <div class="contenedor-botones">
-          <button class="boton-verificar"onClick={verificarRespuesta}>Verificar configuración</button>
 
-          <div class="audiograma-botones">
-            <button onClick={onVolver}>Volver al nivel anterior</button>
-            <button onClick={onVolverAlInicio}>Volver al Inicio</button>
-          </div>
+        <div className="audiograma-botones">
+          <button onClick={onVolver}>Volver al nivel anterior</button>
+          <button onClick={onVolverAlInicio}>Volver al Inicio</button>
         </div>
       </div>
     </div>
