@@ -34,22 +34,28 @@ export default function SignupPage() {
     setError("")
 
     try {
-      // Validate required fields
-      if (!formData.name || !formData.email || !formData.password || !formData.age || !formData.career || !formData.gender) {
-        setError("Please fill in all fields")
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          age: formData.age,
+          career: formData.career,
+          gender: formData.gender,
+        }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.error || "Registration failed")
         return
       }
 
-      // Store user data (in a real app, this would be sent to your backend)
-      localStorage.setItem("user", JSON.stringify({
-        ...formData,
-        isAuthenticated: true,
-        progress: { level1: 0, level2: 0, level3: 0 }
-      }))
-      
-      router.push("/dashboard")
+      router.push("/login")
     } catch (err) {
-      setError("Registration failed. Please try again.")
+      setError("Something went wrong.")
     } finally {
       setIsLoading(false)
     }

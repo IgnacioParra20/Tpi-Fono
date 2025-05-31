@@ -23,16 +23,24 @@ export default function LoginPage() {
     setError("")
 
     try {
-      // Simulate authentication
-      if (email && password) {
-        // Store user session (in a real app, this would be handled by your auth system)
-        localStorage.setItem("user", JSON.stringify({ email, isAuthenticated: true }))
-        router.push("/dashboard")
-      } else {
-        setError("Please enter both email and password")
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.error || "Login failed")
+        return
       }
+
+      const data = await res.json()
+      // Guardar el usuario en localStorage si querés
+      localStorage.setItem("user", JSON.stringify(data.user))
+      router.push("/dashboard")
     } catch (err) {
-      setError("Login failed. Please try again.")
+      setError("Something went wrong.")
     } finally {
       setIsLoading(false)
     }
