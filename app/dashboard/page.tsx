@@ -60,37 +60,38 @@ export default function DashboardPage() {
   }
 
   const levels = [
-    {
-      id: 1,
-      title: "Foundation Level",
-      description: "Complete 10 fundamental phonology questions",
-      icon: BookOpen,
-      progress: user.progress?.level1 || 0,
-      maxProgress: 10,
-      color: "bg-green-500",
-      href: "/levels/1",
-    },
-    {
-      id: 2,
-      title: "Equipment Mastery",
-      description: "Identify different parts of an audiometer",
-      icon: Stethoscope,
-      progress: user.progress?.level2 || 0,
-      maxProgress: 8,
-      color: "bg-yellow-500",
-      href: "/levels/2",
-    },
-    {
-      id: 3,
-      title: "Clinical Application",
-      description: "Modify audiometry to match pathological conditions",
-      icon: Activity,
-      progress: user.progress?.level3 || 0,
-      maxProgress: 5,
-      color: "bg-red-500",
-      href: "/levels/3",
-    },
-  ]
+  {
+    id: 1,
+    title: "Nivel Fundamentos",
+    description: "Completa 10 preguntas fundamentales de fonología",
+    icon: BookOpen,
+    progress: user.progress?.level1 || 0,
+    maxProgress: 10,
+    color: "bg-green-500",
+    href: "/levels/1",
+  },
+  {
+    id: 2,
+    title: "Dominio del Equipamiento",
+    description: "Identifica las distintas partes de un audiómetro",
+    icon: Stethoscope,
+    progress: user.progress?.level2 || 0,
+    maxProgress: 8,
+    color: "bg-yellow-500",
+    href: "/levels/2",
+  },
+  {
+    id: 3,
+    title: "Aplicación Clínica",
+    description: "Modifica la audiometría para ajustarse a condiciones patológicas",
+    icon: Activity,
+    progress: user.progress?.level3 || 0,
+    maxProgress: 5,
+    color: "bg-red-500",
+    href: "/levels/3",
+  },
+]
+
 
   return (
     <div
