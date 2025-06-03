@@ -1,15 +1,46 @@
-import { NextResponse } from 'next/server'
-import { userDB } from '@/lib/userDB'
+// app/api/signup/route.ts
+import { supabase } from '@/lib/supabase'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
-  const newUser = await request.json()
-  const exists = userDB.find(user => user.email === newUser.email)
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { name, email, password, age, career, gender } = body
 
-  if (exists) {
-    return NextResponse.json({ success: false, message: "User already exists" }, { status: 409 })
+    if (!name || !email || !password || !age || !career || !gender) {
+      return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 })
+    }
+
+    // Verificar si ya existe el usuario
+    const { data: existingUser, error: fetchError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single()
+
+    if (existingUser) {
+      return NextResponse.json({ error: "El usuario ya existe" }, { status: 409 })
+    }
+
+    // Crear el nuevo usuario
+    const { data, error } = await supabase.from('users').insert([
+      {
+        name,
+        email,
+        password, // 🔐 En producción, hashear contraseña
+        age: parseInt(age),
+        career,
+        gender,
+        progress: { level1: 0, level2: 0, level3: 0 },
+      },
+    ])
+
+    if (error) throw error
+
+    return NextResponse.json({ success: true, message: "Usuario registrado", user: data })
+  } catch (error) {
+  console.error("Error al registrar usuario:", error) // ✅ Ahora verás más detalles
+  return NextResponse.json({ error: "Error al registrar el usuario" }, { status: 500 })
+
   }
-
-  userDB.push(newUser)
-  console.log("Usuarios actuales:", userDB)
-  return NextResponse.json({ success: true, message: "User registered" })
 }
