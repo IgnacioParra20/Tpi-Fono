@@ -18,10 +18,10 @@ export default function LandingPage() {
           </div>
           <div className="space-x-4">
             <Link href="/login">
-              <Button variant="outline">Login</Button>
+              <Button variant="outline">Iniciar Sesión</Button>
             </Link>
             <Link href="/signup">
-              <Button>Get Started</Button>
+              <Button>Empieza hoy</Button>
             </Link>
           </div>
         </nav>
