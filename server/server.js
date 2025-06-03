@@ -14,12 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI, {
-  // These options are no longer needed in Mongoose 8, but included for clarity
-  // and future compatibility
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-})
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
