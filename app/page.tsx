@@ -1,17 +1,20 @@
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, Users, Award, Volume2 } from 'lucide-react'
+import { Award, BookOpen, Users, Volume2 } from 'lucide-react'
+import Link from "next/link"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div
+      className="min-h-screen bg-gradient-to-br from-blue-50/80 via-indigo-100/80 to-indigo-200/80 bg-cover bg-center"
+      style={{ backgroundImage: "url('/fondo-textura.png')" }}
+    >
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <nav className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Volume2 className="h-8 w-8 text-indigo-600" />
-            <span className="text-2xl font-bold text-gray-900">PhonologyLearn</span>
+            <span className="text-2xl font-bold text-gray-900">Fono al día</span>
           </div>
           <div className="space-x-4">
             <Link href="/login">
