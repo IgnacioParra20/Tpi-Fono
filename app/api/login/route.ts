@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       .from('users')
       .select('*')
       .eq('email', email)
-      .maybeSingle() // <--- Aquí el cambio
+      .single() 
 
     if (error || !data) {
       return NextResponse.json({ error: "Usuario no encontrado" }, { status: 404 })
