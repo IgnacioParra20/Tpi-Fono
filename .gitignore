@@ -3,22 +3,15 @@
 # dependencies
 /node_modules
 /server/node_modules
-/.pnp
-.pnp.js
 
-# testing
-/coverage
+# next.js
+/.next/
+/out/
 
 # production
 /build
 
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -65,4 +58,14 @@ Thumbs.db
 dist/**/*
 
 # ignore yarn.lock
-yarn.lock
+yarn.lock.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
