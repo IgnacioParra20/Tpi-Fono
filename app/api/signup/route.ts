@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       {
         name,
         email,
-        password, // 🔐 En producción, hashear contraseña
+        password,
         age: parseInt(age),
         career,
         gender,
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, message: "Usuario registrado", user: data })
   } catch (error) {
-  console.error("Error al registrar usuario:", error) // ✅ Ahora verás más detalles
+  console.error("Error al registrar usuario:", error) 
   return NextResponse.json({ error: "Error al registrar el usuario" }, { status: 500 })
 
   }
