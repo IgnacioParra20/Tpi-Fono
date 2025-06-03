@@ -221,32 +221,6 @@ export default function ProfilePage() {
             </form>
           </CardContent>
         </Card>
-
-        {/* Resumen de Progreso */}
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>Progreso de Aprendizaje</CardTitle>
-            <CardDescription>
-              Tu progreso actual en todos los niveles.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span>Nivel 1 - Fundamentos</span>
-                <span className="font-semibold">{user.progress.level1}/10 completado</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Nivel 2 - Dominio del Equipamiento</span>
-                <span className="font-semibold">{user.progress.level2}/8 completado</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Nivel 3 - Aplicación Clínica</span>
-                <span className="font-semibold">{user.progress.level3}/5 completado</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </main>
   </div>
