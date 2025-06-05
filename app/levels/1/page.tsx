@@ -42,6 +42,7 @@ const questions = [
       "Análisis Fonético Interno",
       "Asociación de Fonología Internacional",
       "Academia Internacional de Pronunciación"
+
     ],
     correct: 0
   },
@@ -123,6 +124,7 @@ const questions = [
     correct: 1
   }
 ]
+
 
 
 export default function Level1Page() {
@@ -214,7 +216,7 @@ export default function Level1Page() {
                 <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                 <CardTitle className="text-2xl">Nivel 1 Completado!</CardTitle>
                 <CardDescription>
-                  Terminaste los Fundamentos Básicos.
+                  Terminaste los Fundamentos Básicos!
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-6">
@@ -227,7 +229,7 @@ export default function Level1Page() {
 
                 <Alert>
                   <AlertDescription>
-                    {score >= 8 ? "¡Excelente trabajo! Estás listo para el Nivel 2." : 
+                    {score >= 8 ? "¡Excelente! Estás listo para el Nivel 2." : 
                      score >= 6 ? "¡Buen trabajo! Considera repasar antes de avanzar al Nivel 2." :
                      "¡Sigue practicando! Revisa el material e inténtalo nuevamente."}
                   </AlertDescription>

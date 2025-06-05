@@ -70,7 +70,6 @@ const pathologies = [
   },
 ]
 
-
 export default function Level3Page() {
   const [currentPathology, setCurrentPathology] = useState(0)
   const [userAudiogram, setUserAudiogram] = useState({
