@@ -25,8 +25,9 @@ interface UserData {
 export default function DashboardPage() {
   const [user, setUser] = useState<UserData | null>(null)
   const router = useRouter()
-
+  
   useEffect(() => {
+    
     const userData = localStorage.getItem("user")
     if (!userData) {
       router.push("/login")
