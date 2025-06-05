@@ -1,128 +1,131 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Volume2, ArrowLeft, CheckCircle } from 'lucide-react'
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { ArrowLeft, CheckCircle, Volume2 } from 'lucide-react'
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 const questions = [
   {
     id: 1,
-    question: "What is a phoneme?",
+    question: "¿Qué es un fonema?",
     options: [
-      "A unit of sound that distinguishes meaning",
-      "A written letter",
-      "A syllable structure",
-      "A type of vowel"
+      "Una letra escrita",
+      "Una estructura silábica",
+      "Un tipo de vocal",
+      "Una unidad de sonido que distingue significado"
     ],
-    correct: 0
+    correct: 3
   },
   {
     id: 2,
-    question: "Which of the following is an example of a minimal pair?",
+    question: "¿Cuál de los siguientes es un ejemplo de un par mínimo?",
     options: [
-      "cat/bat",
-      "dog/puppy",
-      "run/running",
-      "happy/sad"
+      "perro/cachorro",
+      "feliz/triste",
+      "correr/corriendo",
+      "gato/pato"
     ],
-    correct: 0
+    correct: 3
   },
   {
     id: 3,
-    question: "What does IPA stand for?",
+    question: "¿Qué significan las siglas AFI?",
     options: [
-      "International Phonetic Alphabet",
-      "International Phonology Association",
-      "Internal Phonetic Analysis",
-      "International Pronunciation Academy"
+      "Alfabeto Fonético Internacional",
+      "Análisis Fonético Interno",
+      "Asociación de Fonología Internacional",
+      "Academia Internacional de Pronunciación"
+
     ],
     correct: 0
   },
   {
     id: 4,
-    question: "Which feature distinguishes voiced from voiceless consonants?",
+    question: "¿Qué característica distingue a las consonantes sonoras de las sordas?",
     options: [
-      "Vocal cord vibration",
-      "Tongue position",
-      "Lip rounding",
-      "Airflow direction"
+      "Redondeo de labios",
+      "Posición de la lengua",
+      "Vibración de las cuerdas vocales",
+      "Dirección del flujo de aire"
     ],
-    correct: 0
+    correct: 2
   },
   {
     id: 5,
-    question: "What is the difference between phonetics and phonology?",
+    question: "¿Cuál es la diferencia entre fonética y fonología?",
     options: [
-      "Phonetics studies sounds, phonology studies sound patterns",
-      "They are the same thing",
-      "Phonetics is theoretical, phonology is practical",
-      "Phonetics studies vowels, phonology studies consonants"
+      "La fonética estudia las vocales y la fonología las consonantes",
+      "La fonética es teórica y la fonología práctica",
+      "Estudian lo mismo",
+      "La fonética estudia los sonidos y la fonología los patrones sonoros"
     ],
-    correct: 0
+    correct: 3
   },
   {
     id: 6,
-    question: "Which of these is a place of articulation?",
+    question: "¿Cuál de estos es un punto de articulación?",
     options: [
-      "Alveolar",
-      "Voiced",
       "Nasal",
-      "High"
+      "Sonoro",
+      "Alveolar",
+      "Alto"
     ],
-    correct: 0
+    correct: 2
   },
   {
     id: 7,
-    question: "What is allophonic variation?",
+    question: "¿Qué es la variación alofónica?",
     options: [
-      "Different pronunciations of the same phoneme",
-      "Different meanings of the same word",
-      "Different spellings of the same sound",
-      "Different languages using the same sound"
+      "Diferentes lenguas usando el mismo sonido",
+      "Diferentes significados de la misma palabra",
+      "Diferentes formas de escribir el mismo sonido",
+      "Diferentes pronunciaciones del mismo fonema"
     ],
-    correct: 0
+    correct: 3
   },
   {
     id: 8,
-    question: "Which vowel feature refers to tongue height?",
+    question: "¿Qué característica vocálica se refiere a la altura de la lengua?",
     options: [
-      "High/Mid/Low",
-      "Front/Back",
-      "Rounded/Unrounded",
-      "Tense/Lax"
+      "Anterior/Posterior",
+      "Alta/Media/Baja",
+      "Tensa/Relajada",
+      "Redondeada/No redondeada"
     ],
-    correct: 0
+    correct: 1
   },
   {
     id: 9,
-    question: "What is phonological awareness?",
+    question: "¿Qué es la conciencia fonológica?",
     options: [
-      "The ability to recognize and manipulate sounds in language",
-      "The ability to read quickly",
-      "The ability to spell correctly",
-      "The ability to speak clearly"
+      "La capacidad de leer rápidamente",
+      "La capacidad de reconocer y manipular sonidos en el lenguaje",
+      "La capacidad de hablar con claridad",
+      "La capacidad de deletrear correctamente"
     ],
-    correct: 0
+    correct: 1
   },
   {
     id: 10,
-    question: "Which process involves sounds becoming more similar to nearby sounds?",
+    question: "¿Qué proceso implica que los sonidos se vuelvan más similares a los sonidos cercanos?",
     options: [
-      "Assimilation",
-      "Deletion",
-      "Insertion",
-      "Metathesis"
+      "Inserción",
+      "Asimilación",
+      "Metátesis",
+      "Eliminación"
     ],
-    correct: 0
+    correct: 1
   }
 ]
+
+
 
 export default function Level1Page() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -183,7 +186,7 @@ export default function Level1Page() {
   }
 
   if (!user) {
-    return <div>Loading...</div>
+    return <div>Cargando...</div>
   }
 
   if (showResult) {
@@ -195,12 +198,12 @@ export default function Level1Page() {
               <Link href="/dashboard">
                 <Button variant="outline" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
+                  Volver al Panel de Niveles
                 </Button>
               </Link>
               <div className="flex items-center space-x-2">
                 <Volume2 className="h-8 w-8 text-indigo-600" />
-                <span className="text-2xl font-bold text-gray-900">PhonologyLearn</span>
+                <span className="text-2xl font-bold text-gray-900">Fono al día</span>
               </div>
             </div>
           </div>
@@ -211,9 +214,9 @@ export default function Level1Page() {
             <Card>
               <CardHeader className="text-center">
                 <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                <CardTitle className="text-2xl">Level 1 Complete!</CardTitle>
+                <CardTitle className="text-2xl">Nivel 1 Completado!</CardTitle>
                 <CardDescription>
-                  You've finished the Foundation Level
+                  Terminaste los Fundamentos Básicos!
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-6">
@@ -221,27 +224,27 @@ export default function Level1Page() {
                   <div className="text-4xl font-bold text-green-600 mb-2">
                     {score}/10
                   </div>
-                  <p className="text-gray-600">Questions Answered Correctly</p>
+                  <p className="text-gray-600">Preguntas respondidas correctamente</p>
                 </div>
 
                 <Alert>
                   <AlertDescription>
-                    {score >= 8 ? "Excellent work! You're ready for Level 2." : 
-                     score >= 6 ? "Good job! Consider reviewing before moving to Level 2." :
-                     "Keep practicing! Review the material and try again."}
+                    {score >= 8 ? "¡Excelente! Estás listo para el Nivel 2." : 
+                     score >= 6 ? "¡Buen trabajo! Considera repasar antes de avanzar al Nivel 2." :
+                     "¡Sigue practicando! Revisa el material e inténtalo nuevamente."}
                   </AlertDescription>
                 </Alert>
 
                 <div className="flex gap-4 justify-center">
                   <Button onClick={handleRetry} variant="outline">
-                    Try Again
+                    Volver a Intentar
                   </Button>
                   <Link href="/dashboard">
-                    <Button>Back to Dashboard</Button>
+                    <Button>Volver al Panel de niveles</Button>
                   </Link>
                   {score >= 6 && (
                     <Link href="/levels/2">
-                      <Button>Continue to Level 2</Button>
+                      <Button>Continuar al nivel 2</Button>
                     </Link>
                   )}
                 </div>
