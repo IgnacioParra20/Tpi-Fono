@@ -149,7 +149,7 @@ export default function Level1Page() {
     setSelectedAnswer(value)
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const answerIndex = parseInt(selectedAnswer)
     const newAnswers = [...userAnswers, answerIndex]
     setUserAnswers(newAnswers)
@@ -158,21 +158,37 @@ export default function Level1Page() {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer("")
     } else {
-      // Calculate score and finish
-      const correctAnswers = newAnswers.filter((answer, index) => answer === questions[index].correct).length
+      // Calcular puntaje
+      const correctAnswers = newAnswers.filter(
+        (answer, index) => answer === questions[index].correct
+      ).length
+
       setScore(correctAnswers)
       setShowResult(true)
-      
-      // Update user progress
+
+      // Actualizar progreso del usuario
       if (user) {
-        const updatedUser = {
-          ...user,
-          progress: {
+        try {
+          const updatedProgress = {
             ...user.progress,
-            level1: Math.max(user.progress.level1, correctAnswers)
+            level1: score, // Podés cambiarlo dinámicamente si querés
           }
+
+          const res = await fetch("/api/users/updateProgress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: user.email,
+              progress: updatedProgress,
+            }),
+          })
+
+          if (!res.ok) {
+            console.error("Fallo al actualizar el progreso del usuario")
+          } 
+        } catch (error) {
+          console.error("Error al actualizar progreso:", error)
         }
-        localStorage.setItem("user", JSON.stringify(updatedUser))
       }
     }
   }
