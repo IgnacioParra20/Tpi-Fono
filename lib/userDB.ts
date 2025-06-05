@@ -5,6 +5,7 @@ type User = {
   age: string
   career: string
   gender: string
+
   progress: {
     level1: number
     level2: number
@@ -32,3 +33,4 @@ export function addUser(user: User) {
 export function getAllUsers() {
   return userDB
 }
+
