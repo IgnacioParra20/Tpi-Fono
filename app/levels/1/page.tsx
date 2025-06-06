@@ -1,10 +1,16 @@
 "use client"
 
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { ArrowLeft, CheckCircle, Volume2 } from 'lucide-react'
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ArrowLeft, CheckCircle, Volume2 } from 'lucide-react'
 import Link from "next/link"
@@ -54,7 +60,7 @@ const questions = [
       "Generador de tono puro",
       "Selector de transductor"
     ],
-    correct: 0
+    correct: 2
   },
   {
     id: 5,
@@ -88,6 +94,7 @@ const questions = [
       "Disminución del umbral de disconfort"
     ],
     correct: 3
+    correct: 3
   },
   {
     id: 8,
@@ -98,6 +105,7 @@ const questions = [
       "25",
       "10"
     ],
+    correct: 1
     correct: 1
   },
   {
@@ -120,6 +128,7 @@ const questions = [
       "Katz",
       "Hall"
     ],
+    correct: 1
     correct: 1
   }
 ]
@@ -147,7 +156,7 @@ export default function Level1Page() {
     setSelectedAnswer(value)
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const answerIndex = parseInt(selectedAnswer)
     const newAnswers = [...userAnswers, answerIndex]
     setUserAnswers(newAnswers)
@@ -156,21 +165,37 @@ export default function Level1Page() {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer("")
     } else {
-      // Calculate score and finish
-      const correctAnswers = newAnswers.filter((answer, index) => answer === questions[index].correct).length
+      // Calcular puntaje
+      const correctAnswers = newAnswers.filter(
+        (answer, index) => answer === questions[index].correct
+      ).length
+
       setScore(correctAnswers)
       setShowResult(true)
-      
-      // Update user progress
+
+      // Actualizar progreso del usuario
       if (user) {
-        const updatedUser = {
-          ...user,
-          progress: {
+        try {
+          const updatedProgress = {
             ...user.progress,
-            level1: Math.max(user.progress.level1, correctAnswers)
+            level1: score, // Podés cambiarlo dinámicamente si querés
           }
+
+          const res = await fetch("/api/users/updateProgress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: user.email,
+              progress: updatedProgress,
+            }),
+          })
+
+          if (!res.ok) {
+            console.error("Fallo al actualizar el progreso del usuario")
+          } 
+        } catch (error) {
+          console.error("Error al actualizar progreso:", error)
         }
-        localStorage.setItem("user", JSON.stringify(updatedUser))
       }
     }
   }
@@ -185,6 +210,7 @@ export default function Level1Page() {
 
   if (!user) {
     return <div>Cargando...</div>
+    return <div>Cargando...</div>
   }
 
   if (showResult) {
@@ -197,10 +223,12 @@ export default function Level1Page() {
                 <Button variant="outline" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver al Panel de Niveles
+                  Volver al Panel de Niveles
                 </Button>
               </Link>
               <div className="flex items-center space-x-2">
                 <Volume2 className="h-8 w-8 text-indigo-600" />
+                <span className="text-2xl font-bold text-gray-900">Fono al día</span>
                 <span className="text-2xl font-bold text-gray-900">Fono al día</span>
               </div>
             </div>
@@ -213,6 +241,7 @@ export default function Level1Page() {
               <CardHeader className="text-center">
                 <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                 <CardTitle className="text-2xl">Nivel 1 Completado!</CardTitle>
+                <CardTitle className="text-2xl">Nivel 1 Completado!</CardTitle>
                 <CardDescription>
                   Terminaste los Fundamentos Básicos.
                 </CardDescription>
@@ -222,6 +251,7 @@ export default function Level1Page() {
                   <div className="text-4xl font-bold text-green-600 mb-2">
                     {score}/10
                   </div>
+                  <p className="text-gray-600">Preguntas respondidas correctamente</p>
                   <p className="text-gray-600">Preguntas respondidas correctamente</p>
                 </div>
 
@@ -236,12 +266,15 @@ export default function Level1Page() {
                 <div className="flex gap-4 justify-center">
                   <Button onClick={handleRetry} variant="outline">
                     Volver a Intentar
+                    Volver a Intentar
                   </Button>
                   <Link href="/dashboard">
+                    <Button>Volver al Panel de niveles</Button>
                     <Button>Volver al Panel de niveles</Button>
                   </Link>
                   {score >= 6 && (
                     <Link href="/levels/2">
+                      <Button>Continuar al nivel 2</Button>
                       <Button>Continuar al nivel 2</Button>
                     </Link>
                   )}

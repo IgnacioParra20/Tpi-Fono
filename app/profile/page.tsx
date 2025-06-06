@@ -15,7 +15,6 @@ interface UserData {
   name: string
   email: string
   age: string
-  career: string
   gender: string
   progress: {
     level1: number
@@ -29,21 +28,11 @@ export default function ProfilePage() {
   const [formData, setFormData] = useState({
     name: "",
     age: "",
-    career: "",
     gender: ""
   })
   const [success, setSuccess] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-
-  // Mapeo de traducción
-  const careerMap: Record<string, string> = {
-    "speech-pathology": "Fonoaudiología",
-    "audiology": "Audiología",
-    "linguistics": "Lingüística",
-    "communication-disorders": "Trastornos de la comunicación",
-    "other": "Otro"
-  }
 
   const genderMap: Record<string, string> = {
     "female": "Femenino",
@@ -58,14 +47,26 @@ export default function ProfilePage() {
       router.push("/login")
       return
     }
-    const parsedUser = JSON.parse(userData)
-    setUser(parsedUser)
-    setFormData({
-      name: parsedUser.name,
-      age: parsedUser.age,
-      career: parsedUser.career,
-      gender: parsedUser.gender
+    const email  = JSON.parse(userData)
+    fetch("/api/getUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
     })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user)
+          setFormData({
+            name: data.user.name,
+            age: data.user.age,
+            gender: data.user.gender
+          })
+        } else {
+          router.push("/login")
+        }
+      })
+      .catch(() => router.push("/login"))
   }, [router])
 
   const handleInputChange = (field: string, value: string) => {
@@ -175,22 +176,6 @@ export default function ProfilePage() {
                   onChange={(e) => handleInputChange("age", e.target.value)}
                   required
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="career">Carrera / Campo de estudio</Label>
-                <Select value={formData.career} onValueChange={(value) => handleInputChange("career", value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona tu campo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Fonoaudiologo">Fonoaudiología</SelectItem>
-                    <SelectItem value="Audiologo">Audiología</SelectItem>
-                    <SelectItem value="Linguista">Lingüística</SelectItem>
-                    <SelectItem value="Persona con transtorno de comunicación">Trastornos de la comunicación</SelectItem>
-                    <SelectItem value="Otro">Otro</SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
 
               <div className="space-y-2">

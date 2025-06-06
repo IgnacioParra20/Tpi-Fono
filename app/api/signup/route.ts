@@ -5,9 +5,9 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, password, age, career, gender } = body
+    const { name, email, password, age, gender } = body
 
-    if (!name || !email || !password || !age || !career || !gender) {
+    if (!name || !email || !password || !age || !gender) {
       return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 })
     }
 
@@ -29,7 +29,6 @@ export async function POST(request: NextRequest) {
         email,
         password,
         age: parseInt(age),
-        career,
         gender,
         progress: { level1: 0, level2: 0, level3: 0 },
       },

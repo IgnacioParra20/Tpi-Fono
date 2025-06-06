@@ -17,7 +17,6 @@ export default function SignupPage() {
     email: "",
     password: "",
     age: "",
-    career: "",
     gender: ""
   })
   const [error, setError] = useState("")
@@ -42,7 +41,6 @@ export default function SignupPage() {
           email: formData.email,
           password: formData.password,
           age: formData.age,
-          career: formData.career,
           gender: formData.gender,
         }),
       })
