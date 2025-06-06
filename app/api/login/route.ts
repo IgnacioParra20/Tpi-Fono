@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 })
     }
 
+
     return NextResponse.json({
       success: true,
       message: "Inicio de sesión exitoso",
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
         id: data.id,
         name: data.name,
         email: data.email,
-        career: data.career,
+        gender: data.gender,
         progress: data.progress || {},
       },
     })
