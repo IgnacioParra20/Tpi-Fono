@@ -34,6 +34,15 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
+  // Mapeo de traducción
+  const careerMap: Record<string, string> = {
+    "speech-pathology": "Fonoaudiología",
+    "audiology": "Audiología",
+    "linguistics": "Lingüística",
+    "communication-disorders": "Trastornos de la comunicación",
+    "other": "Otro"
+  }
+
   const genderMap: Record<string, string> = {
     "female": "Femenino",
     "male": "Masculino",
@@ -176,6 +185,22 @@ export default function ProfilePage() {
                   onChange={(e) => handleInputChange("age", e.target.value)}
                   required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="career">Carrera / Campo de estudio</Label>
+                <Select value={formData.career} onValueChange={(value) => handleInputChange("career", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona tu campo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Fonoaudiologo">Fonoaudiología</SelectItem>
+                    <SelectItem value="Audiologo">Audiología</SelectItem>
+                    <SelectItem value="Linguista">Lingüística</SelectItem>
+                    <SelectItem value="Persona con transtorno de comunicación">Trastornos de la comunicación</SelectItem>
+                    <SelectItem value="Otro">Otro</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">

@@ -135,6 +135,10 @@ export default function DashboardPage() {
       <CardContent className="p-4">
         <div className="flex items-center space-x-2">
           <User className="h-5 w-5 text-indigo-600" />
+          <div>
+            <p className="text-sm text-gray-600">Carrera</p>
+            <p className="font-semibold">{user.career}</p>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -178,6 +182,7 @@ export default function DashboardPage() {
       const Icon = level.icon
       const isLocked = level.id > 1 && levels[level.id - 2].progress < levels[level.id - 2].maxProgress
       const isCompleted = level.progress >= level.maxProgress
+
       return (
         <Card key={level.id} className={`relative ${isLocked ? "opacity-50" : ""}`}>
           <CardHeader>

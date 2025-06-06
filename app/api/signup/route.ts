@@ -39,8 +39,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, message: "Usuario registrado", user: data })
   } catch (error) {
   console.error("Error al registrar usuario:", error) 
-  // Nuevo log detallado para depuración
-  console.log("Detalles del error:", JSON.stringify(error, Object.getOwnPropertyNames(error)))
   return NextResponse.json({ error: "Error al registrar el usuario" }, { status: 500 })
 
   }
