@@ -5,9 +5,9 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, email, password, age, career, gender } = body
+    const { name, email, password, age, gender } = body
 
-    if (!name || !email || !password || !age || !career || !gender) {
+    if (!name || !email || !password || !age || !gender) {
       return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 })
     }
 
@@ -27,9 +27,8 @@ export async function POST(request: NextRequest) {
       {
         name,
         email,
-        password, // 🔐 En producción, hashear contraseña
+        password,
         age: parseInt(age),
-        career,
         gender,
         progress: { level1: 0, level2: 0, level3: 0 },
       },
@@ -39,7 +38,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, message: "Usuario registrado", user: data })
   } catch (error) {
-  console.error("Error al registrar usuario:", error) // ✅ Ahora verás más detalles
+  console.error("Error al registrar usuario:", error) 
+  // Nuevo log detallado para depuración
+  console.log("Detalles del error:", JSON.stringify(error, Object.getOwnPropertyNames(error)))
   return NextResponse.json({ error: "Error al registrar el usuario" }, { status: 500 })
 
   }

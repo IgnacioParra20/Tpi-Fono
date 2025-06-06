@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         id: data.id,
         name: data.name,
         email: data.email,
-        career: data.career,
+        gender: data.gender,
         progress: data.progress || {},
       },
     })
