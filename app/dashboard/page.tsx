@@ -171,7 +171,6 @@ export default function DashboardPage() {
       const Icon = level.icon
       const isLocked = level.id > 1 && levels[level.id - 2].progress < levels[level.id - 2].maxProgress
       const isCompleted = level.progress >= level.maxProgress
-
       return (
         <Card key={level.id} className={`relative ${isLocked ? "opacity-50" : ""}`}>
           <CardHeader>
