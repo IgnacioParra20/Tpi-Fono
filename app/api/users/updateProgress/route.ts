@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
 import { updateUserProgress } from "@/lib/userDB"
+import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   const { email, progress } = await req.json()
