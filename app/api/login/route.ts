@@ -1,4 +1,3 @@
-
 // app/api/login/route.ts
 import { supabase } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
@@ -32,7 +31,7 @@ export async function POST(request: NextRequest) {
         id: data.id,
         name: data.name,
         email: data.email,
-        career: data.career,
+        gender: data.gender,
         progress: data.progress || {},
       },
     })

@@ -1,14 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { userDB } from '@/lib/userDB'
+import { supabase } from '@/lib/supabase'
 
-export async function GET(req: NextRequest) {
-  const { email, password } = await req.json()
+export async function POST(request: NextRequest) {
+  try {
+    const { email } = await request.json()
+    if (!email) {
+      return NextResponse.json({ error: 'Email requerido' }, { status: 400 });
+    }
 
-  const user = userDB.find(u => u.email === email && u.password === password)
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
 
-  if (!user) {
-    return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 })
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    if (!user) {
+      return NextResponse.json({ error: 'Usuario no encontrado' }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, user });
+  } catch (err) {
+    return NextResponse.json({ error: 'Error inesperado en el servidor' }, { status: 500 });
   }
-  console.log("Usuarios actuales:", userDB)
-  return NextResponse.json({ success: true, user })
 }

@@ -13,7 +13,6 @@ interface UserData {
   name: string
   email: string
   age: string
-  career: string
   gender: string
   progress: {
     level1: number
@@ -24,31 +23,33 @@ interface UserData {
 
 export default function DashboardPage() {
   const [user, setUser] = useState<UserData | null>(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
   
   useEffect(() => {
-    
     const userData = localStorage.getItem("user")
     if (!userData) {
+      console.log("No se encontró el usuario en localStorage")
       router.push("/login")
       return
     }
-
-    try {
-      const parsedUser = JSON.parse(userData)
-
-      // Ensure progress object exists with default values
-      if (!parsedUser.progress) {
-        parsedUser.progress = { level1: 0, level2: 0, level3: 0 }
-        localStorage.setItem("user", JSON.stringify(parsedUser))
-      }
-
-      setUser(parsedUser)
-    } catch (error) {
-      console.error("Error parsing user data:", error)
-      localStorage.removeItem("user")
-      router.push("/login")
-    }
+    const  email  = JSON.parse(userData)
+    // Buscar usuario en la base de datos
+    fetch("/api/getUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user)
+        } else {
+          router.push("/login")
+        }
+      })
+      .catch(() => router.push("/login"))
+      .finally(() => setLoading(false))
   }, [router])
 
   const handleLogout = () => {
@@ -56,9 +57,8 @@ export default function DashboardPage() {
     router.push("/")
   }
 
-  if (!user) {
-    return <div>Loading...</div>
-  }
+  if (loading) return <div>Cargando...</div>
+  if (!user) return <div>No se encontró el usuario.</div>
 
   const levels = [
   {
@@ -131,17 +131,6 @@ export default function DashboardPage() {
 
   {/* Estadísticas del usuario */}
   <div className="grid md:grid-cols-4 gap-4 mb-8">
-    <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center space-x-2">
-          <User className="h-5 w-5 text-indigo-600" />
-          <div>
-            <p className="text-sm text-gray-600">Carrera</p>
-            <p className="font-semibold">{user.career}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
     <Card>
       <CardContent className="p-4">
         <div>

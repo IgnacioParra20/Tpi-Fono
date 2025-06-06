@@ -37,7 +37,7 @@ export default function LoginPage() {
 
       const data = await res.json()
       // Guardar el usuario en localStorage si querés
-      localStorage.setItem("user", JSON.stringify(data.user))
+      localStorage.setItem("user", JSON.stringify(data.user.email))
       router.push("/dashboard")
     } catch (err) {
       setError("Something went wrong.")

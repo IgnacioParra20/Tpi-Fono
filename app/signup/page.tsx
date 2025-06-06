@@ -17,7 +17,6 @@ export default function SignupPage() {
     email: "",
     password: "",
     age: "",
-    career: "",
     gender: ""
   })
   const [error, setError] = useState("")
@@ -42,7 +41,6 @@ export default function SignupPage() {
           email: formData.email,
           password: formData.password,
           age: formData.age,
-          career: formData.career,
           gender: formData.gender,
         }),
       })
@@ -129,22 +127,6 @@ export default function SignupPage() {
                 onChange={(e) => handleInputChange("age", e.target.value)}
                 required
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="career">Carrera / Campo de estudio</Label>
-              <Select onValueChange={(value) => handleInputChange("career", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona tu campo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="speech-pathology">Fonoaudiología</SelectItem>
-                  <SelectItem value="audiology">Audiología</SelectItem>
-                  <SelectItem value="linguistics">Lingüística</SelectItem>
-                  <SelectItem value="communication-disorders">Trastornos de la comunicación</SelectItem>
-                  <SelectItem value="other">Otro</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="space-y-2">
