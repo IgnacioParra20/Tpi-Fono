@@ -36,7 +36,6 @@ export default function LoginPage() {
       }
 
       const data = await res.json()
-      // Guardar el usuario en localStorage si querés
       localStorage.setItem("user", JSON.stringify(data.user.email))
       router.push("/dashboard")
     } catch (err) {
@@ -47,73 +46,78 @@ export default function LoginPage() {
   }
 
   return (
-  <div 
-    className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4"
-    style={{ backgroundImage: "url('/fondo-textura.png')" }}
-  >
-    {/* Tarjeta de Inicio de Sesión */}
-    <div className="w-full max-w-md">
-  <div className="text-center mb-8">
-    <Link href="/" className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-xl shadow-md">
-      <Volume2 className="h-8 w-8 text-indigo-600" />
-      <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
-    </Link>
+    <div 
+      className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 bg-cover bg-center"
+      style={{ backgroundImage: "url('/fondo-textura.png')" }}
+    >
+      <div className="w-full max-w-md">
+        {/* Encabezado con animación */}
+        <div className="text-center mb-8 opacity-0 animate-fade-in">
+          <Link href="/" className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-xl shadow-md transition-transform duration-200 hover:scale-105 active:scale-95">
+            <Volume2 className="h-8 w-8 text-indigo-600" />
+            <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
+          </Link>
+        </div>
+
+        {/* Tarjeta de inicio de sesión animada */}
+        <Card className="opacity-0 animate-fade-in delay-100">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Bienvenido/a de nuevo</CardTitle>
+            <CardDescription>
+              Inicia sesión para continuar con tu aprendizaje en fonología
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Correo electrónico</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Ingresa tu correo"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Contraseña</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Ingresa tu contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <Button 
+                type="submit" 
+                className="w-full transition-transform duration-200 hover:scale-105 active:scale-95"
+                disabled={isLoading}
+              >
+                {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+              </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                ¿No tienes una cuenta?{" "}
+                <Link href="/signup" className="text-indigo-600 hover:underline">
+                  Regístrate aquí
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Bienvenido/a de nuevo</CardTitle>
-          <CardDescription>
-            Inicia sesión para continuar con tu aprendizaje en fonología
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Correo electrónico</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Ingresa tu correo"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Contraseña</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Ingresa tu contraseña"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
-            </Button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              ¿No tienes una cuenta?{" "}
-              <Link href="/signup" className="text-indigo-600 hover:underline">
-                Regístrate aquí
-              </Link>
-            </p>
-          </div>
-        </CardContent>
-      </Card>
     </div>
-  </div>
-)
+  )
 }
