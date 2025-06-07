@@ -119,36 +119,51 @@ export default function DashboardPage() {
       className="min-h-screen bg-gradient-to-br from-blue-50/80 via-indigo-100/80 to-indigo-200/80 bg-cover bg-center"
       style={{ backgroundImage: "url('/fondo-textura.png')" }}
     >
-{/* Encabezado */}
-<header className="bg-white shadow-sm">
+<header>
   <div className="container mx-auto px-4 py-4">
     <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-2">
+      
+      {/* Cuadro blanco solo para Fono al Día */}
+      <div className="bg-white px-4 py-2 rounded-xl shadow-md flex items-center space-x-2">
         <Volume2 className="h-8 w-8 text-indigo-600" />
         <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
       </div>
-      <div className="flex items-center space-x-4">
-        <Link href="/profile">
-          <Button variant="outline" size="sm">
-            <Settings className="h-4 w-4 mr-2" />
-            Perfil
-          </Button>
-        </Link>
-        <Button variant="outline" size="sm" onClick={handleLogout}>
-          Cerrar sesión
-        </Button>
-      </div>
+
+<div className="flex items-center space-x-4">
+  <Link href="/profile">
+    <Button
+      variant="outline"
+      size="sm"
+      className="transition-transform transition-shadow duration-200 hover:scale-105 hover:shadow-md"
+    >
+      <Settings className="h-4 w-4 mr-2" />
+      Perfil
+    </Button>
+  </Link>
+
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={handleLogout}
+    className="transition-transform transition-shadow duration-200 hover:scale-105 hover:shadow-md"
+  >
+    Cerrar sesión
+  </Button>
+</div>
     </div>
   </div>
 </header>
 
 <main className="container mx-auto px-4 py-8">
-  {/* Sección de bienvenida */}
-  <div className="mb-8">
-    <h1 className="text-3xl font-bold text-gray-900 mb-2">¡Bienvenido/a de nuevo, {user.name}!</h1>
-    <p className="text-gray-600">Continúa tu aprendizaje en fonología. Elige un nivel para comenzar.</p>
+  {/* Sección de bienvenida con cuadro blanco */}
+  <div className="bg-white p-6 rounded-xl shadow-md mb-8">
+    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      ¡Bienvenido/a de nuevo, {user.name}!
+    </h1>
+    <p className="text-gray-600">
+      Continúa tu aprendizaje en fonología. Elige un nivel para comenzar.
+    </p>
   </div>
-
   {/* Estadísticas del usuario */}
   <div className="grid md:grid-cols-4 gap-4 mb-8">
     <Card>

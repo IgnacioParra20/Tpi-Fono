@@ -53,12 +53,11 @@ export default function LoginPage() {
   >
     {/* Tarjeta de Inicio de Sesión */}
     <div className="w-full max-w-md">
-      {/* Logo */}
-      <div className="text-center mb-8">
-        <Link href="/" className="inline-flex items-center space-x-2">
-          <Volume2 className="h-8 w-8 text-indigo-600" />
-          <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
-        </Link>
+  <div className="text-center mb-8">
+    <Link href="/" className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-xl shadow-md">
+      <Volume2 className="h-8 w-8 text-indigo-600" />
+      <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
+    </Link>
       </div>
 
       <Card>
