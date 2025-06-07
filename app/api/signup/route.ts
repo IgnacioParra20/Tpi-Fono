@@ -1,5 +1,6 @@
 
 // app/api/signup/route.ts
+import { Progress } from '@/components/ui/progress'
 import { supabase } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -23,26 +24,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "El usuario ya existe" }, { status: 409 })
     }
 
-    // Crear el nuevo usuario
-    const { data, error } = await supabase.from('users').insert([
-      {
-        name,
-        email,
-        password,
-        age: parseInt(age),
-        gender,
-        progress: { level1: 0, level2: 0, level3: 0 },
-      },
-    ])
 
-    if (error) throw error
+    // Crear usuario
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .insert([{ email, password, name, age, gender }])
+      .select()
+      .single();
 
-    return NextResponse.json({ success: true, message: "Usuario registrado", user: data })
+
+    if (userError) {
+      console.error("Error al crear usuario:", userError);
+      return NextResponse.json({ error: "Error al crear usuario", details: userError.message }, { status: 500 });
+    }
+    if (!user || !user.id) {
+      console.error("No se obtuvo el id del usuario creado:", user);
+      return NextResponse.json({ error: "No se pudo obtener el id del usuario creado" }, { status: 500 });
+    }
+    
+    // Crear progreso asociado
+    return NextResponse.json({ success: true, message: "Usuario registrado", user: { ...user } });
   } catch (error) {
-  console.error("Error al registrar usuario:", error) 
-  // Nuevo log detallado para depuración
-  console.log("Detalles del error:", JSON.stringify(error, Object.getOwnPropertyNames(error)))
-  return NextResponse.json({ error: "Error al registrar el usuario" }, { status: 500 })
+
+    console.error("Error al registrar usuario:", error)
+    return NextResponse.json({
+      error: "Error al registrar el usuario",
+      details: error instanceof Error ? error.message : String(error)
+    }, { status: 500 })
 
   }
 }
