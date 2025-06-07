@@ -142,7 +142,22 @@ export default function Level1Page() {
       router.push("/login")
       return
     }
-    setUser(JSON.parse(userData))
+    const  email  = JSON.parse(userData)
+    fetch("/api/getUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user)
+          console.log("user", data.user)
+        } else {
+          router.push("/login")
+        }
+      })
+      .catch(() => router.push("/login"))
   }, [router])
 
   const handleAnswerSelect = (value: string) => {
@@ -160,7 +175,7 @@ export default function Level1Page() {
     } else {
       // Calcular puntaje
       const correctAnswers = newAnswers.filter(
-        (answer, index) => answer === questions[index].correct
+        (answer, index) => questions[index] && answer === questions[index].correct
       ).length
 
       setScore(correctAnswers)
@@ -171,15 +186,16 @@ export default function Level1Page() {
         try {
           const updatedProgress = {
             ...user.progress,
-            level1: score, // Podés cambiarlo dinámicamente si querés
+            level1: correctAnswers, // Podés cambiarlo dinámicamente si querés
           }
-
+          console.log("updatedProgress", JSON.stringify(updatedProgress))
           const res = await fetch("/api/users/updateProgress", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              email: user.email,
-              progress: updatedProgress,
+              userId: user.id,
+              nuevoValor: correctAnswers,
+              nivel: "lvl1",
             }),
           })
 
