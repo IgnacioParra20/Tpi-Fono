@@ -8,23 +8,25 @@ import { Activity, BookOpen, Settings, Stethoscope, Volume2 } from "lucide-react
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-
 interface UserData {
   name: string
   email: string
   age: string
   gender: string
-  progress: {
-    level1: number
-    level2: number
-    level3: number
-  }
+  id: string
+}
+interface progresoData {
+  lvl1: number
+  lvl2: number
+  lvl3: number
+  usuario: string
 }
 
 export default function DashboardPage() {
   const [user, setUser] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  const [progreso, setProgreso] = useState<progresoData | null>(null)
   
   useEffect(() => {
     const userData = localStorage.getItem("user")
@@ -44,6 +46,9 @@ export default function DashboardPage() {
       .then(data => {
         if (data.user) {
           setUser(data.user)
+
+          
+
         } else {
           router.push("/login")
         }
@@ -51,7 +56,22 @@ export default function DashboardPage() {
       .catch(() => router.push("/login"))
       .finally(() => setLoading(false))
   }, [router])
-
+  useEffect(() => {
+    console.log("user", user)
+    if (!user || !user.id) return; // Espera a que user esté cargado
+  
+    fetch("/api/getProgress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: user.id }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.progreso) {
+          setProgreso(data.progreso)
+        }
+      });
+  }, [user]);
   const handleLogout = () => {
     localStorage.removeItem("user")
     router.push("/")
@@ -66,7 +86,7 @@ export default function DashboardPage() {
     title: "Nivel Fundamentos",
     description: "Completa 10 preguntas fundamentales de fonología",
     icon: BookOpen,
-    progress: user.progress?.level1 || 0,
+    progress: progreso?.lvl1 || 0,
     maxProgress: 10,
     color: "bg-green-500",
     href: "/levels/1",
@@ -76,7 +96,7 @@ export default function DashboardPage() {
     title: "Dominio del Equipamiento",
     description: "Identifica las distintas partes de un audiómetro",
     icon: Stethoscope,
-    progress: user.progress?.level2 || 0,
+    progress: progreso?.lvl2 || 0,
     maxProgress: 8,
     color: "bg-yellow-500",
     href: "/levels/2",
@@ -86,7 +106,7 @@ export default function DashboardPage() {
     title: "Aplicación Clínica",
     description: "Modifica la audiometría para ajustarse a condiciones patológicas",
     icon: Activity,
-    progress: user.progress?.level3 || 0,
+    progress: progreso?.lvl3 || 0,
     maxProgress: 5,
     color: "bg-red-500",
     href: "/levels/3",
@@ -136,7 +156,7 @@ export default function DashboardPage() {
         <div>
           <p className="text-sm text-gray-600">Progreso total</p>
           <p className="font-semibold">
-            {(user.progress?.level1 || 0) + (user.progress?.level2 || 0) + (user.progress?.level3 || 0)}/23 Completado
+            {(progreso?.lvl1 || 0) + (progreso?.lvl2|| 0) + (progreso?.lvl3 || 0)}/23 Completado
           </p>
         </div>
       </CardContent>
@@ -146,8 +166,8 @@ export default function DashboardPage() {
         <div>
           <p className="text-sm text-gray-600">Nivel actual</p>
           <p className="font-semibold">
-            {(user.progress?.level1 || 0) === 10
-              ? (user.progress?.level2 || 0) === 8
+            {(progreso?.lvl1 || 0) === 10
+              ? (progreso?.lvl2 || 0) === 8
                 ? "Nivel 3"
                 : "Nivel 2"
               : "Nivel 1"}

@@ -140,7 +140,22 @@ export default function Level1Page() {
       router.push("/login")
       return
     }
-    setUser(JSON.parse(userData))
+    const  email  = JSON.parse(userData)
+    fetch("/api/getUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user)
+          console.log("user", data.user)
+        } else {
+          router.push("/login")
+        }
+      })
+      .catch(() => router.push("/login"))
   }, [router])
 
   const handleAnswerSelect = (value: string) => {
@@ -167,8 +182,25 @@ export default function Level1Page() {
           ...user,
           progress: {
             ...user.progress,
-            level1: Math.max(user.progress.level1, correctAnswers)
+
+            level1: correctAnswers, // Podés cambiarlo dinámicamente si querés
           }
+          console.log("updatedProgress", JSON.stringify(updatedProgress))
+          const res = await fetch("/api/users/updateProgress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: user.id,
+              nuevoValor: correctAnswers,
+              nivel: "lvl1",
+            }),
+          })
+
+          if (!res.ok) {
+            console.error("Fallo al actualizar el progreso del usuario")
+          } 
+        } catch (error) {
+          console.error("Error al actualizar progreso:", error)
         }
         localStorage.setItem("user", JSON.stringify(updatedUser))
       }
