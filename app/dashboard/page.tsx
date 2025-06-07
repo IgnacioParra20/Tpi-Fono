@@ -46,7 +46,9 @@ export default function DashboardPage() {
       .then(data => {
         if (data.user) {
           setUser(data.user)
+
           
+
         } else {
           router.push("/login")
         }
