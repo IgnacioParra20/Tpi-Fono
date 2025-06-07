@@ -30,7 +30,6 @@ export async function POST(request: NextRequest) {
         password,
         age: parseInt(age),
         gender,
-        progress: { level1: 0, level2: 0, level3: 0 },
       },
     ])
 

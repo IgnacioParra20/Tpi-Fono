@@ -82,19 +82,17 @@ export default function Level3Page() {
   const [user, setUser] = useState<any>(null)
   const router = useRouter()
 
-  useEffect(() => {
-    const userData = localStorage.getItem("user")
-    if (!userData) {
-      router.push("/login")
-      return
-    }
-    const parsedUser = JSON.parse(userData)
-    if (parsedUser.progress.level2 < 4) {
-      router.push("/dashboard")
-      return
-    }
-    setUser(parsedUser)
-  }, [router])
+useEffect(() => {
+  const userData = localStorage.getItem("user")
+  if (!userData) {
+    router.push("/login")
+    return
+  }
+
+  const parsedUser = JSON.parse(userData)
+  setUser(parsedUser)
+}, [router])
+
 
   const handleAirConductionChange = (index: number, value: number[]) => {
     const newAirConduction = [...userAudiogram.airConduction]
