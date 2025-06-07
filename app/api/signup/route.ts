@@ -1,4 +1,5 @@
 // app/api/signup/route.ts
+import { Progress } from '@/components/ui/progress'
 import { supabase } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -41,10 +42,12 @@ export async function POST(request: NextRequest) {
     // Crear progreso asociado
     return NextResponse.json({ success: true, message: "Usuario registrado", user: { ...user } });
   } catch (error) {
+
     console.error("Error al registrar usuario:", error)
     return NextResponse.json({
       error: "Error al registrar el usuario",
       details: error instanceof Error ? error.message : String(error)
     }, { status: 500 })
+
   }
 }
