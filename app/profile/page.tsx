@@ -100,40 +100,33 @@ export default function ProfilePage() {
     return <div>Cargando...</div>
   }
 
- return (
+return (
   <div
     className="min-h-screen bg-gradient-to-br from-blue-50/80 via-indigo-100/80 to-indigo-200/80 bg-cover bg-center"
     style={{ backgroundImage: "url('/fondo-textura.png')" }}
   >
     {/* Encabezado */}
-    <header className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-4">
+    <header>
+      <div className="container    mx-auto px-8 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/dashboard">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+            <Link href="/dashboard">  
+              <Button variant="outline" size="sm"
+              className="text-base font-bold px-6 py-3 transition-transform duration-200 hover:scale-105 hover:shadow-md border-gray-300 text-gray-700">
+                <ArrowLeft className="h-5 w-5 mr-2" />
                 Volver al Panel
               </Button>
             </Link>
-            <div className="flex items-center space-x-2">
+            <div className="bg-white px-4 py-2 rounded-xl shadow-md flex items-center space-x-2">
               <Volume2 className="h-8 w-8 text-indigo-600" />
-              <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
-            </div>
+            <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
           </div>
         </div>
-      </div>
+      </div>  
     </header>
 
-    <main className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Configuración de Perfil</h1>
-          <p className="text-gray-600">
-            Actualiza tu información personal y preferencias.
-          </p>
-        </div>
-
+    {/* Sección Principal */}
+    <main className="container mx-auto px-8 py-12">
+      <div className="max-w-3xl mx-auto"> 
         <Card>
           <CardHeader>
             <CardTitle>Información Personal</CardTitle>
@@ -199,7 +192,7 @@ export default function ProfilePage() {
                 </Alert>
               )}
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full transition-transform duration-200 hover:scale-105 active:scale-95" disabled={isLoading}>
                 <Save className="h-4 w-4 mr-2" />
                 {isLoading ? "Guardando..." : "Guardar Cambios"}
               </Button>
