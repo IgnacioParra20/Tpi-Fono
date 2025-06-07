@@ -153,17 +153,6 @@ export default function DashboardPage() {
   <div className="grid md:grid-cols-4 gap-4 mb-8">
     <Card>
       <CardContent className="p-4">
-        <div className="flex items-center space-x-2">
-          <User className="h-5 w-5 text-indigo-600" />
-          <div>
-            <p className="text-sm text-gray-600">Carrera</p>
-            <p className="font-semibold">{user.career}</p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-    <Card>
-      <CardContent className="p-4">
         <div>
           <p className="text-sm text-gray-600">Progreso total</p>
           <p className="font-semibold">
