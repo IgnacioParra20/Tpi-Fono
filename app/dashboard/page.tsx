@@ -183,8 +183,10 @@ export default function DashboardPage() {
           <p className="font-semibold">
             {(progreso?.lvl1 || 0) === 10
               ? (progreso?.lvl2 || 0) === 8
-                ? "Nivel 3"
-                : "Nivel 2"
+                ? (progreso?.lvl3 || 0) === 5
+                  ? "Nivel 3"
+                  : "Nivel 2"
+                : "Nivel 1"
               : "Nivel 1"}
           </p>
         </div>
@@ -239,7 +241,7 @@ export default function DashboardPage() {
               </div>
 
               <Link href={isLocked ? "#" : level.href}>
-                <Button className="w-full" disabled={isLocked} variant={isCompleted ? "outline" : "default"}>
+                <Button className="w-full mt-2" disabled={isLocked} variant={isCompleted ? "outline" : "default"}>
                   {isLocked ? "Completa el nivel anterior" : isCompleted ? "Revisar" : "Continuar"}
                 </Button>
               </Link>

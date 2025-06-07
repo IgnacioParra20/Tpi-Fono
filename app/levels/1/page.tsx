@@ -304,12 +304,12 @@ export default function Level1Page() {
             <Link href="/dashboard">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
+                Volver al panel
               </Button>
             </Link>
             <div className="flex items-center space-x-2">
               <Volume2 className="h-8 w-8 text-indigo-600" />
-              <span className="text-2xl font-bold text-gray-900">PhonologyLearn</span>
+              <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
             </div>
           </div>
         </div>
@@ -319,7 +319,7 @@ export default function Level1Page() {
         <div className="max-w-2xl mx-auto">
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
-              <h1 className="text-2xl font-bold">Level 1: Foundation</h1>
+              <h1 className="text-2xl font-bold">Nivel 1: Fundamentos</h1>
               <span className="text-sm text-gray-600">
                 Pregunta {currentQuestion + 1} de {questions.length}
               </span>
