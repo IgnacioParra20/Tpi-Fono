@@ -23,14 +23,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "El usuario ya existe" }, { status: 409 })
     }
 
-
     // Crear usuario
     const { data: user, error: userError } = await supabase
       .from('users')
       .insert([{ email, password, name, age, gender }])
       .select()
       .single();
-
 
     if (userError) {
       console.error("Error al crear usuario:", userError);
