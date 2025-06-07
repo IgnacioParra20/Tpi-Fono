@@ -1,4 +1,3 @@
-
 // app/api/login/route.ts
 import { supabase } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
@@ -24,7 +23,6 @@ export async function POST(request: NextRequest) {
     if (data.password !== password) {
       return NextResponse.json({ error: "Contraseña incorrecta" }, { status: 401 })
     }
-
 
     return NextResponse.json({
       success: true,

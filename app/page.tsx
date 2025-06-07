@@ -12,7 +12,7 @@ export default function LandingPage() {
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
   <nav className="flex items-center justify-between">
-    <div className="flex items-center space-x-2">
+    <div className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-2 w-fit">
       <Volume2 className="h-8 w-8 text-indigo-600" />
       <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
     </div>
