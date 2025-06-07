@@ -78,27 +78,42 @@ export default function Level2Page() {
   const [selectedPosition, setSelectedPosition] = useState<{x: number, y: number} | null>(null)
   const router = useRouter()
 
-  useEffect(() => {
-  const userData = localStorage.getItem("user")
-  if (!userData) {
-    router.push("/login")
-    return
+useEffect(() => {
+    const userData = localStorage.getItem("user")
+    if (!userData) {
+      router.push("/login")
+      return
+    }
+
+    const email = JSON.parse(userData)
+
+    fetch("/api/getUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user)
+          console.log("user", data.user)
+        } else {
+          router.push("/login")
+        }
+      })
+      .catch(() => router.push("/login"))
+  }, [router])
+
+  // ✅ Capturar clic en la imagen
+  const handlePositionClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const x = ((event.clientX - rect.left) / rect.width) * 100
+    const y = ((event.clientY - rect.top) / rect.height) * 100
+    setSelectedPosition({ x, y })
   }
 
-  const parsedUser = JSON.parse(userData)
-  setUser(parsedUser)
-}, [router])
-
-
-const handlePositionClick = (event: React.MouseEvent<HTMLDivElement>) => {
-  const rect = event.currentTarget.getBoundingClientRect()
-  const x = ((event.clientX - rect.left) / rect.width) * 100
-  const y = ((event.clientY - rect.top) / rect.height) * 100
-  setSelectedPosition({ x, y })
-}
-
-
-  const handleNext = () => {
+  // ✅ Evaluar respuestas y actualizar progreso
+  const handleNext = async () => {
     if (!selectedPosition) return
 
     const newAnswers = [...userAnswers, selectedPosition]
@@ -108,19 +123,43 @@ const handlePositionClick = (event: React.MouseEvent<HTMLDivElement>) => {
       setCurrentPart(currentPart + 1)
       setSelectedPosition(null)
     } else {
-      // Calculate score and finish
-const correctAnswers = newAnswers.filter((answer, index) => {
-  const correct = audiometerParts[index].correctPosition
-  const distance = Math.sqrt(
-    Math.pow(answer.x - correct.x, 2) +
-    Math.pow(answer.y - correct.y, 2)
-  )
-  return distance <= 2 // ajuste fino (puede ser 10, 12 o 15 según tu imagen)
-}).length
+      const correctAnswers = newAnswers.filter((answer, index) => {
+        const correct = audiometerParts[index].correctPosition
+        const distance = Math.sqrt(
+          Math.pow(answer.x - correct.x, 2) +
+          Math.pow(answer.y - correct.y, 2)
+        )
+        return distance <= 2
+      }).length
 
       setScore(correctAnswers)
       setShowResult(true)
-      
+
+      // ✅ Enviar progreso del nivel 2 al backend
+      if (user) {
+        try {
+          const updatedProgress = {
+            ...user.progress,
+            level2: correctAnswers, // Podés cambiarlo dinámicamente si querés
+          }
+          console.log("updatedProgress", JSON.stringify(updatedProgress))
+          const res = await fetch("/api/users/updateProgress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: user.id,
+              nuevoValor: correctAnswers,
+              nivel: "lvl2",
+            }),
+          })
+
+          if (!res.ok) {
+            console.error("Fallo al actualizar el progreso del usuario")
+          } 
+        } catch (error) {
+          console.error("Error al actualizar progreso:", error)
+        }
+      }
     }
   }
 

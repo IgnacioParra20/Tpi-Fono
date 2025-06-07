@@ -21,7 +21,8 @@ const questions = [
       "Un tipo de vocal",
       "Una unidad de sonido que distingue significado"
     ],
-    correct: 3
+    correct: 1 //2
+
   },
   {
     id: 2,
@@ -32,7 +33,7 @@ const questions = [
       "correr/corriendo",
       "gato/pato"
     ],
-    correct: 3
+    correct: 2 //3
   },
   {
     id: 3,
@@ -44,7 +45,8 @@ const questions = [
       "Academia Internacional de Pronunciación"
 
     ],
-    correct: 0
+    correct: 2 //3
+
   },
   {
     id: 4,
@@ -55,7 +57,8 @@ const questions = [
       "Vibración de las cuerdas vocales",
       "Dirección del flujo de aire"
     ],
-    correct: 2
+    correct: 0 //1
+
   },
   {
     id: 5,
@@ -66,7 +69,9 @@ const questions = [
       "Estudian lo mismo",
       "La fonética estudia los sonidos y la fonología los patrones sonoros"
     ],
-    correct: 3
+
+    correct: 1 //2
+
   },
   {
     id: 6,
@@ -77,7 +82,7 @@ const questions = [
       "Alveolar",
       "Alto"
     ],
-    correct: 2
+    correct: 1 //2
   },
   {
     id: 7,
@@ -88,7 +93,7 @@ const questions = [
       "Diferentes formas de escribir el mismo sonido",
       "Diferentes pronunciaciones del mismo fonema"
     ],
-    correct: 3
+    correct: 3 //4
   },
   {
     id: 8,
@@ -99,7 +104,7 @@ const questions = [
       "Tensa/Relajada",
       "Redondeada/No redondeada"
     ],
-    correct: 1
+    correct: 1 //2
   },
   {
     id: 9,
@@ -110,7 +115,7 @@ const questions = [
       "La capacidad de hablar con claridad",
       "La capacidad de deletrear correctamente"
     ],
-    correct: 1
+    correct: 2 //3
   },
   {
     id: 10,
@@ -121,7 +126,7 @@ const questions = [
       "Metátesis",
       "Eliminación"
     ],
-    correct: 1
+    correct: 0 //2
   }
 ]
 
@@ -217,7 +222,7 @@ export default function Level1Page() {
     setScore(0)
   }
 
-  if (!user) {
+ if (!user) {
     return <div>Cargando...</div>
   }
 
@@ -316,7 +321,7 @@ export default function Level1Page() {
             <div className="flex justify-between items-center mb-2">
               <h1 className="text-2xl font-bold">Level 1: Foundation</h1>
               <span className="text-sm text-gray-600">
-                Question {currentQuestion + 1} of {questions.length}
+                Pregunta {currentQuestion + 1} de {questions.length}
               </span>
             </div>
             <Progress value={progress} className="h-2" />
