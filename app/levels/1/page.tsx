@@ -14,115 +14,117 @@ import { useEffect, useState } from "react"
 const questions = [
   {
     id: 1,
-    question: "¿Qué representa el color azul en un audiograma?",
+    question: "¿Qué es un fonema?",
     options: [
-      "Vía ósea derecha",
-      "Vía aérea izquierda",
-      "Oído derecho",
-      "Enmascaramiento"
+      "Una letra escrita",
+      "Una estructura silábica",
+      "Un tipo de vocal",
+      "Una unidad de sonido que distingue significado"
     ],
-    correct: 1
+    correct: 3
   },
   {
     id: 2,
-    question: "El símbolo “X” en un audiograma representa:",
+    question: "¿Cuál de los siguientes es un ejemplo de un par mínimo?",
     options: [
-      "Oído derecho",
-      "Vía ósea izquierda",
-      "Vía aérea izquierda",
-      "Oído no testeado"
+      "perro/cachorro",
+      "feliz/triste",
+      "correr/corriendo",
+      "gato/pato"
     ],
-    correct: 2
+    correct: 3
   },
   {
     id: 3,
-    question: "¿Qué se mide con un audiómetro?",
+    question: "¿Qué significan las siglas AFI?",
     options: [
-      "La intensidad de la voz",
-      "La frecuencia de resonancia",
-      "El umbral auditivo",
-      "La presión timpánica"
-    ],
-    correct: 2
-  },
-  {
-    id: 4,
-    question: "¿Cuál de los siguientes componentes NO pertenece al audiómetro?",
-    options: [
-      "Otoscopio",
-      "Interruptor de estímulo",
-      "Generador de tono puro",
-      "Selector de transductor"
+      "Alfabeto Fonético Internacional",
+      "Análisis Fonético Interno",
+      "Asociación de Fonología Internacional",
+      "Academia Internacional de Pronunciación"
+
     ],
     correct: 0
   },
   {
-    id: 5,
-    question: "¿Qué vía se representa con los símbolos < y > en un audiograma?",
+    id: 4,
+    question: "¿Qué característica distingue a las consonantes sonoras de las sordas?",
     options: [
-      "Vía aérea",
-      "Vía ósea ",
-      "Vía mixta",
-      "Oído externo",
+      "Redondeo de labios",
+      "Posición de la lengua",
+      "Vibración de las cuerdas vocales",
+      "Dirección del flujo de aire"
     ],
-    correct: 1
+    correct: 2
+  },
+  {
+    id: 5,
+    question: "¿Cuál es la diferencia entre fonética y fonología?",
+    options: [
+      "La fonética estudia las vocales y la fonología las consonantes",
+      "La fonética es teórica y la fonología práctica",
+      "Estudian lo mismo",
+      "La fonética estudia los sonidos y la fonología los patrones sonoros"
+    ],
+    correct: 3
   },
   {
     id: 6,
-    question: "¿Qué es el ensordecimiento?",
+    question: "¿Cuál de estos es un punto de articulación?",
     options: [
-      "Pérdida súbita de la audición",
-      "Necesidad de mayor intensidad para oír después de un estímulo previo",
-      "Presencia de acúfeno",
-      "Dificultad para discriminar palabras"
+      "Nasal",
+      "Sonoro",
+      "Alveolar",
+      "Alto"
     ],
-    correct: 1
+    correct: 2
   },
   {
     id: 7,
-    question: "¿Qué indica el fenómeno del reclutamiento?",
+    question: "¿Qué es la variación alofónica?",
     options: [
-      "Falta de percepción auditiva",
-      "Percepción anormal de los sonidos suaves",
-      "Hipersensibilidad al silencio",
-      "Disminución del umbral de disconfort"
+      "Diferentes lenguas usando el mismo sonido",
+      "Diferentes significados de la misma palabra",
+      "Diferentes formas de escribir el mismo sonido",
+      "Diferentes pronunciaciones del mismo fonema"
     ],
     correct: 3
   },
   {
     id: 8,
-    question: "Según Diamante, ¿cuántos dB se suman para el enmascaramiento por vía aérea?",
+    question: "¿Qué característica vocálica se refiere a la altura de la lengua?",
     options: [
-      "15",
-      "30",
-      "25",
-      "10"
+      "Anterior/Posterior",
+      "Alta/Media/Baja",
+      "Tensa/Relajada",
+      "Redondeada/No redondeada"
     ],
     correct: 1
   },
   {
     id: 9,
-    question: "¿Qué mide la acufenometría?",
+    question: "¿Qué es la conciencia fonológica?",
     options: [
-      "El umbral de dolor",
-      "El nivel de ensordecimiento",
-      "La frecuencia e intensidad del acúfeno",
-      "La percepción de la voz en ruido"
+      "La capacidad de leer rápidamente",
+      "La capacidad de reconocer y manipular sonidos en el lenguaje",
+      "La capacidad de hablar con claridad",
+      "La capacidad de deletrear correctamente"
     ],
-    correct: 2
+    correct: 1
   },
   {
     id: 10,
-    question: "¿Qué autor plantea reglas específicas de ensordecimiento para la vía ósea?",
+    question: "¿Qué proceso implica que los sonidos se vuelvan más similares a los sonidos cercanos?",
     options: [
-      "Vicente Cursio",
-      "Helms",
-      "Katz",
-      "Hall"
+      "Inserción",
+      "Asimilación",
+      "Metátesis",
+      "Eliminación"
     ],
     correct: 1
   }
 ]
+
 
 
 export default function Level1Page() {
@@ -162,7 +164,7 @@ export default function Level1Page() {
     setSelectedAnswer(value)
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const answerIndex = parseInt(selectedAnswer)
     const newAnswers = [...userAnswers, answerIndex]
     setUserAnswers(newAnswers)
@@ -171,18 +173,19 @@ export default function Level1Page() {
       setCurrentQuestion(currentQuestion + 1)
       setSelectedAnswer("")
     } else {
-      // Calculate score and finish
-      const correctAnswers = newAnswers.filter((answer, index) => answer === questions[index].correct).length
+      // Calcular puntaje
+      const correctAnswers = newAnswers.filter(
+        (answer, index) => questions[index] && answer === questions[index].correct
+      ).length
+
       setScore(correctAnswers)
       setShowResult(true)
-      
-      // Update user progress
-      if (user) {
-        const updatedUser = {
-          ...user,
-          progress: {
-            ...user.progress,
 
+      // Actualizar progreso del usuario
+      if (user) {
+        try {
+          const updatedProgress = {
+            ...user.progress,
             level1: correctAnswers, // Podés cambiarlo dinámicamente si querés
           }
           console.log("updatedProgress", JSON.stringify(updatedProgress))
@@ -202,7 +205,6 @@ export default function Level1Page() {
         } catch (error) {
           console.error("Error al actualizar progreso:", error)
         }
-        localStorage.setItem("user", JSON.stringify(updatedUser))
       }
     }
   }
@@ -246,7 +248,7 @@ export default function Level1Page() {
                 <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                 <CardTitle className="text-2xl">Nivel 1 Completado!</CardTitle>
                 <CardDescription>
-                  Terminaste los Fundamentos Básicos.
+                  Terminaste los Fundamentos Básicos!
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-6">
@@ -259,7 +261,7 @@ export default function Level1Page() {
 
                 <Alert>
                   <AlertDescription>
-                    {score >= 8 ? "¡Excelente trabajo! Estás listo para el Nivel 2." : 
+                    {score >= 8 ? "¡Excelente! Estás listo para el Nivel 2." : 
                      score >= 6 ? "¡Buen trabajo! Considera repasar antes de avanzar al Nivel 2." :
                      "¡Sigue practicando! Revisa el material e inténtalo nuevamente."}
                   </AlertDescription>
@@ -297,12 +299,12 @@ export default function Level1Page() {
             <Link href="/dashboard">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Volver al Panel de Niveles
+                Back to Dashboard
               </Button>
             </Link>
             <div className="flex items-center space-x-2">
               <Volume2 className="h-8 w-8 text-indigo-600" />
-              <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
+              <span className="text-2xl font-bold text-gray-900">PhonologyLearn</span>
             </div>
           </div>
         </div>
@@ -312,9 +314,9 @@ export default function Level1Page() {
         <div className="max-w-2xl mx-auto">
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
-              <h1 className="text-2xl font-bold">Nivel 1: Fundamentos</h1>
+              <h1 className="text-2xl font-bold">Level 1: Foundation</h1>
               <span className="text-sm text-gray-600">
-                Pregunta {currentQuestion + 1} of {questions.length}
+                Question {currentQuestion + 1} of {questions.length}
               </span>
             </div>
             <Progress value={progress} className="h-2" />
@@ -342,13 +344,13 @@ export default function Level1Page() {
                   disabled={currentQuestion === 0}
                   onClick={() => setCurrentQuestion(currentQuestion - 1)}
                 >
-                  Anterior
+                  Previous
                 </Button>
                 <Button 
                   onClick={handleNext}
                   disabled={!selectedAnswer}
                 >
-                  {currentQuestion === questions.length - 1 ? "Terminar" : "Siguiente"}
+                  {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
                 </Button>
               </div>
             </CardContent>
