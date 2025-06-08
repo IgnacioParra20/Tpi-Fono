@@ -5,20 +5,27 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Volume2 } from 'lucide-react'
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function SignupPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [name, setName] = useState("")
-  const [age, setAge] = useState("")
-  const [gender, setGender] = useState("")
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    age: "",
+    gender: ""
+  })
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,18 +36,22 @@ export default function SignupPage() {
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name, age, gender }),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          age: formData.age,
+          gender: formData.gender,
+        }),
       })
 
       if (!res.ok) {
         const data = await res.json()
-        setError(data.error || "Signup failed")
+        setError(data.error || "Registration failed")
         return
       }
 
-      const data = await res.json()
-      localStorage.setItem("user", JSON.stringify(data.user))
-      router.push("/dashboard")
+      router.push("/login")
     } catch (err) {
       setError("Something went wrong.")
     } finally {
@@ -49,12 +60,12 @@ export default function SignupPage() {
   }
 
   return (
-    <div 
+    <div
       className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 bg-cover bg-center"
       style={{ backgroundImage: "url('/fondo-textura.png')" }}
     >
       <div className="w-full max-w-md">
-        {/* Encabezado con animación */}
+        {/* Logo con animación */}
         <div className="text-center mb-8 opacity-0 animate-fade-in">
           <Link href="/" className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-xl shadow-md transition-transform duration-200 hover:scale-105 active:scale-95">
             <Volume2 className="h-8 w-8 text-indigo-600" />
@@ -67,7 +78,7 @@ export default function SignupPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Crea tu cuenta</CardTitle>
             <CardDescription>
-              Únete para comenzar tu camino en la fonología
+              Únete a miles de estudiantes aprendiendo fonología
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -76,32 +87,33 @@ export default function SignupPage() {
                 <Label htmlFor="name">Nombre completo</Label>
                 <Input
                   id="name"
-                  type="text"
-                  placeholder="Ingresa tu nombre"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ingresa tu nombre completo"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
                   required
                 />
               </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email">Correo electrónico</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="Ingresa tu correo"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   required
                 />
               </div>
+
               <div className="space-y-2">
                 <Label htmlFor="password">Contraseña</Label>
                 <Input
                   id="password"
                   type="password"
                   placeholder="Crea una contraseña"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={(e) => handleInputChange("password", e.target.value)}
                   required
                 />
               </div>
@@ -112,42 +124,39 @@ export default function SignupPage() {
                   id="age"
                   type="number"
                   placeholder="Ingresa tu edad"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
+                  value={formData.age}
+                  onChange={(e) => handleInputChange("age", e.target.value)}
                   required
-                  min="1"
-                  max="120"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="gender">Género</Label>
-                <select
-                  id="gender"
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  required
-                >
-                  <option value="">Selecciona tu género</option>
-                  <option value="masculino">Masculino</option>
-                  <option value="femenino">Femenino</option>
-                  <option value="otro">Otro</option>
-                </select>
+                <Select value={formData.gender} onValueChange={(value) => handleInputChange("gender", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona tu género" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="female">Femenino</SelectItem>
+                    <SelectItem value="male">Masculino</SelectItem>
+                    <SelectItem value="non-binary">No binario</SelectItem>
+                    <SelectItem value="prefer-not-to-say">Prefiero no decirlo</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {error && (
-                <Alert variant="destructive">
+                <Alert variant="destructive" className="animate-fade-in">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full transition-transform duration-200 hover:scale-105 active:scale-95"
                 disabled={isLoading}
               >
-                {isLoading ? "Creando cuenta..." : "Registrarse"}
+                {isLoading ? "Creando cuenta..." : "Crear cuenta"}
               </Button>
             </form>
 
