@@ -1,4 +1,5 @@
 // app/api/signup/route.ts
+import { Progress } from '@/components/ui/progress'
 import { supabase } from '@/lib/supabase'
 import { NextRequest, NextResponse } from 'next/server'
 

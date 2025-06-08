@@ -27,7 +27,57 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const [progreso, setProgreso] = useState<progresoData | null>(null)
-  
+  const [devMode, setDevMode] = useState(false)
+  const [keyPressCount, setKeyPressCount] = useState(0)
+  const [lastKeyPressTime, setLastKeyPressTime] = useState(0)
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const currentTime = Date.now()
+      if (e.key.toLowerCase() === '-') {
+        if (currentTime - lastKeyPressTime < 1000) { // 1 segundo entre presiones
+          setKeyPressCount(prev => {
+            const newCount = prev + 1
+            if (newCount === 4) {
+              if (process.env.NODE_ENV === 'production') {
+                console.warn(
+                  '%c⚠️ ADVERTENCIA: Modo desarrollador detectado en producción ⚠️\n' +
+                  'Este modo no debería estar disponible en el entorno de producción.\n' +
+                  'Por favor, asegúrese de que esta funcionalidad esté deshabilitada antes de desplegar.',
+                  'color: red; font-weight: bold; font-size: 14px;'
+                )
+              }
+              setDevMode(true)
+              return 0
+            }
+            return newCount
+          })
+        } else {
+          setKeyPressCount(1)
+        }
+        setLastKeyPressTime(currentTime)
+      }
+    }
+
+    // Solo agregar el listener en desarrollo
+    if (process.env.NODE_ENV !== 'production') {
+      window.addEventListener('keydown', handleKeyPress)
+      return () => window.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [lastKeyPressTime])
+
+  // Advertencia adicional al cargar el componente en producción
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(
+        '%c⚠️ ADVERTENCIA: Modo desarrollador detectado en producción ⚠️\n' +
+        'Esta funcionalidad no debería estar disponible en el entorno de producción.\n' +
+        'Por favor, revise el código fuente y asegúrese de que esta característica esté deshabilitada.',
+        'color: red; font-weight: bold; font-size: 14px;'
+      )
+    }
+  }, [])
+
   useEffect(() => {
     const userData = localStorage.getItem("user")
     if (!userData) {
@@ -81,38 +131,37 @@ export default function DashboardPage() {
   if (!user) return <div>No se encontró el usuario.</div>
 
   const levels = [
-  {
-    id: 1,
-    title: "Nivel Fundamentos",
-    description: "Completa 10 preguntas fundamentales de fonología",
-    icon: BookOpen,
-    progress: progreso?.lvl1 || 0,
-    maxProgress: 10,
-    color: "bg-green-500",
-    href: "/levels/1",
-  },
-  {
-    id: 2,
-    title: "Dominio del Equipamiento",
-    description: "Identifica las distintas partes de un audiómetro",
-    icon: Stethoscope,
-    progress: progreso?.lvl2 || 0,
-    maxProgress: 8,
-    color: "bg-yellow-500",
-    href: "/levels/2",
-  },
-  {
-    id: 3,
-    title: "Aplicación Clínica",
-    description: "Modifica la audiometría para ajustarse a condiciones patológicas",
-    icon: Activity,
-    progress: progreso?.lvl3 || 0,
-    maxProgress: 5,
-    color: "bg-red-500",
-    href: "/levels/3",
-  },
-]
-
+    {
+      id: 1,
+      title: "Nivel Fundamentos",
+      description: "Completa 10 preguntas fundamentales de fonología",
+      icon: BookOpen,
+      progress: devMode ? 10 : progreso?.lvl1 || 0,
+      maxProgress: 10,
+      color: "bg-green-500",
+      href: "/levels/1",
+    },
+    {
+      id: 2,
+      title: "Dominio del Equipamiento",
+      description: "Identifica las distintas partes de un audiómetro",
+      icon: Stethoscope,
+      progress: devMode ? 8 : progreso?.lvl2 || 0,
+      maxProgress: 8,
+      color: "bg-yellow-500",
+      href: "/levels/2",
+    },
+    {
+      id: 3,
+      title: "Aplicación Clínica",
+      description: "Modifica la audiometría para ajustarse a condiciones patológicas",
+      icon: Activity,
+      progress: devMode ? 5 : progreso?.lvl3 || 0,
+      maxProgress: 5,
+      color: "bg-red-500",
+      href: "/levels/3",
+    },
+  ]
 
   return (
     <div
@@ -158,7 +207,7 @@ export default function DashboardPage() {
   {/* Sección de bienvenida con cuadro blanco */}
   <div className="bg-white p-6 rounded-xl shadow-md mb-8">
     <h1 className="text-3xl font-bold text-gray-900 mb-2">
-      ¡Bienvenido/a de nuevo, {user.name}!
+      ¡Bienvenid{user.gender === "femenino" ? "a" : user.gender === "masculino" ? "o" : "o/a"}, {user.name}!
     </h1>
     <p className="text-gray-600">
       Continúa tu aprendizaje en fonología. Elige un nivel para comenzar.
