@@ -5,27 +5,18 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Volume2 } from 'lucide-react'
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function SignupPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    age: "",
-    gender: ""
-  })
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [name, setName] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,22 +27,18 @@ export default function SignupPage() {
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          age: formData.age,
-          gender: formData.gender,
-        }),
+        body: JSON.stringify({ email, password, name }),
       })
 
       if (!res.ok) {
         const data = await res.json()
-        setError(data.error || "Registration failed")
+        setError(data.error || "Signup failed")
         return
       }
 
-      router.push("/login")
+      const data = await res.json()
+      localStorage.setItem("user", JSON.stringify(data.user))
+      router.push("/dashboard")
     } catch (err) {
       setError("Something went wrong.")
     } finally {
@@ -60,12 +47,13 @@ export default function SignupPage() {
   }
 
   return (
-    <div
+    <div 
       className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 bg-cover bg-center"
       style={{ backgroundImage: "url('/fondo-textura.png')" }}
     >
       <div className="w-full max-w-md">
         {/* Logo con animación */}
+
         <div className="text-center mb-8 opacity-0 animate-fade-in">
           <Link href="/" className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-xl shadow-md transition-transform duration-200 hover:scale-105 active:scale-95">
             <Volume2 className="h-8 w-8 text-indigo-600" />
@@ -93,7 +81,6 @@ export default function SignupPage() {
                   required
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="email">Correo electrónico</Label>
                 <Input
@@ -105,7 +92,6 @@ export default function SignupPage() {
                   required
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="password">Contraseña</Label>
                 <Input
@@ -117,6 +103,7 @@ export default function SignupPage() {
                   required
                 />
               </div>
+
 
               <div className="space-y-2">
                 <Label htmlFor="age">Edad</Label>
@@ -150,7 +137,6 @@ export default function SignupPage() {
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-
               <Button
                 type="submit"
                 className="w-full transition-transform duration-200 hover:scale-105 active:scale-95"

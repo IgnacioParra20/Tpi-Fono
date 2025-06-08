@@ -271,6 +271,11 @@ export default function DashboardPage() {
                   {isLocked && <Badge variant="destructive">Bloqueado</Badge>}
                 </div>
               </div>
+              <Link href={isLocked ? "#" : level.href}>
+                <Button className="w-full mt-2" disabled={isLocked} variant={isCompleted ? "outline" : "default"}>
+                  {isLocked ? "Completa el nivel anterior" : isCompleted ? "Revisar" : "Continuar"}
+                </Button>
+              </Link>
             </div>
           </div>
           <CardDescription>{level.description}</CardDescription>
