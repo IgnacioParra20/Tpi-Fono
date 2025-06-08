@@ -27,7 +27,57 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const [progreso, setProgreso] = useState<progresoData | null>(null)
-  
+  const [devMode, setDevMode] = useState(false)
+  const [keyPressCount, setKeyPressCount] = useState(0)
+  const [lastKeyPressTime, setLastKeyPressTime] = useState(0)
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const currentTime = Date.now()
+      if (e.key.toLowerCase() === '-') {
+        if (currentTime - lastKeyPressTime < 1000) { // 1 segundo entre presiones
+          setKeyPressCount(prev => {
+            const newCount = prev + 1
+            if (newCount === 4) {
+              if (process.env.NODE_ENV === 'production') {
+                console.warn(
+                  '%c⚠️ ADVERTENCIA: Modo desarrollador detectado en producción ⚠️\n' +
+                  'Este modo no debería estar disponible en el entorno de producción.\n' +
+                  'Por favor, asegúrese de que esta funcionalidad esté deshabilitada antes de desplegar.',
+                  'color: red; font-weight: bold; font-size: 14px;'
+                )
+              }
+              setDevMode(true)
+              return 0
+            }
+            return newCount
+          })
+        } else {
+          setKeyPressCount(1)
+        }
+        setLastKeyPressTime(currentTime)
+      }
+    }
+
+    // Solo agregar el listener en desarrollo
+    if (process.env.NODE_ENV !== 'production') {
+      window.addEventListener('keydown', handleKeyPress)
+      return () => window.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [lastKeyPressTime])
+
+  // Advertencia adicional al cargar el componente en producción
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') {
+      console.warn(
+        '%c⚠️ ADVERTENCIA: Modo desarrollador detectado en producción ⚠️\n' +
+        'Esta funcionalidad no debería estar disponible en el entorno de producción.\n' +
+        'Por favor, revise el código fuente y asegúrese de que esta característica esté deshabilitada.',
+        'color: red; font-weight: bold; font-size: 14px;'
+      )
+    }
+  }, [])
+
   useEffect(() => {
     const userData = localStorage.getItem("user")
     if (!userData) {
@@ -81,38 +131,37 @@ export default function DashboardPage() {
   if (!user) return <div>No se encontró el usuario.</div>
 
   const levels = [
-  {
-    id: 1,
-    title: "Nivel Fundamentos",
-    description: "Completa 10 preguntas fundamentales de fonología",
-    icon: BookOpen,
-    progress: progreso?.lvl1 || 0,
-    maxProgress: 10,
-    color: "bg-green-500",
-    href: "/levels/1",
-  },
-  {
-    id: 2,
-    title: "Dominio del Equipamiento",
-    description: "Identifica las distintas partes de un audiómetro",
-    icon: Stethoscope,
-    progress: progreso?.lvl2 || 0,
-    maxProgress: 8,
-    color: "bg-yellow-500",
-    href: "/levels/2",
-  },
-  {
-    id: 3,
-    title: "Aplicación Clínica",
-    description: "Modifica la audiometría para ajustarse a condiciones patológicas",
-    icon: Activity,
-    progress: progreso?.lvl3 || 0,
-    maxProgress: 5,
-    color: "bg-red-500",
-    href: "/levels/3",
-  },
-]
-
+    {
+      id: 1,
+      title: "Nivel Fundamentos",
+      description: "Completa 10 preguntas fundamentales de fonología",
+      icon: BookOpen,
+      progress: devMode ? 10 : progreso?.lvl1 || 0,
+      maxProgress: 10,
+      color: "bg-green-500",
+      href: "/levels/1",
+    },
+    {
+      id: 2,
+      title: "Dominio del Equipamiento",
+      description: "Identifica las distintas partes de un audiómetro",
+      icon: Stethoscope,
+      progress: devMode ? 8 : progreso?.lvl2 || 0,
+      maxProgress: 8,
+      color: "bg-yellow-500",
+      href: "/levels/2",
+    },
+    {
+      id: 3,
+      title: "Aplicación Clínica",
+      description: "Modifica la audiometría para ajustarse a condiciones patológicas",
+      icon: Activity,
+      progress: devMode ? 5 : progreso?.lvl3 || 0,
+      maxProgress: 5,
+      color: "bg-red-500",
+      href: "/levels/3",
+    },
+  ]
 
   return (
     <div
@@ -158,7 +207,7 @@ export default function DashboardPage() {
   {/* Sección de bienvenida con cuadro blanco */}
   <div className="bg-white p-6 rounded-xl shadow-md mb-8">
     <h1 className="text-3xl font-bold text-gray-900 mb-2">
-      ¡Bienvenido/a de nuevo, {user.name}!
+      ¡Bienvenid{user.gender === "femenino" ? "a" : user.gender === "masculino" ? "o" : "o/a"}, {user.name}!
     </h1>
     <p className="text-gray-600">
       Continúa tu aprendizaje en fonología. Elige un nivel para comenzar.
@@ -182,11 +231,9 @@ export default function DashboardPage() {
           <p className="text-sm text-gray-600">Nivel actual</p>
           <p className="font-semibold">
             {(progreso?.lvl1 || 0) === 10
-              ? (progreso?.lvl2 || 0) === 8
-                ? (progreso?.lvl3 || 0) === 5
+              ? ((progreso?.lvl2 || 0) === 8
                   ? "Nivel 3"
-                  : "Nivel 2"
-                : "Nivel 1"
+                  : "Nivel 2")
               : "Nivel 1"}
           </p>
         </div>
@@ -204,54 +251,77 @@ export default function DashboardPage() {
 
   {/* Niveles de aprendizaje */}
   <div className="grid md:grid-cols-3 gap-6">
-    {levels.map((level) => {
-      const Icon = level.icon
-      const isLocked = level.id > 1 && levels[level.id - 2].progress < levels[level.id - 2].maxProgress
-      const isCompleted = level.progress >= level.maxProgress
-      return (
-        <Card key={level.id} className={`relative ${isLocked ? "opacity-50" : ""}`}>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className={`p-2 rounded-lg ${level.color} text-white`}>
-                  <Icon className="h-6 w-6" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg">{level.title}</CardTitle>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant={isCompleted ? "default" : "secondary"}>Nivel {level.id}</Badge>
-                    {isCompleted && <Badge variant="outline">Completado</Badge>}
-                    {isLocked && <Badge variant="destructive">Bloqueado</Badge>}
-                  </div>
-                </div>
+  {levels.map((level) => {
+    const Icon = level.icon
+    const isLocked = level.id > 1 && levels[level.id - 2].progress < levels[level.id - 2].maxProgress
+    const isCompleted = level.progress >= level.maxProgress
+    return (
+      <Card key={level.id} className={`relative ${isLocked ? "opacity-50" : ""}`}>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className={`p-2 rounded-lg ${level.color} text-white`}>
+                <Icon className="h-6 w-6" />
               </div>
-            </div>
-            <CardDescription>{level.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
               <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span>Progreso</span>
-                  <span>
-                    {level.progress}/{level.maxProgress}
-                  </span>
+                <CardTitle className="text-lg">{level.title}</CardTitle>
+                <div className="flex items-center space-x-2">
+                  <Badge variant={isCompleted ? "default" : "secondary"}>Nivel {level.id}</Badge>
+                  {isCompleted && <Badge variant="outline">Completado</Badge>}
+                  {isLocked && <Badge variant="destructive">Bloqueado</Badge>}
                 </div>
-                <Progress value={(level.progress / level.maxProgress) * 100} />
               </div>
-
-              <Link href={isLocked ? "#" : level.href}>
-                <Button className="w-full mt-2" disabled={isLocked} variant={isCompleted ? "outline" : "default"}>
-                  {isLocked ? "Completa el nivel anterior" : isCompleted ? "Revisar" : "Continuar"}
-                </Button>
-              </Link>
             </div>
-          </CardContent>
-        </Card>
-      )
-    })}
+          </div>
+          <CardDescription>{level.description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-2">
+                <span>Progreso</span>
+                <span>
+                  {level.progress}/{level.maxProgress}
+                </span>
+              </div>
+              <Progress value={(level.progress / level.maxProgress) * 100} />
+            </div>
+
+            <Link href={isLocked ? "#" : level.href}>
+              <Button
+                className="w-full mt-2"
+                disabled={isLocked}
+                variant={isCompleted ? "outline" : "default"}
+              >
+                {isLocked ? "Completa el nivel anterior" : isCompleted ? "Revisar" : "Continuar"}
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  })}
+
+  {/* Tarjeta del Simulador fuera del map */}
+  <div className="md:col-span-3">
+    <Card className="w-full bg-white p-6 rounded-xl shadow-md mt-4">
+      <CardHeader>
+        <CardTitle className="text-2xl">Simulador de Audiómetro</CardTitle>
+        <CardDescription className="text-gray-600 justify-center">
+          Accede al simulador interactivo para practicar la audiometría clínica.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Link href="/simulator">
+          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-base py-2">
+            Ir al Simulador
+          </Button>
+        </Link>
+      </CardContent>
+    </Card>
   </div>
-</main> 
 </div>
+</main>
+    </div>
   )
 }

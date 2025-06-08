@@ -34,11 +34,14 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
+  // Mapeo bidireccional para los valores de género
   const genderMap: Record<string, string> = {
-    "female": "Femenino",
-    "male": "Masculino",
-    "non-binary": "No binario",
-    "prefer-not-to-say": "Prefiero no decirlo"
+    "masculino": "male",
+    "femenino": "female",
+    "otro": "non-binary",
+    "male": "masculino",
+    "female": "femenino",
+    "non-binary": "otro"
   }
 
   useEffect(() => {
@@ -60,7 +63,7 @@ export default function ProfilePage() {
           setFormData({
             name: data.user.name,
             age: data.user.age,
-            gender: data.user.gender
+            gender: data.user.gender || "prefer-not-to-say" // Convertir el género a formato del Select
           })
         } else {
           router.push("/login")
@@ -83,7 +86,8 @@ export default function ProfilePage() {
 
       const updatedUser = {
         ...user,
-        ...formData
+        ...formData,
+        gender: genderMap[formData.gender] // Convertir el género de vuelta al formato de la base de datos
       }
 
       localStorage.setItem("user", JSON.stringify(updatedUser))
