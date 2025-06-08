@@ -63,7 +63,7 @@ export default function ProfilePage() {
           setFormData({
             name: data.user.name,
             age: data.user.age,
-            gender: genderMap[data.user.gender] || "prefer-not-to-say" // Convertir el género a formato del Select
+            gender: data.user.gender || "prefer-not-to-say" // Convertir el género a formato del Select
           })
         } else {
           router.push("/login")
