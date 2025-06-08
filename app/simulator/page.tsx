@@ -15,7 +15,6 @@ const intensidades = Array.from({ length: 27 }, (_, i) => -10 + i * 5) // -10 a 
 // Protocolo de audiometría estándar
 const protocoloAudiometria = {
   frecuenciasObligatorias: [125, 250, 500, 1000, 2000, 4000, 8000],
-  // frecuenciasOpcionales: [125, 750, 1500, 3000, 6000],
   intensidadInicial: 40,
   pasoIntensidad: 10,
   pasoFino: 5,
@@ -567,35 +566,14 @@ export default function Simulador() {
                   )
                 })}
 
-                {/* Líneas verticales secundarias (inter-octavas) */}
-                {/* {[750, 1500, 3000, 6000].map((freq, i) => {
-                  const positions = [240, 320, 400, 480]
-                  return (
-                    <line
-                      key={`v-sec-${freq}`}
-                      x1={positions[i]}
-                      y1="20"
-                      x2={positions[i]}
-                      y2="195"
-                      stroke="#ccc"
-                      strokeWidth="0.5"
-                      strokeDasharray="2,2"
-                    />
-                  )
-                })} */}
-
                 {/* Etiquetas de frecuencia */}
                 {[
                   { freq: 125, x: 80 },
                   { freq: 250, x: 140 },
                   { freq: 500, x: 200 },
-                  // { freq: 750, x: 240 },
                   { freq: 1000, x: 280 },
-                  // { freq: 1500, x: 320 },
                   { freq: 2000, x: 360 },
-                  // { freq: 3000, x: 400 },
                   { freq: 4000, x: 440 },
-                  // { freq: 6000, x: 480 },
                   { freq: 8000, x: 520 },
                 ].map(({ freq, x }) => (
                   <text
@@ -647,17 +625,13 @@ export default function Simulador() {
                 {/* Indicador de frecuencia actual */}
                 {(() => {
                   const freqPositions: Record<number, number> = {
-                    125: 80,
-                    250: 140,
-                    500: 200,
-                    // 750: 240,
-                    1000: 280,
-                    // 1500: 320,
-                    2000: 360,
-                    // 3000: 400,
-                    4000: 440,
-                    // 6000: 480,
-                    8000: 520,
+                      125: 80,
+                      250: 140,
+                      500: 200,
+                      1000: 280,
+                      2000: 360,
+                      4000: 440,
+                      8000: 520,
                   }
                   const x = freqPositions[frecuenciaSeleccionada] || 280
                   return <rect x={x - 2} y="18" width="4" height="179" fill="#0066cc" opacity="0.3" />
@@ -676,13 +650,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const puntos = Object.entries(resultados.derecho.aerea)
@@ -719,13 +689,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const puntos = Object.entries(resultados.izquierdo.aerea)
@@ -763,13 +729,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const puntos = Object.entries(resultados.derecho.osea)
@@ -807,13 +769,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const puntos = Object.entries(resultados.izquierdo.osea)
@@ -852,13 +810,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const x = freqPositions[Number(freq)]
@@ -880,13 +834,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const x = freqPositions[Number(freq)]
@@ -914,13 +864,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const x = freqPositions[Number(freq)]
@@ -949,13 +895,9 @@ export default function Simulador() {
                       125: 80,
                       250: 140,
                       500: 200,
-                      // 750: 240,
                       1000: 280,
-                      // 1500: 320,
                       2000: 360,
-                      // 3000: 400,
                       4000: 440,
-                      // 6000: 480,
                       8000: 520,
                     }
                     const x = freqPositions[Number(freq)]
@@ -1011,50 +953,6 @@ export default function Simulador() {
               <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
             </button>
 
-            {/* <button
-              className="absolute left-[260px] top-[381px] w-[75px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => toast({ title: "Wavefile", description: "Función no disponible en el simulador" })}
-            >
-              <div className="absolute left-[14px] top-[-23px] text-xs">Wavefile</div>
-            </button> */}
-
-            {/* <button
-              className="absolute left-[349.06px] top-[381px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => toast({ title: "Mic", description: "Función no disponible en el simulador" })}
-            >
-              <div className="absolute left-[28.17px] top-[-23px] text-xs">Mic</div>
-            </button> */}
-
-            {/* <button
-              className="absolute left-[436px] top-[381px] w-[75px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => toast({ title: "1 CD 2", description: "Función no disponible en el simulador" })}
-            >
-              <div className="absolute left-[16px] top-[-23px] text-xs">1 CD 2</div>
-              <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
-            </button> */}
-
-            {/* <button
-              className="absolute left-[642.81px] top-[400px] w-[75.45px] h-[40px] bg-[#BF6A02] rounded-lg"
-              onClick={() => toast({ title: "Ext Range", description: "Función no disponible en el simulador" })}
-            >
-              <div className="absolute left-[9.05px] top-[-24px] text-xs">Ext Range</div>
-            </button> */}
-
-            {/* <button
-              className="absolute left-[848.03px] top-[381px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => toast({ title: "1 Monitor 2", description: "Función no disponible en el simulador" })}
-            >
-              <div className="absolute left-[6.03px] top-[-23px] text-xs">1 Monitor 2</div>
-              <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
-            </button> */}
-
-            {/* <button
-              className="absolute left-[936.55px] top-[381px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => toast({ title: "Talk Back", description: "Función no disponible en el simulador" })}
-            >
-              <div className="absolute left-[10.06px] top-[-23px] text-xs">Talk Back</div>
-            </button> */}
-
             {/* Segunda fila de botones */}
             <div className="absolute left-[171px] top-[459px] flex flex-col items-center">
               <span className="mb-1 text-xs text-black">Oído Derecho</span>
@@ -1103,54 +1001,6 @@ export default function Simulador() {
               </button>
             </div>
 
-            {/* Botones de control */}
-            {/* <div className="absolute left-[598.54px] top-[467px] w-[164px] h-[40px] bg-[#BF6A02] rounded-lg flex">
-              <button
-                className="w-1/2 h-full flex flex-col items-center justify-center"
-                onClick={() => toast({ title: "Man", description: "Modo manual activado" })}
-              >
-                <span className="absolute left-[5.03px] top-[-23px] text-xs">Man</span>
-                <div className="absolute left-[80px] top-[0px] h-full w-[1px] bg-black"></div>
-              </button>
-              <button
-                className="w-1/2 h-full flex flex-col items-center justify-center"
-                onClick={() => toast({ title: "Rev", description: "Modo reverso activado" })}
-              >
-                <span className="absolute left-[47.28px] top-[-23px] text-xs">Rev</span>
-              </button>
-            </div> */}
-
-            {/* <div className="absolute left-[687.07px] top-[467px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg flex">
-              <button
-                className="w-1/2 h-full flex flex-col items-center justify-center"
-                onClick={() => toast({ title: "Single", description: "Modo único activado" })}
-              >
-                <span className="absolute left-[0px] top-[-23px] text-xs">Single</span>
-                <div className="absolute left-[40px] top-[0px] h-full w-[1px] bg-black"></div>
-              </button>
-              <button
-                className="w-1/2 h-full flex flex-col items-center justify-center"
-                onClick={() => toast({ title: "Multi", description: "Modo múltiple activado" })}
-              >
-                <span className="absolute left-[44.26px] top-[-23px] text-xs">Multi</span>
-              </button>
-            </div> */}
-
-            {/* <button
-              className="absolute left-[848.03px] top-[467px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => setEnmascaramiento(!enmascaramiento)}
-            >
-              <div className="absolute left-[3.01px] top-[-23px] text-xs">Mask on/off</div>
-              {enmascaramiento && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
-            </button> */}
-
-            {/* <button
-              className="absolute left-[936.55px] top-[467px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => toast({ title: "Sync", description: "Sincronización activada" })}
-            >
-              <div className="absolute left-[23.14px] top-[-23px] text-xs">Sync</div>
-            </button> */}
-
             {/* Botones de respuesta */}
             <button
               className="absolute left-[598.54px] top-[545px] w-[75.45px] h-[40px] bg-[#FFD65C] rounded-lg"
@@ -1159,14 +1009,6 @@ export default function Simulador() {
             >
               <div className="absolute left-[22.13px] top-[-15px] text-xs">Guardar</div>
             </button>
-
-            {/* <button
-              className="absolute left-[687.07px] top-[545px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white"
-              onClick={() => registrarRespuesta("no")}
-              disabled={!esperandoRespuesta}
-            >
-              <div className="absolute left-[14.08px] top-[-15px] text-xs text-black">No Resp</div>
-            </button> */}
 
               <button
                 className="absolute left-[598.54px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
@@ -1265,9 +1107,6 @@ export default function Simulador() {
                 <div>
                   Vía: <span className="font-bold">{viaSeleccionada === "aerea" ? "Aérea" : "Ósea"}</span>
                 </div>
-                {/* <div>
-                  Modo: <span className="font-bold">{modoAutomatico ? "Automático" : "Manual"}</span>
-                </div> */}
                 <div>
                   Estado:{" "}
                   <span
@@ -1279,25 +1118,6 @@ export default function Simulador() {
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Controles de modo */}
-            <div className="mb-4">
-              {/* <h3 className="text-sm font-bold mb-1">Modo de operación</h3>
-              <div className="flex gap-2">
-                <Button onClick={iniciarModoAutomatico} disabled={modoAutomatico} className="w-full text-xs" size="sm">
-                  Modo Automático
-                </Button>
-                <Button
-                  onClick={() => setModoAutomatico(false)}
-                  disabled={!modoAutomatico}
-                  variant="outline"
-                  className="w-full text-xs"
-                  size="sm"
-                >
-                  Modo Manual
-                </Button>
-              </div> */}
             </div>
 
             {/* Respuesta del paciente */}
@@ -1396,14 +1216,6 @@ export default function Simulador() {
 
             {/* Botones de acción */}
             <div className="mt-4 flex gap-2">
-              {/* <Button
-                size="sm"
-                variant="outline"
-                className="w-full text-xs"
-                onClick={() => toast({ title: "Imprimir", description: "Función no disponible en el simulador" })}
-              >
-                Imprimir
-              </Button> */}
               <Button
                 size="sm"
                 className="w-full bg-blue-600 hover:bg-blue-700 text-xs"
