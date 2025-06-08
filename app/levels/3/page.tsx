@@ -11,7 +11,6 @@ import { Activity, ArrowLeft, CheckCircle, Volume2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-
 const pathologies = [
   {
     id: 1,
@@ -126,8 +125,22 @@ export default function Level3Page() {
       return
     }
 
-    const parsedUser = JSON.parse(userData)
-    setUser(parsedUser)
+    const email = JSON.parse(userData)
+
+    fetch("/api/getUser", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser(data.user)
+        } else {
+          router.push("/login")
+        }
+      })
+      .catch(() => router.push("/login"))
   }, [router])
 
   const handleAirConductionChange = (ear: "rightEar" | "leftEar", index: number, value: number[]) => {
@@ -151,30 +164,32 @@ export default function Level3Page() {
   }
 
   const calculateAccuracy = () => {
-  const pathology = pathologies[currentPathology]
-  let totalError = 0
-  const ears: Array<"rightEar" | "leftEar"> = ["rightEar", "leftEar"]
+    const pathology = pathologies[currentPathology]
+    let totalError = 0
+    const ears: Array<"rightEar" | "leftEar"> = ["rightEar", "leftEar"]
 
-  ears.forEach((ear) => {
-    for (let i = 0; i < 7; i++) {
-      totalError += Math.abs(
-        userAudiogram[ear].airConduction[i] -
-          pathology.targetPattern[ear].airConduction[i]
-      )
-      totalError += Math.abs(
-        userAudiogram[ear].boneConduction[i] -
-          pathology.targetPattern[ear].boneConduction[i]
-      )
-    }
-  })
+    ears.forEach((ear) => {
+      for (let i = 0; i < 7; i++) {
+        totalError += Math.abs(
+          userAudiogram[ear].airConduction[i] -
+            pathology.targetPattern[ear].airConduction[i]
+        )
+        totalError += Math.abs(
+          userAudiogram[ear].boneConduction[i] -
+            pathology.targetPattern[ear].boneConduction[i]
+        )
+      }
+    })
 
-  const maxPossibleError = 28 * 100 // 28 points, max 100 dB difference each
-  const accuracy = Math.max(0, 100 - (totalError / maxPossibleError) * 100)
-  return accuracy > 70 ? 1 : 0
-}
+    const maxPossibleError = 28 * 100 // 28 points, max 100 dB difference each
+    const accuracy = Math.max(0, 100 - (totalError / maxPossibleError) * 100)
+    return accuracy > 70 ? 1 : 0
+  }
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    console.log("user", user.id)
     const isCorrect = calculateAccuracy()
+    setScore(score + isCorrect)
 
     if (currentPathology < pathologies.length - 1) {
       setCurrentPathology(currentPathology + 1)
@@ -189,23 +204,27 @@ export default function Level3Page() {
         },
       })
     } else {
-      let finalScore = 0
-      for (let i = 0; i <= currentPathology; i++) {
-        finalScore += 1
-      }
-
-      setScore(finalScore)
       setShowResult(true)
 
       if (user) {
-        const updatedUser = {
-          ...user,
-          progress: {
-            ...user.progress,
-            level3: Math.max(user.progress.level3, finalScore),
-          },
+        try {
+          console.log("user", user.id)
+          const res = await fetch("/api/users/updateProgress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: user.id,
+              nuevoValor: score,
+              nivel: "lvl3",
+            }),
+          })
+
+          if (!res.ok) {
+            console.error("Fallo al actualizar el progreso del usuario")
+          } 
+        } catch (error) {
+          console.error("Error al actualizar progreso:", error)
         }
-        localStorage.setItem("user", JSON.stringify(updatedUser))
       }
     }
   }
@@ -379,6 +398,19 @@ export default function Level3Page() {
                       </div>
                     ))}
                   </div>
+                  {/* Leyenda de símbolos */}
+                  <div className="mt-2 px-2 pb-2">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="w-3 h-3 border-2 border-red-500 rounded-full mr-1 inline-block"></span>
+                      <span className="font-semibold">CA</span>
+                      <span className="text-gray-500">(Canal Aéreo)</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs mt-1">
+                      <span className="text-red-500 font-bold mr-1 text-sm">{"<"}</span>
+                      <span className="font-semibold">CO</span>
+                      <span className="text-gray-500">(Canal Óseo)</span>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -495,6 +527,19 @@ export default function Level3Page() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                  {/* Leyenda de símbolos */}
+                  <div className="mt-2 px-2 pb-2">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-blue-500 font-bold mr-1 text-sm">X</span>
+                      <span className="font-semibold">CA</span>
+                      <span className="text-gray-500">(Canal Aéreo)</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs mt-1">
+                      <span className="text-blue-500 font-bold mr-1 text-sm">{">"}</span>
+                      <span className="font-semibold">CO</span>
+                      <span className="text-gray-500">(Canal Óseo)</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

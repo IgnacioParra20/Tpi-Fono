@@ -126,7 +126,7 @@ const questions = [
       "Metátesis",
       "Eliminación"
     ],
-    correct: 0 //2
+    correct: 0 //1
   }
 ]
 

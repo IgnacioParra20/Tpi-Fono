@@ -5,20 +5,30 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Volume2 } from 'lucide-react'
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function SignupPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [name, setName] = useState("")
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    age: "",
+    gender: ""
+  })
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
+    
     e.preventDefault()
     setIsLoading(true)
     setError("")
@@ -27,18 +37,22 @@ export default function SignupPage() {
       const res = await fetch("/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          age: formData.age,
+          gender: formData.gender,
+        }),
       })
 
       if (!res.ok) {
         const data = await res.json()
-        setError(data.error || "Signup failed")
+        setError(data.error || "Registration failed")
         return
       }
 
-      const data = await res.json()
-      localStorage.setItem("user", JSON.stringify(data.user))
-      router.push("/dashboard")
+      router.push("/login")
     } catch (err) {
       setError("Something went wrong.")
     } finally {

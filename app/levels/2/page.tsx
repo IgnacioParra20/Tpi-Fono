@@ -96,7 +96,6 @@ useEffect(() => {
       .then(data => {
         if (data.user) {
           setUser(data.user)
-          console.log("user", data.user)
         } else {
           router.push("/login")
         }
@@ -142,7 +141,6 @@ useEffect(() => {
             ...user.progress,
             level2: correctAnswers, // Podés cambiarlo dinámicamente si querés
           }
-          console.log("updatedProgress", JSON.stringify(updatedProgress))
           const res = await fetch("/api/users/updateProgress", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
