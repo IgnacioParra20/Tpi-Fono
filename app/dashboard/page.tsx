@@ -251,54 +251,77 @@ export default function DashboardPage() {
 
   {/* Niveles de aprendizaje */}
   <div className="grid md:grid-cols-3 gap-6">
-    {levels.map((level) => {
-      const Icon = level.icon
-      const isLocked = level.id > 1 && levels[level.id - 2].progress < levels[level.id - 2].maxProgress
-      const isCompleted = level.progress >= level.maxProgress
-      return (
-        <Card key={level.id} className={`relative ${isLocked ? "opacity-50" : ""}`}>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className={`p-2 rounded-lg ${level.color} text-white`}>
-                  <Icon className="h-6 w-6" />
-                </div>
-                <div>
-                  <CardTitle className="text-lg">{level.title}</CardTitle>
-                  <div className="flex items-center space-x-2">
-                    <Badge variant={isCompleted ? "default" : "secondary"}>Nivel {level.id}</Badge>
-                    {isCompleted && <Badge variant="outline">Completado</Badge>}
-                    {isLocked && <Badge variant="destructive">Bloqueado</Badge>}
-                  </div>
-                </div>
+  {levels.map((level) => {
+    const Icon = level.icon
+    const isLocked = level.id > 1 && levels[level.id - 2].progress < levels[level.id - 2].maxProgress
+    const isCompleted = level.progress >= level.maxProgress
+    return (
+      <Card key={level.id} className={`relative ${isLocked ? "opacity-50" : ""}`}>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className={`p-2 rounded-lg ${level.color} text-white`}>
+                <Icon className="h-6 w-6" />
               </div>
-            </div>
-            <CardDescription>{level.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
               <div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span>Progreso</span>
-                  <span>
-                    {level.progress}/{level.maxProgress}
-                  </span>
+                <CardTitle className="text-lg">{level.title}</CardTitle>
+                <div className="flex items-center space-x-2">
+                  <Badge variant={isCompleted ? "default" : "secondary"}>Nivel {level.id}</Badge>
+                  {isCompleted && <Badge variant="outline">Completado</Badge>}
+                  {isLocked && <Badge variant="destructive">Bloqueado</Badge>}
                 </div>
-                <Progress value={(level.progress / level.maxProgress) * 100} />
               </div>
-
-              <Link href={isLocked ? "#" : level.href}>
-                <Button className="w-full mt-2" disabled={isLocked} variant={isCompleted ? "outline" : "default"}>
-                  {isLocked ? "Completa el nivel anterior" : isCompleted ? "Revisar" : "Continuar"}
-                </Button>
-              </Link>
             </div>
-          </CardContent>
-        </Card>
-      )
-    })}
+          </div>
+          <CardDescription>{level.description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-2">
+                <span>Progreso</span>
+                <span>
+                  {level.progress}/{level.maxProgress}
+                </span>
+              </div>
+              <Progress value={(level.progress / level.maxProgress) * 100} />
+            </div>
+
+            <Link href={isLocked ? "#" : level.href}>
+              <Button
+                className="w-full mt-2"
+                disabled={isLocked}
+                variant={isCompleted ? "outline" : "default"}
+              >
+                {isLocked ? "Completa el nivel anterior" : isCompleted ? "Revisar" : "Continuar"}
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  })}
+
+  {/* Tarjeta del Simulador fuera del map */}
+  <div className="md:col-span-3">
+    <Card className="w-full bg-white p-6 rounded-xl shadow-md mt-4">
+      <CardHeader>
+        <CardTitle className="text-2xl">Simulador de Audiómetro</CardTitle>
+        <CardDescription className="text-gray-600 justify-center">
+          Accede al simulador interactivo para practicar la audiometría clínica.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Link href="/simulator">
+          <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white text-base py-2">
+            Ir al Simulador
+          </Button>
+        </Link>
+      </CardContent>
+    </Card>
   </div>
-</main> 
 </div>
+</main>
+    </div>
   )
 }
