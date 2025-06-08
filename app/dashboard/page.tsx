@@ -182,11 +182,9 @@ export default function DashboardPage() {
           <p className="text-sm text-gray-600">Nivel actual</p>
           <p className="font-semibold">
             {(progreso?.lvl1 || 0) === 10
-              ? (progreso?.lvl2 || 0) === 8
-                ? (progreso?.lvl3 || 0) === 5
+              ? ((progreso?.lvl2 || 0) === 8
                   ? "Nivel 3"
-                  : "Nivel 2"
-                : "Nivel 1"
+                  : "Nivel 2")
               : "Nivel 1"}
           </p>
         </div>
