@@ -36,6 +36,7 @@ export default function Simulador() {
   const [viaSeleccionada, setViaSeleccionada] = useState<"aerea" | "osea">("aerea")
   const [enmascaramiento, setEnmascaramiento] = useState(false)
   const [intensidadEnmascaramiento, setIntensidadEnmascaramiento] = useState(60)
+  const [tipoTono, setTipoTono] = useState<"pure" | "warble">("pure")
 
   // Estados del protocolo
   const [modoAutomatico, setModoAutomatico] = useState(false)
@@ -123,14 +124,44 @@ export default function Simulador() {
       oscillatorRef.current = audioContextRef.current.createOscillator()
       gainNodeRef.current = audioContextRef.current.createGain()
 
-      // Configurar frecuencia
+      // Configurar frecuencia base
       oscillatorRef.current.frequency.setValueAtTime(frecuencia, audioContextRef.current.currentTime)
       oscillatorRef.current.type = "sine"
 
       // Calcular volumen basado en intensidad (simulado)
-      // En un audiómetro real, esto sería calibrado en dB HL
       const volumen = Math.max(0, Math.min(1, (intensidadDb + 10) / 130))
-      gainNodeRef.current.gain.setValueAtTime(volumen * 0.1, audioContextRef.current.currentTime) // Volumen bajo para seguridad
+      gainNodeRef.current.gain.setValueAtTime(volumen * 0.1, audioContextRef.current.currentTime)
+
+      // Aplicar modulación si es warble
+      if (tipoTono === "warble") {
+        // Crear oscilador de modulación para el efecto warble
+        const modulatorOsc = audioContextRef.current.createOscillator()
+        const modulatorGain = audioContextRef.current.createGain()
+
+        // Configurar modulación (frecuencia de modulación de 6.25 Hz, típica para warble)
+        modulatorOsc.frequency.setValueAtTime(6.25, audioContextRef.current.currentTime)
+        modulatorOsc.type = "sine"
+
+        // Profundidad de modulación (±5% de la frecuencia base)
+        modulatorGain.gain.setValueAtTime(frecuencia * 0.05, audioContextRef.current.currentTime)
+
+        // Conectar modulación
+        modulatorOsc.connect(modulatorGain)
+        modulatorGain.connect(oscillatorRef.current.frequency)
+
+        // Iniciar modulador
+        modulatorOsc.start()
+
+        // Programar parada del modulador
+        setTimeout(() => {
+          try {
+            modulatorOsc.stop()
+            modulatorOsc.disconnect()
+          } catch (error) {
+            // El modulador ya fue detenido
+          }
+        }, duracion)
+      }
 
       // Conectar nodos
       oscillatorRef.current.connect(gainNodeRef.current)
@@ -145,7 +176,7 @@ export default function Simulador() {
       }, duracion)
 
       toast({
-        title: "Tono reproducido",
+        title: `${tipoTono === "pure" ? "Tono puro" : "Tono warble"} reproducido`,
         description: `${frecuencia} Hz a ${intensidadDb} dB HL - Oído ${oido}`,
       })
     } catch (error) {
@@ -866,8 +897,7 @@ export default function Simulador() {
                     return (
                       <g key={`right-air-${freq}`}>
                         <circle cx={x} cy={y} r="6" fill="white" stroke="#cc0000" strokeWidth="2" />
-                        <text x={x} y={y + 3} fontSize="8" textAnchor="middle" fill="#cc0000" fontWeight="bold">
-                        </text>
+                        <text x={x} y={y + 3} fontSize="8" textAnchor="middle" fill="#cc0000" fontWeight="bold"></text>
                       </g>
                     )
                   })}
@@ -900,8 +930,7 @@ export default function Simulador() {
                           strokeWidth="2.5"
                           strokeLinecap="round"
                         />
-                        <text x={x + 10} y={y + 3} fontSize="7" fill="#0066cc" fontWeight="bold">
-                        </text>
+                        <text x={x + 10} y={y + 3} fontSize="7" fill="#0066cc" fontWeight="bold"></text>
                       </g>
                     )
                   })}
@@ -938,7 +967,6 @@ export default function Simulador() {
                         {"<"}
                       </text>
                     )
-
                   })}
 
                 {/* Símbolos para oído izquierdo (vía ósea) - Corchetes cuadrados */}
@@ -979,24 +1007,46 @@ export default function Simulador() {
               <div className="absolute left-[660px] top-[20px]">
                 <svg width="190" height="110">
                   <rect x="0" y="0" width="190" height="110" rx="10" fill="white" opacity="1" stroke="#ccc" />
-                  <text x="10" y="18" fontSize="12" fontWeight="bold">LEYENDA AUDIOMETRÍA</text>
+                  <text x="10" y="18" fontSize="12" fontWeight="bold">
+                    LEYENDA AUDIOMETRÍA
+                  </text>
                   {/* Oído derecho */}
-                  <text x="10" y="35" fontSize="9" fontWeight="bold" fill="#cc0000">Oído Derecho</text>
+                  <text x="10" y="35" fontSize="9" fontWeight="bold" fill="#cc0000">
+                    Oído Derecho
+                  </text>
                   <circle cx="20" cy="45" r="4" stroke="#cc0000" fill="white" strokeWidth="2" />
-                  <text x="35" y="48" fontSize="8">Vía Aérea</text>
-                  <text x="20" y="62" fontSize="12" fill="#cc0000">&lt;</text>
-                  <text x="35" y="62" fontSize="8">Vía Ósea</text>
+                  <text x="35" y="48" fontSize="8">
+                    Vía Aérea
+                  </text>
+                  <text x="20" y="62" fontSize="12" fill="#cc0000">
+                    &lt;
+                  </text>
+                  <text x="35" y="62" fontSize="8">
+                    Vía Ósea
+                  </text>
                   {/* Oído izquierdo */}
-                  <text x="100" y="35" fontSize="9" fontWeight="bold" fill="#0066cc">Oído Izquierdo</text>
+                  <text x="100" y="35" fontSize="9" fontWeight="bold" fill="#0066cc">
+                    Oído Izquierdo
+                  </text>
                   <path d="M 110 42 L 120 52 M 110 52 L 120 42" stroke="#0066cc" strokeWidth="2" />
-                  <text x="130" y="48" fontSize="8">Vía Aérea</text>
-                  <text x="110" y="62" fontSize="12" fill="#0066cc">&gt;</text>
-                  <text x="130" y="62" fontSize="8">Vía Ósea</text>
+                  <text x="130" y="48" fontSize="8">
+                    Vía Aérea
+                  </text>
+                  <text x="110" y="62" fontSize="12" fill="#0066cc">
+                    &gt;
+                  </text>
+                  <text x="130" y="62" fontSize="8">
+                    Vía Ósea
+                  </text>
                   {/* Líneas */}
                   <line x1="10" y1="80" x2="30" y2="80" stroke="#cc0000" strokeWidth="2" />
-                  <text x="35" y="83" fontSize="8">Línea oído derecho</text>
+                  <text x="35" y="83" fontSize="8">
+                    Línea oído derecho
+                  </text>
                   <line x1="100" y1="80" x2="120" y2="80" stroke="#0066cc" strokeWidth="2" strokeDasharray="4,2" />
-                  <text x="125" y="83" fontSize="8">Línea oído izquierdo</text>
+                  <text x="125" y="83" fontSize="8">
+                    Línea oído izquierdo
+                  </text>
                 </svg>
               </div>
             </div>
@@ -1004,11 +1054,24 @@ export default function Simulador() {
             {/* Primera fila de botones */}
             <button
               className="absolute left-[172px] top-[381px] w-[75px] h-[40px] bg-[#2C2C2C] rounded-lg border-t border-black flex flex-col"
-              onClick={() => toast({ title: "Tone/Warble", description: "Seleccionado modo de tono puro" })}
+              onClick={() => {
+                const nuevoTipo = tipoTono === "pure" ? "warble" : "pure"
+                setTipoTono(nuevoTipo)
+                toast({
+                  title: `Modo ${nuevoTipo === "pure" ? "Tono Puro" : "Warble"} activado`,
+                  description: `Ahora reproduciendo ${nuevoTipo === "pure" ? "tonos puros" : "tonos warble"}`,
+                })
+              }}
             >
               <div className="absolute left-[4px] top-[-23px] text-xs">Tone</div>
               <div className="absolute left-[38px] top-[-23px] text-xs">Warble</div>
               <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
+              {/* Indicador visual del modo activo */}
+              {tipoTono === "pure" ? (
+                <div className="absolute left-[8px] top-[15px] w-[25px] h-[2px] bg-green-400 rounded"></div>
+              ) : (
+                <div className="absolute left-[42px] top-[15px] w-[25px] h-[2px] bg-green-400 rounded"></div>
+              )}
             </button>
 
             <button
@@ -1063,9 +1126,7 @@ export default function Simulador() {
                 onClick={() => cambiarOido("derecho")}
               >
                 <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                {oido === "derecho" && (
-                  <div className="absolute inset-1 border-2 border-white rounded-md"></div>
-                )}
+                {oido === "derecho" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
               </button>
             </div>
 
@@ -1076,15 +1137,11 @@ export default function Simulador() {
                 onClick={() => cambiarOido("izquierdo")}
               >
                 <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                {oido === "izquierdo" && (
-                  <div className="absolute inset-1 border-2 border-white rounded-md"></div>
-                )}
+                {oido === "izquierdo" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
               </button>
             </div>
 
-
-            <div
-            className="absolute left-[349px] top-[459px] flex flex-col items-center">
+            <div className="absolute left-[349px] top-[459px] flex flex-col items-center">
               <span className="mb-1 text-xs text-black">Vía Ósea/Aérea</span>
               <button
                 className="relative w-[75px] h-[40px] bg-[#00BFFF] rounded-lg"
@@ -1168,22 +1225,21 @@ export default function Simulador() {
               <div className="absolute left-[14.08px] top-[-15px] text-xs text-black">No Resp</div>
             </button>
 
-              <button
-                className="absolute left-[598.54px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
-                onClick={() => cambiarIntensidad("bajar")}
-                disabled={modoAutomatico}
-              >
-                Subir Tono
-              </button>
+            <button
+              className="absolute left-[598.54px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
+              onClick={() => cambiarIntensidad("bajar")}
+              disabled={modoAutomatico}
+            >
+              Subir Tono
+            </button>
 
-              <button
-                className="absolute left-[687.07px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
-                onClick={() => cambiarIntensidad("subir")}
-                disabled={modoAutomatico}
-              >
-                Bajar Tono
-              </button>
-
+            <button
+              className="absolute left-[687.07px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
+              onClick={() => cambiarIntensidad("subir")}
+              disabled={modoAutomatico}
+            >
+              Bajar Tono
+            </button>
 
             {/* Perillas grandes */}
             <div
@@ -1264,6 +1320,9 @@ export default function Simulador() {
                 </div>
                 <div>
                   Vía: <span className="font-bold">{viaSeleccionada === "aerea" ? "Aérea" : "Ósea"}</span>
+                </div>
+                <div>
+                  Tipo de tono: <span className="font-bold">{tipoTono === "pure" ? "Puro" : "Warble"}</span>
                 </div>
                 <div>
                   Modo: <span className="font-bold">{modoAutomatico ? "Automático" : "Manual"}</span>
