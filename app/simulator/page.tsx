@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Play, Square } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { ArrowLeft, Play, Square } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useEffect, useRef, useState } from "react"
 
 // Frecuencias estándar para audiometría
 const frecuencias = [125, 250, 500, 750, 1000, 1500, 2000, 3000, 4000, 6000, 8000]
@@ -507,7 +507,7 @@ export default function Simulador() {
       <div className="mb-4 flex items-center">
         <Button variant="ghost" onClick={() => router.push("/dashboard")} className="mr-2">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Volver al Dashboard
+          Volver al Panel de Niveles
         </Button>
         <h1 className="text-xl font-bold">Simulador de Audiómetro</h1>
       </div>
@@ -517,11 +517,11 @@ export default function Simulador() {
         <div className="w-full lg:w-3/4">
           <div className="relative w-full h-[812px] bg-[#F4F4F5] rounded-lg border border-[#E4E4E7] overflow-hidden">
             {/* Área de visualización del audiograma */}
-            <div className="absolute left-[171px] top-[33px] w-[841px] h-[240px] bg-white border border-black">
+            <div className="relative w-[641px] h-[240px] bg-white border border-black">
               {/* Audiograma */}
-              <svg width="100%" height="100%" viewBox="0 0 841 240">
+              <svg width="100%" height="100%" viewBox="0 0 641 240">
                 {/* Fondo del audiograma */}
-                <rect x="0" y="0" width="841" height="240" fill="white" />
+                <rect x="0" y="0" width="641" height="240" fill="white" />
 
                 {/* Líneas horizontales principales (cada 20 dB) */}
                 {Array.from({ length: 8 }, (_, i) => (
@@ -642,12 +642,6 @@ export default function Simulador() {
                   transform="rotate(-90, 15, 120)"
                 >
                   Hearing Level (dB HL)
-                </text>
-
-                {/* Zona de audición normal */}
-                <rect x="40" y="20" width="760" height="50" fill="#e8f5e8" opacity="0.3" />
-                <text x="420" y="40" fontSize="9" textAnchor="middle" fill="#2d5a2d" fontStyle="italic">
-                  Normal Hearing Range
                 </text>
 
                 {/* Indicador de frecuencia actual */}
@@ -873,7 +867,6 @@ export default function Simulador() {
                       <g key={`right-air-${freq}`}>
                         <circle cx={x} cy={y} r="6" fill="white" stroke="#cc0000" strokeWidth="2" />
                         <text x={x} y={y + 3} fontSize="8" textAnchor="middle" fill="#cc0000" fontWeight="bold">
-                          R
                         </text>
                       </g>
                     )
@@ -908,7 +901,6 @@ export default function Simulador() {
                           strokeLinecap="round"
                         />
                         <text x={x + 10} y={y + 3} fontSize="7" fill="#0066cc" fontWeight="bold">
-                          L
                         </text>
                       </g>
                     )
@@ -934,26 +926,19 @@ export default function Simulador() {
                     const x = freqPositions[Number(freq)]
                     const y = 20 + (valor! + 10) * 1.25
                     return (
-                      <g key={`right-bone-${freq}`}>
-                        <rect x={x - 6} y={y - 6} width="12" height="12" fill="white" stroke="none" />
-                        <path
-                          d={`M ${x - 5} ${y - 3} L ${x - 2} ${y} L ${x - 5} ${y + 3}`}
-                          fill="none"
-                          stroke="#cc0000"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d={`M ${x + 5} ${y - 3} L ${x + 2} ${y} L ${x + 5} ${y + 3}`}
-                          fill="none"
-                          stroke="#cc0000"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </g>
+                      <text
+                        key={`right-bone-${freq}`}
+                        x={x}
+                        y={y + 4}
+                        textAnchor="middle"
+                        fontSize="16"
+                        fill="#cc0000"
+                        fontWeight="bold"
+                      >
+                        {"<"}
+                      </text>
                     )
+
                   })}
 
                 {/* Símbolos para oído izquierdo (vía ósea) - Corchetes cuadrados */}
@@ -976,150 +961,44 @@ export default function Simulador() {
                     const x = freqPositions[Number(freq)]
                     const y = 20 + (valor! + 10) * 1.25
                     return (
-                      <g key={`left-bone-${freq}`}>
-                        <rect x={x - 6} y={y - 6} width="12" height="12" fill="white" stroke="none" />
-                        <path
-                          d={`M ${x - 5} ${y - 4} L ${x - 5} ${y + 4} M ${x - 5} ${y - 4} L ${x - 2} ${y - 4} M ${x - 5} ${y + 4} L ${x - 2} ${y + 4}`}
-                          stroke="#0066cc"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                        <path
-                          d={`M ${x + 5} ${y - 4} L ${x + 5} ${y + 4} M ${x + 5} ${y - 4} L ${x + 2} ${y - 4} M ${x + 5} ${y + 4} L ${x + 2} ${y + 4}`}
-                          stroke="#0066cc"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </g>
+                      <text
+                        key={`left-bone-${freq}`}
+                        x={x}
+                        y={y + 4}
+                        textAnchor="middle"
+                        fontSize="16"
+                        fill="#0066cc"
+                        fontWeight="bold"
+                      >
+                        {">"}
+                      </text>
                     )
                   })}
-
-                {/* Leyenda mejorada */}
-                <g transform="translate(600, 30)">
-                  <rect x="-10" y="-5" width="180" height="85" fill="white" stroke="#ccc" strokeWidth="1" rx="3" />
-
-                  <text x="0" y="10" fontSize="11" fontWeight="bold" fill="#333">
-                    AUDIOGRAM LEGEND
-                  </text>
-
-                  {/* Oído derecho */}
-                  <text x="0" y="25" fontSize="9" fontWeight="bold" fill="#cc0000">
-                    RIGHT EAR
-                  </text>
-                  <circle cx="10" cy="35" r="4" fill="white" stroke="#cc0000" strokeWidth="2" />
-                  <text x="20" y="38" fontSize="8" fill="#333">
-                    Air Conduction
-                  </text>
-
-                  <path
-                    d="M 5 45 L 8 48 L 5 51 M 15 45 L 12 48 L 15 51"
-                    fill="none"
-                    stroke="#cc0000"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <text x="20" y="50" fontSize="8" fill="#333">
-                    Bone Conduction
-                  </text>
-
-                  {/* Oído izquierdo */}
-                  <text x="90" y="25" fontSize="9" fontWeight="bold" fill="#0066cc">
-                    LEFT EAR
-                  </text>
-                  <path d="M 95 32 L 105 42 M 95 42 L 105 32" stroke="#0066cc" strokeWidth="2" strokeLinecap="round" />
-                  <text x="110" y="38" fontSize="8" fill="#333">
-                    Air Conduction
-                  </text>
-
-                  <path
-                    d="M 95 45 L 95 55 M 95 45 L 98 45 M 95 55 L 98 55 M 105 45 L 105 55 M 105 45 L 102 45 M 105 55 L 102 55"
-                    stroke="#0066cc"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                  <text x="110" y="52" fontSize="8" fill="#333">
-                    Bone Conduction
-                  </text>
-
-                  {/* Líneas */}
-                  <line x1="0" y1="65" x2="20" y2="65" stroke="#cc0000" strokeWidth="2" />
-                  <text x="25" y="68" fontSize="8" fill="#333">
-                    Right Ear
-                  </text>
-
-                  <line x1="90" y1="65" x2="110" y2="65" stroke="#0066cc" strokeWidth="2" strokeDasharray="4,2" />
-                  <text x="115" y="68" fontSize="8" fill="#333">
-                    Left Ear
-                  </text>
-                </g>
-
-                {/* Clasificación de pérdida auditiva */}
-                <g transform="translate(40, 205)">
-                  <rect x="0" y="0" width="200" height="30" fill="#f8f9fa" stroke="#dee2e6" strokeWidth="1" rx="2" />
-                  <text x="5" y="12" fontSize="8" fontWeight="bold" fill="#495057">
-                    HEARING LOSS CLASSIFICATION:
-                  </text>
-                  <text x="5" y="22" fontSize="7" fill="#6c757d">
-                    Normal: ≤20 dB | Mild: 21-40 dB | Moderate: 41-70 dB | Severe: 71-90 dB | Profound: &gt;90 dB
-                  </text>
-                </g>
               </svg>
-            </div>
-
-            {/* Botones superiores */}
-            <div className="absolute left-[58px] top-[292px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[-2px] top-[-14px] text-xs text-center">Shift</span>
-            </div>
-            <div className="absolute left-[126px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[-5px] top-[-16px] text-xs text-center">Setup</span>
-            </div>
-            <div className="absolute left-[255px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[348px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[441px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[534px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[627px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[720px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[813px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[906px] top-[294px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[10px] top-[-16px] text-xs text-center">|</span>
-            </div>
-            <div className="absolute left-[1014px] top-[292px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[-4px] top-[-14px] text-xs text-center">Tests</span>
-            </div>
-            <div className="absolute left-[1083px] top-[293px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[-3px] top-[-31px] text-xs text-center">
-                Del
-                <br />
-                Point
-              </span>
-              <span className="absolute left-[-15px] top-[40px] text-xs italic font-light">del curve</span>
-            </div>
-            <div className="absolute left-[1158px] top-[293px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[-11px] top-[-31px] text-xs text-center">
-                Save
-                <br />
-                Session
-              </span>
-              <span className="absolute left-[-23px] top-[40px] text-xs italic font-light">new session</span>
-            </div>
-            <div className="absolute left-[1226px] top-[290px] w-[23px] h-[40px] bg-[#2C2C2C] rounded-lg">
-              <span className="absolute left-[-2px] top-[-23px] text-xs text-center">Print</span>
-              <span className="absolute left-[-7px] top-[43px] text-xs italic font-light">clients</span>
+              {/* Leyenda al costado del audiograma */}
+              <div className="absolute left-[660px] top-[20px]">
+                <svg width="190" height="110">
+                  <rect x="0" y="0" width="190" height="110" rx="10" fill="white" opacity="1" stroke="#ccc" />
+                  <text x="10" y="18" fontSize="12" fontWeight="bold">LEYENDA AUDIOMETRÍA</text>
+                  {/* Oído derecho */}
+                  <text x="10" y="35" fontSize="9" fontWeight="bold" fill="#cc0000">Oído Derecho</text>
+                  <circle cx="20" cy="45" r="4" stroke="#cc0000" fill="white" strokeWidth="2" />
+                  <text x="35" y="48" fontSize="8">Vía Aérea</text>
+                  <text x="20" y="62" fontSize="12" fill="#cc0000">&lt;</text>
+                  <text x="35" y="62" fontSize="8">Vía Ósea</text>
+                  {/* Oído izquierdo */}
+                  <text x="100" y="35" fontSize="9" fontWeight="bold" fill="#0066cc">Oído Izquierdo</text>
+                  <path d="M 110 42 L 120 52 M 110 52 L 120 42" stroke="#0066cc" strokeWidth="2" />
+                  <text x="130" y="48" fontSize="8">Vía Aérea</text>
+                  <text x="110" y="62" fontSize="12" fill="#0066cc">&gt;</text>
+                  <text x="130" y="62" fontSize="8">Vía Ósea</text>
+                  {/* Líneas */}
+                  <line x1="10" y1="80" x2="30" y2="80" stroke="#cc0000" strokeWidth="2" />
+                  <text x="35" y="83" fontSize="8">Línea oído derecho</text>
+                  <line x1="100" y1="80" x2="120" y2="80" stroke="#0066cc" strokeWidth="2" strokeDasharray="4,2" />
+                  <text x="125" y="83" fontSize="8">Línea oído izquierdo</text>
+                </svg>
+              </div>
             </div>
 
             {/* Primera fila de botones */}
@@ -1155,10 +1034,10 @@ export default function Simulador() {
             </button>
 
             <button
-              className="absolute left-[642.81px] top-[381px] w-[75.45px] h-[40px] bg-[#BF6A02] rounded-lg"
+              className="absolute left-[642.81px] top-[400px] w-[75.45px] h-[40px] bg-[#BF6A02] rounded-lg"
               onClick={() => toast({ title: "Ext Range", description: "Función no disponible en el simulador" })}
             >
-              <div className="absolute left-[9.05px] top-[-23px] text-xs">Ext Range</div>
+              <div className="absolute left-[9.05px] top-[-24px] text-xs">Ext Range</div>
             </button>
 
             <button
@@ -1177,42 +1056,52 @@ export default function Simulador() {
             </button>
 
             {/* Segunda fila de botones */}
-            <button
-              className="absolute left-[171px] top-[459px] w-[75px] h-[40px] bg-[#C00F0C] rounded-lg"
-              onClick={() => cambiarOido("derecho")}
-            >
-              <div className="absolute left-[4px] top-[-23px] text-xs">Right</div>
-              <div className="absolute left-[38px] top-[-23px] text-xs">Insert</div>
-              <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
-              {oido === "derecho" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
-            </button>
+            <div className="absolute left-[171px] top-[459px] flex flex-col items-center">
+              <span className="mb-1 text-xs text-black">Oído Derecho</span>
+              <button
+                className="relative w-[75px] h-[40px] bg-[#C00F0C] rounded-lg"
+                onClick={() => cambiarOido("derecho")}
+              >
+                <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
+                {oido === "derecho" && (
+                  <div className="absolute inset-1 border-2 border-white rounded-md"></div>
+                )}
+              </button>
+            </div>
 
-            <button
-              className="absolute left-[260px] top-[459px] w-[75px] h-[40px] bg-[#1D0990] rounded-lg"
-              onClick={() => cambiarOido("izquierdo")}
-            >
-              <div className="absolute left-[4px] top-[-23px] text-xs">Left</div>
-              <div className="absolute left-[38px] top-[-23px] text-xs">Insert</div>
-              <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
-              {oido === "izquierdo" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
-            </button>
+            <div className="absolute left-[260px] top-[459px] flex flex-col items-center">
+              <span className="mb-1 text-xs text-black">Oído Izquierdo</span>
+              <button
+                className="relative w-[75px] h-[40px] bg-[#1D0990] rounded-lg"
+                onClick={() => cambiarOido("izquierdo")}
+              >
+                <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
+                {oido === "izquierdo" && (
+                  <div className="absolute inset-1 border-2 border-white rounded-md"></div>
+                )}
+              </button>
+            </div>
 
-            <button
-              className="absolute left-[349px] top-[459px] w-[75px] h-[40px] bg-[#1C098B] rounded-lg"
-              onClick={() => cambiarVia("osea")}
-            >
-              <div className="absolute left-[9px] top-[-23px] text-xs">R Bone L</div>
-              <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
-              {viaSeleccionada === "osea" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
-            </button>
 
-            <button
-              className="absolute left-[436px] top-[459px] w-[75px] h-[40px] bg-[#2C2C2C] rounded-lg"
-              onClick={() => toast({ title: "1 FF 2", description: "Función no disponible en el simulador" })}
-            >
-              <div className="absolute left-[17px] top-[-23px] text-xs">1 FF 2</div>
-              <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
-            </button>
+            <div
+            className="absolute left-[349px] top-[459px] flex flex-col items-center">
+              <span className="mb-1 text-xs text-black">Vía Ósea/Aérea</span>
+              <button
+                className="relative w-[75px] h-[40px] bg-[#00BFFF] rounded-lg"
+                onClick={() => {
+                  if (viaSeleccionada === "osea") {
+                    setViaSeleccionada("aerea")
+                  } else {
+                    cambiarVia("osea")
+                  }
+                }}
+              >
+                <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
+                {viaSeleccionada === "osea" && (
+                  <div className="absolute inset-1 border-2 border-white rounded-md"></div>
+                )}
+              </button>
+            </div>
 
             {/* Botones de control */}
             <div className="absolute left-[598.54px] top-[467px] w-[164px] h-[40px] bg-[#BF6A02] rounded-lg flex">
@@ -1268,7 +1157,7 @@ export default function Simulador() {
               onClick={guardarResultado}
               disabled={modoAutomatico}
             >
-              <div className="absolute left-[22.13px] top-[-15px] text-xs">Store</div>
+              <div className="absolute left-[22.13px] top-[-15px] text-xs">Guardar</div>
             </button>
 
             <button
@@ -1279,23 +1168,22 @@ export default function Simulador() {
               <div className="absolute left-[14.08px] top-[-15px] text-xs text-black">No Resp</div>
             </button>
 
-            <button
-              className="absolute left-[598.54px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white"
-              onClick={() => cambiarIntensidad("bajar")}
-              disabled={modoAutomatico}
-            >
-              <div className="absolute left-[20.12px] top-[40px] text-xs text-black">Down</div>
-              <div className="absolute left-[12.07px] top-[-15px] text-xs text-black">Incorrect</div>
-            </button>
+              <button
+                className="absolute left-[598.54px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
+                onClick={() => cambiarIntensidad("bajar")}
+                disabled={modoAutomatico}
+              >
+                Subir Tono
+              </button>
 
-            <button
-              className="absolute left-[687.07px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white"
-              onClick={() => cambiarIntensidad("subir")}
-              disabled={modoAutomatico}
-            >
-              <div className="absolute left-[28.17px] top-[40px] text-xs text-black">Up</div>
-              <div className="absolute left-[16.09px] top-[-15px] text-xs text-black">Correct</div>
-            </button>
+              <button
+                className="absolute left-[687.07px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
+                onClick={() => cambiarIntensidad("subir")}
+                disabled={modoAutomatico}
+              >
+                Bajar Tono
+              </button>
+
 
             {/* Perillas grandes */}
             <div
