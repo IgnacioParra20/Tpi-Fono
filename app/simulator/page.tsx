@@ -430,259 +430,138 @@ export default function Simulador() {
     }, 1000)
   }
 
-  // Calcular PTA (Pure Tone Average)
-  const calcularPTA = () => {
-    const ptaDerecho =
-      [500, 1000, 2000].map((freq) => resultados.derecho.aerea[freq] || 0).reduce((sum, val) => sum + val, 0) / 3
-
-    const ptaIzquierdo =
-      [500, 1000, 2000].map((freq) => resultados.izquierdo.aerea[freq] || 0).reduce((sum, val) => sum + val, 0) / 3
-
-    return { derecho: Math.round(ptaDerecho), izquierdo: Math.round(ptaIzquierdo) }
-  }
-
-  // Calcular gap aéreo-óseo
-  const calcularGapAereoOseo = () => {
-    const gaps: Record<string, number[]> = { derecho: [], izquierdo: [] }
-
-    for (const freq of [500, 1000, 2000, 4000]) {
-      const aereoD = resultados.derecho.aerea[freq]
-      const oseoD = resultados.derecho.osea[freq]
-      if (aereoD !== null && oseoD !== null) {
-        gaps.derecho.push(aereoD - oseoD)
-      }
-
-      const aereoI = resultados.izquierdo.aerea[freq]
-      const oseoI = resultados.izquierdo.osea[freq]
-      if (aereoI !== null && oseoI !== null) {
-        gaps.izquierdo.push(aereoI - oseoI)
-      }
-    }
-
-    const gapPromedioDerecho =
-      gaps.derecho.length > 0 ? gaps.derecho.reduce((sum, gap) => sum + gap, 0) / gaps.derecho.length : 0
-
-    const gapPromedioIzquierdo =
-      gaps.izquierdo.length > 0 ? gaps.izquierdo.reduce((sum, gap) => sum + gap, 0) / gaps.izquierdo.length : 0
-
-    return { derecho: gapPromedioDerecho, izquierdo: gapPromedioIzquierdo }
-  }
-
-  // Determinar tipo de hipoacusia
-  const determinarTipoHipoacusia = () => {
-    const gaps = calcularGapAereoOseo()
-    const pta = calcularPTA()
-
-    const resultadoDerecho = {
-      tipo: "Normal",
-      grado: "Normal",
-      descripcion: "Audición normal",
-    }
-
-    const resultadoIzquierdo = {
-      tipo: "Normal",
-      grado: "Normal",
-      descripcion: "Audición normal",
-    }
-
-    // Determinar tipo para oído derecho
-    if (pta.derecho > 20) {
-      if (gaps.derecho >= 15) {
-        resultadoDerecho.tipo = "Conductiva"
-        resultadoDerecho.descripcion = "Hipoacusia conductiva"
-      } else if (gaps.derecho < 10) {
-        resultadoDerecho.tipo = "Neurosensorial"
-        resultadoDerecho.descripcion = "Hipoacusia neurosensorial"
-      } else {
-        resultadoDerecho.tipo = "Mixta"
-        resultadoDerecho.descripcion = "Hipoacusia mixta"
-      }
-
-      // Determinar grado
-      if (pta.derecho < 25) resultadoDerecho.grado = "Normal"
-      else if (pta.derecho < 40) resultadoDerecho.grado = "Leve"
-      else if (pta.derecho < 55) resultadoDerecho.grado = "Moderada"
-      else if (pta.derecho < 70) resultadoDerecho.grado = "Moderada a severa"
-      else if (pta.derecho < 90) resultadoDerecho.grado = "Severa"
-      else resultadoDerecho.grado = "Profunda"
-    }
-
-    // Determinar tipo para oído izquierdo
-    if (pta.izquierdo > 20) {
-      if (gaps.izquierdo >= 15) {
-        resultadoIzquierdo.tipo = "Conductiva"
-        resultadoIzquierdo.descripcion = "Hipoacusia conductiva"
-      } else if (gaps.izquierdo < 10) {
-        resultadoIzquierdo.tipo = "Neurosensorial"
-        resultadoIzquierdo.descripcion = "Hipoacusia neurosensorial"
-      } else {
-        resultadoIzquierdo.tipo = "Mixta"
-        resultadoIzquierdo.descripcion = "Hipoacusia mixta"
-      }
-
-      // Determinar grado
-      if (pta.izquierdo < 25) resultadoIzquierdo.grado = "Normal"
-      else if (pta.izquierdo < 40) resultadoIzquierdo.grado = "Leve"
-      else if (pta.izquierdo < 55) resultadoIzquierdo.grado = "Moderada"
-      else if (pta.izquierdo < 70) resultadoIzquierdo.grado = "Moderada a severa"
-      else if (pta.izquierdo < 90) resultadoIzquierdo.grado = "Severa"
-      else resultadoIzquierdo.grado = "Profunda"
-    }
-
-    return { derecho: resultadoDerecho, izquierdo: resultadoIzquierdo }
-  }
-
   return (
-    <div className="min-h-screen bg-[#F4F4F5] p-4">
-      <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-        {/* Botón con cuadro blanco y animación */}
-        <div className="bg-white rounded-lg shadow transition-transform hover:scale-105 border border-gray-200 px-4 py-2">
+    <div className="min-h-screen bg-[#F4F4F5] p-2 sm:p-4">
+      {/* Header responsive */}
+      <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+        <div className="bg-white rounded-lg shadow transition-transform hover:scale-105 border border-gray-200 px-3 py-2">
           <Button
             variant="ghost"
             onClick={() => router.push("/dashboard")}
-            className="flex items-center text-base font-semibold text-gray-700 hover:text-blue-700 transition-colors transition duration-200 ease-in-out hover:scale-105"
+            className="flex items-center text-sm sm:text-base font-semibold text-gray-700 hover:text-blue-700 transition-colors p-1 sm:p-2"
           >
-            <ArrowLeft className="mr-2 h-5 w-5" />
-            Volver al Panel de Niveles
+            <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Volver al Panel de Niveles</span>
+            <span className="sm:hidden">Volver</span>
           </Button>
         </div>
-        {/* Título separado */}
-        <h1 className="text-xl font-bold ml-0 sm:ml-6 mt-2 sm:mt-0">Simulador de Audiómetro</h1>
+        <h1 className="text-lg sm:text-xl font-bold">Simulador de Audiómetro</h1>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Panel principal del audiómetro - Audiograma más grande */}
-        <div className="w-full lg:w-3/4">
-          <div className="relative w-full h-[900px] bg-[#F4F4F5] rounded-lg border border-[#E4E4E7] overflow-hidden">
-            {/* Área de visualización del audiograma - Más grande */}
-            <div className="relative w-[750px] h-[320px] bg-white border-2 border-black shadow-lg">
-              {/* Audiograma */}
-              <svg width="100%" height="100%" viewBox="0 0 750 320">
-                {/* Fondo del audiograma */}
-                <rect x="0" y="0" width="750" height="320" fill="white" />
+      {/* Layout principal responsive */}
+      <div className="flex flex-col xl:flex-row gap-4">
+        {/* Panel principal del audiómetro */}
+        <div className="w-full xl:w-3/4">
+          <div className="bg-white rounded-lg border border-[#E4E4E7] p-2 sm:p-4">
+            {/* Audiograma responsive */}
+            <div className="w-full overflow-x-auto mb-4">
+              <div className="min-w-[600px] lg:min-w-[750px]">
+                <svg width="100%" height="300" viewBox="0 0 750 320" className="border-2 border-black bg-white rounded">
+                  {/* Fondo del audiograma */}
+                  <rect x="0" y="0" width="750" height="320" fill="white" />
 
-                {/* Líneas horizontales principales (cada 20 dB) */}
-                {Array.from({ length: 8 }, (_, i) => (
-                  <line
-                    key={`h-main-${i}`}
-                    x1="50"
-                    y1={30 + i * 35}
-                    x2="700"
-                    y2={30 + i * 35}
-                    stroke={i === 1 ? "#000" : "#666"}
-                    strokeWidth={i === 1 ? "2" : "1"}
-                  />
-                ))}
-
-                {/* Líneas horizontales secundarias (cada 10 dB) */}
-                {Array.from({ length: 7 }, (_, i) => (
-                  <line
-                    key={`h-sec-${i}`}
-                    x1="50"
-                    y1={47.5 + i * 35}
-                    x2="700"
-                    y2={47.5 + i * 35}
-                    stroke="#ccc"
-                    strokeWidth="0.5"
-                    strokeDasharray="2,2"
-                  />
-                ))}
-
-                {/* Líneas verticales principales (octavas) */}
-                {[125, 250, 500, 1000, 2000, 4000, 8000].map((freq, i) => {
-                  const positions = [100, 180, 260, 360, 460, 560, 660]
-                  return (
+                  {/* Líneas horizontales principales (cada 20 dB) */}
+                  {Array.from({ length: 8 }, (_, i) => (
                     <line
-                      key={`v-main-${freq}`}
-                      x1={positions[i]}
-                      y1="30"
-                      x2={positions[i]}
-                      y2="275"
-                      stroke="#666"
-                      strokeWidth="1"
+                      key={`h-main-${i}`}
+                      x1="50"
+                      y1={30 + i * 35}
+                      x2="700"
+                      y2={30 + i * 35}
+                      stroke={i === 1 ? "#000" : "#666"}
+                      strokeWidth={i === 1 ? "2" : "1"}
                     />
-                  )
-                })}
+                  ))}
 
-                {/* Etiquetas de frecuencia */}
-                {[
-                  { freq: 125, x: 100 },
-                  { freq: 250, x: 180 },
-                  { freq: 500, x: 260 },
-                  { freq: 1000, x: 360 },
-                  { freq: 2000, x: 460 },
-                  { freq: 4000, x: 560 },
-                  { freq: 8000, x: 660 },
-                ].map(({ freq, x }) => (
+                  {/* Líneas horizontales secundarias (cada 10 dB) */}
+                  {Array.from({ length: 7 }, (_, i) => (
+                    <line
+                      key={`h-sec-${i}`}
+                      x1="50"
+                      y1={47.5 + i * 35}
+                      x2="700"
+                      y2={47.5 + i * 35}
+                      stroke="#ccc"
+                      strokeWidth="0.5"
+                      strokeDasharray="2,2"
+                    />
+                  ))}
+
+                  {/* Líneas verticales principales (octavas) */}
+                  {[125, 250, 500, 1000, 2000, 4000, 8000].map((freq, i) => {
+                    const positions = [100, 180, 260, 360, 460, 560, 660]
+                    return (
+                      <line
+                        key={`v-main-${freq}`}
+                        x1={positions[i]}
+                        y1="30"
+                        x2={positions[i]}
+                        y2="275"
+                        stroke="#666"
+                        strokeWidth="1"
+                      />
+                    )
+                  })}
+
+                  {/* Etiquetas de frecuencia */}
+                  {[
+                    { freq: 125, x: 100 },
+                    { freq: 250, x: 180 },
+                    { freq: 500, x: 260 },
+                    { freq: 1000, x: 360 },
+                    { freq: 2000, x: 460 },
+                    { freq: 4000, x: 560 },
+                    { freq: 8000, x: 660 },
+                  ].map(({ freq, x }) => (
+                    <text
+                      key={`freq-${freq}`}
+                      x={x}
+                      y="295"
+                      fontSize="12"
+                      textAnchor="middle"
+                      fill={freq === frecuenciaSeleccionada ? "#0066cc" : "#333"}
+                      fontWeight={freq === frecuenciaSeleccionada ? "bold" : "normal"}
+                    >
+                      {freq >= 1000 ? `${freq / 1000}K` : freq}
+                    </text>
+                  ))}
+
+                  {/* Etiquetas de intensidad */}
+                  {Array.from({ length: 8 }, (_, i) => (
+                    <text
+                      key={`db-${i}`}
+                      x="35"
+                      y={35 + i * 35}
+                      fontSize="12"
+                      textAnchor="end"
+                      fill="#333"
+                      fontWeight="500"
+                    >
+                      {-10 + i * 20}
+                    </text>
+                  ))}
+
+                  {/* Título del eje X */}
+                  <text x="375" y="315" fontSize="14" textAnchor="middle" fontWeight="bold" fill="#333">
+                    Frecuencia (Hz)
+                  </text>
+
+                  {/* Título del eje Y */}
                   <text
-                    key={`freq-${freq}`}
-                    y="295"
-                    fontSize="12"
+                    x="20"
+                    y="160"
+                    fontSize="14"
                     textAnchor="middle"
-                    fill={freq === frecuenciaSeleccionada ? "#0066cc" : "#333"}
-                    fontWeight={freq === frecuenciaSeleccionada ? "bold" : "normal"}
-                  >
-                    {freq >= 1000 ? `${freq / 1000}K` : freq}
-                  </text>
-                ))}
-
-                {/* Etiquetas de intensidad */}
-                {Array.from({ length: 8 }, (_, i) => (
-                  <text
-                    key={`db-${i}`}
-                    x="35"
-                    y={35 + i * 35}
-                    fontSize="12"
-                    textAnchor="end"
+                    fontWeight="bold"
                     fill="#333"
-                    fontWeight="500"
+                    transform="rotate(-90, 20, 160)"
                   >
-                    {-10 + i * 20}
+                    Nivel de Audición (dB HL)
                   </text>
-                ))}
 
-                {/* Título del eje X */}
-                <text x="375" y="315" fontSize="14" textAnchor="middle" fontWeight="bold" fill="#333">
-                  Frecuencia (Hz)
-                </text>
 
-                {/* Título del eje Y */}
-                <text
-                  x="20"
-                  y="160"
-                  fontSize="14"
-                  textAnchor="middle"
-                  fontWeight="bold"
-                  fill="#333"
-                  transform="rotate(-90, 20, 160)"
-                >
-                  Nivel de Audición (dB HL)
-                </text>
+                  {/* Indicador de frecuencia actual */}
 
-                {/* Indicador de frecuencia actual */}
-                {(() => {
-                  const freqPositions: Record<number, number> = {
-                    125: 100,
-                    250: 180,
-                    500: 260,
-                    1000: 360,
-                    2000: 460,
-                    4000: 560,
-                    8000: 660,
-                  }
-                  const x = freqPositions[frecuenciaSeleccionada] || 360
-                  return <rect x={x - 3} y="28" width="6" height="249" fill="#0066cc" opacity="0.3" />
-                })()}
-
-                {/* Indicador de intensidad actual */}
-                {(() => {
-                  const y = 30 + (intensidad + 10) * 1.75
-                  return <rect x="48" y={y - 3} width="654" height="6" fill="#ff6600" opacity="0.3" />
-                })()}
-
-                {/* Líneas conectoras y símbolos - Actualizados para el audiograma más grande */}
-                {/* Líneas conectoras para oído derecho (vía aérea) */}
-                <g>
                   {(() => {
                     const freqPositions: Record<number, number> = {
                       125: 100,
@@ -693,393 +572,439 @@ export default function Simulador() {
                       4000: 560,
                       8000: 660,
                     }
-                    const puntos = Object.entries(resultados.derecho.aerea)
-                      .filter(([_, valor]) => valor !== null)
-                      .map(([freq, valor]) => ({
-                        x: freqPositions[Number(freq)],
-                        y: 30 + (valor! + 10) * 1.75,
-                        freq: Number(freq),
-                      }))
-                      .sort((a, b) => a.freq - b.freq)
-
-                    return puntos.map((punto, i) => {
-                      if (i === 0) return null
-                      const puntoAnterior = puntos[i - 1]
-                      return (
-                        <line
-                          key={`line-right-air-${punto.freq}`}
-                          x1={puntoAnterior.x}
-                          y1={puntoAnterior.y}
-                          x2={punto.x}
-                          y2={punto.y}
-                          stroke="#cc0000"
-                          strokeWidth="3"
-                        />
-                      )
-                    })
+                    const x = freqPositions[frecuenciaSeleccionada] || 360
+                    return <rect x={x - 3} y="28" width="6" height="249" fill="#0066cc" opacity="0.3" />
                   })()}
-                </g>
 
-                {/* Líneas conectoras para oído izquierdo (vía aérea) */}
-                <g>
+                  {/* Indicador de intensidad actual */}
                   {(() => {
-                    const freqPositions: Record<number, number> = {
-                      125: 100,
-                      250: 180,
-                      500: 260,
-                      1000: 360,
-                      2000: 460,
-                      4000: 560,
-                      8000: 660,
-                    }
-                    const puntos = Object.entries(resultados.izquierdo.aerea)
-                      .filter(([_, valor]) => valor !== null)
-                      .map(([freq, valor]) => ({
-                        x: freqPositions[Number(freq)],
-                        y: 30 + (valor! + 10) * 1.75,
-                        freq: Number(freq),
-                      }))
-                      .sort((a, b) => a.freq - b.freq)
-
-                    return puntos.map((punto, i) => {
-                      if (i === 0) return null
-                      const puntoAnterior = puntos[i - 1]
-                      return (
-                        <line
-                          key={`line-left-air-${punto.freq}`}
-                          x1={puntoAnterior.x}
-                          y1={puntoAnterior.y}
-                          x2={punto.x}
-                          y2={punto.y}
-                          stroke="#0066cc"
-                          strokeWidth="3"
-                          strokeDasharray="6,3"
-                        />
-                      )
-                    })
+                    const y = 30 + (intensidad + 10) * 1.75
+                    return <rect x="48" y={y - 3} width="654" height="6" fill="#ff6600" opacity="0.3" />
                   })()}
-                </g>
 
-                {/* Símbolos para oído derecho (vía aérea) - Círculos más grandes */}
-                {Object.entries(resultados.derecho.aerea)
-                  .filter(([_, valor]) => valor !== null)
-                  .map(([freq, valor]) => {
-                    const freqPositions: Record<number, number> = {
-                      125: 100,
-                      250: 180,
-                      500: 260,
-                      1000: 360,
-                      2000: 460,
-                      4000: 560,
-                      8000: 660,
-                    }
-                    const x = freqPositions[Number(freq)]
-                    const y = 30 + (valor! + 10) * 1.75
-                    return (
-                      <g key={`right-air-${freq}`}>
-                        <circle cx={x} cy={y} r="8" fill="white" stroke="#cc0000" strokeWidth="3" />
-                      </g>
-                    )
-                  })}
-                
-                {/* Símbolos para oído izquierdo (vía aérea) - X más grandes */}
-                
-                {Object.entries(resultados.izquierdo.aerea)
-                  .filter(([_, valor]) => valor !== null)
-                  .map(([freq, valor]) => {
-                    const freqPositions: Record<number, number> = {
-                      125: 100,
-                      250: 180,
-                      500: 260,
-                      1000: 360,
-                      2000: 460,
-                      4000: 560,
-                      8000: 660,
-                    }
-                    const x = freqPositions[Number(freq)]
-                    const y = 30 + (valor! + 10) * 1.75
-                    return (
-                      <g key={`left-air-${freq}`}>
-                        <rect x={x - 8} y={y - 8} width="16" height="16" fill="white" stroke="none" />
-                        <path
-                          d={`M ${x - 7} ${y - 7} L ${x + 7} ${y + 7} M ${x - 7} ${y + 7} L ${x + 7} ${y - 7}`}
-                          stroke="#0066cc"
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                        />
-                      </g>
-                    )
-                  })}
+                  {/* Símbolos y líneas del audiograma */}
+                  {/* Líneas conectoras para oído derecho (vía aérea) */}
+                  <g>
+                    {(() => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const puntos = Object.entries(resultados.derecho.aerea)
+                        .filter(([_, valor]) => valor !== null)
+                        .map(([freq, valor]) => ({
+                          x: freqPositions[Number(freq)],
+                          y: 30 + (valor! + 10) * 1.75,
+                          freq: Number(freq),
+                        }))
+                        .sort((a, b) => a.freq - b.freq)
 
-                {/* Símbolos para vía ósea - más grandes */}
+                      return puntos.map((punto, i) => {
+                        if (i === 0) return null
+                        const puntoAnterior = puntos[i - 1]
+                        return (
+                          <line
+                            key={`line-right-air-${punto.freq}`}
+                            x1={puntoAnterior.x}
+                            y1={puntoAnterior.y}
+                            x2={punto.x}
+                            y2={punto.y}
+                            stroke="#cc0000"
+                            strokeWidth="3"
+                          />
+                        )
+                      })
+                    })()}
+                  </g>
 
-                {Object.entries(resultados.derecho.osea)
-                  .filter(([_, valor]) => valor !== null)
-                  .map(([freq, valor]) => {
-                    const freqPositions: Record<number, number> = {
-                      125: 100,
-                      250: 180,
-                      500: 260,
-                      1000: 360,
-                      2000: 460,
-                      4000: 560,
-                      8000: 660,
-                    }
-                    const x = freqPositions[Number(freq)]
-                    const y = 30 + (valor! + 10) * 1.75
-                    return (
-                      <text
-                        key={`right-bone-${freq}`}
-                        x={x}
-                        y={y + 6}
-                        textAnchor="middle"
-                        fontSize="20"
-                        fill="#cc0000"
-                        fontWeight="bold"
-                      >
-                        {"<"}
-                      </text>
-                    )
-                  })}
+                  {/* Líneas conectoras para oído izquierdo (vía aérea) */}
+                  <g>
+                    {(() => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const puntos = Object.entries(resultados.izquierdo.aerea)
+                        .filter(([_, valor]) => valor !== null)
+                        .map(([freq, valor]) => ({
+                          x: freqPositions[Number(freq)],
+                          y: 30 + (valor! + 10) * 1.75,
+                          freq: Number(freq),
+                        }))
+                        .sort((a, b) => a.freq - b.freq)
 
-                {Object.entries(resultados.izquierdo.osea)
-                  .filter(([_, valor]) => valor !== null)
-                  .map(([freq, valor]) => {
-                    const freqPositions: Record<number, number> = {
-                      125: 100,
-                      250: 180,
-                      500: 260,
-                      1000: 360,
-                      2000: 460,
-                      4000: 560,
-                      8000: 660,
-                    }
-                    const x = freqPositions[Number(freq)]
-                    const y = 30 + (valor! + 10) * 1.75
-                    return (
-                      <text
-                        key={`left-bone-${freq}`}
-                        x={x}
-                        y={y + 6}
-                        textAnchor="middle"
-                        fontSize="20"
-                        fill="#0066cc"
-                        fontWeight="bold"
-                      >
-                        {">"}
-                      </text>
-                    )
-                  })}
-              </svg>
+                      return puntos.map((punto, i) => {
+                        if (i === 0) return null
+                        const puntoAnterior = puntos[i - 1]
+                        return (
+                          <line
+                            key={`line-left-air-${punto.freq}`}
+                            x1={puntoAnterior.x}
+                            y1={puntoAnterior.y}
+                            x2={punto.x}
+                            y2={punto.y}
+                            stroke="#0066cc"
+                            strokeWidth="3"
+                            strokeDasharray="6,3"
+                          />
+                        )
+                      })
+                    })()}
+                  </g>
 
-              {/* Leyenda mejorada al costado del audiograma */}
-              <div className="absolute left-[760px] top-[0px]">
-                <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl shadow-lg border-2 border-blue-200 w-[220px]">
-                  <div className="mb-3"></div>
+                  {/* Símbolos para oído derecho (vía aérea) */}
+                  {Object.entries(resultados.derecho.aerea)
+                    .filter(([_, valor]) => valor !== null)
+                    .map(([freq, valor]) => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const x = freqPositions[Number(freq)]
+                      const y = 30 + (valor! + 10) * 1.75
+                      return (
+                        <g key={`right-air-${freq}`}>
+                          <circle cx={x} cy={y} r="8" fill="white" stroke="#cc0000" strokeWidth="3" />
+                        </g>
+                      )
+                    })}
 
-                  {/* Oído derecho */}
-                  <div className="mb-4 bg-red-50 p-3 rounded-lg border border-red-200">
-                    <h5 className="text-xs font-bold mb-2 text-red-700 flex items-center">
-                      <span className="w-3 h-3 bg-red-600 rounded-full mr-2"></span>
-                      Oído Derecho
-                    </h5>
-                    <div className="flex items-center mb-1">
-                      <svg width="20" height="20" className="mr-2">
-                        <circle cx="10" cy="10" r="6" stroke="#cc0000" fill="white" strokeWidth="2" />
-                      </svg>
-                      <span className="text-xs text-gray-700">Vía Aérea</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-lg text-red-600 mr-2 font-bold">{"<"}</span>
-                      <span className="text-xs text-gray-700">Vía Ósea</span>
-                    </div>
+                  {/* Símbolos para oído izquierdo (vía aérea) */}
+                  {Object.entries(resultados.izquierdo.aerea)
+                    .filter(([_, valor]) => valor !== null)
+                    .map(([freq, valor]) => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const x = freqPositions[Number(freq)]
+                      const y = 30 + (valor! + 10) * 1.75
+                      return (
+                        <g key={`left-air-${freq}`}>
+                          <rect x={x - 8} y={y - 8} width="16" height="16" fill="white" stroke="none" />
+                          <path
+                            d={`M ${x - 7} ${y - 7} L ${x + 7} ${y + 7} M ${x - 7} ${y + 7} L ${x + 7} ${y - 7}`}
+                            stroke="#0066cc"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                          />
+                        </g>
+                      )
+                    })}
+
+                  {/* Símbolos para vía ósea derecha */}
+                  {Object.entries(resultados.derecho.osea)
+                    .filter(([_, valor]) => valor !== null)
+                    .map(([freq, valor]) => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const x = freqPositions[Number(freq)]
+                      const y = 30 + (valor! + 10) * 1.75
+                      return (
+                        <text
+                          key={`right-bone-${freq}`}
+                          x={x}
+                          y={y + 6}
+                          textAnchor="middle"
+                          fontSize="20"
+                          fill="#cc0000"
+                          fontWeight="bold"
+                        >
+                          {"<"}
+                        </text>
+                      )
+                    })}
+
+                  {/* Símbolos para vía ósea izquierda */}
+                  {Object.entries(resultados.izquierdo.osea)
+                    .filter(([_, valor]) => valor !== null)
+                    .map(([freq, valor]) => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const x = freqPositions[Number(freq)]
+                      const y = 30 + (valor! + 10) * 1.75
+                      return (
+                        <text
+                          key={`left-bone-${freq}`}
+                          x={x}
+                          y={y + 6}
+                          textAnchor="middle"
+                          fontSize="20"
+                          fill="#0066cc"
+                          fontWeight="bold"
+                        >
+                          {">"}
+                        </text>
+                      )
+                    })}
+                </svg>
+              </div>
+            </div>
+
+            {/* Leyenda responsive */}
+            <div className="mb-4 bg-gradient-to-br from-blue-50 to-white p-3 rounded-xl shadow-lg border-2 border-blue-200">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                {/* Oído derecho */}
+                <div className="bg-red-50 p-2 rounded-lg border border-red-200">
+                  <h5 className="font-bold mb-1 text-red-700 flex items-center text-xs">
+                    <span className="w-2 h-2 bg-red-600 rounded-full mr-1"></span>
+                    Oído Derecho
+                  </h5>
+                  <div className="flex items-center mb-1">
+                    <svg width="16" height="16" className="mr-1">
+                      <circle cx="8" cy="8" r="5" stroke="#cc0000" fill="white" strokeWidth="2" />
+                    </svg>
+                    <span className="text-xs text-gray-700">Vía Aérea</span>
                   </div>
-
-                  {/* Oído izquierdo */}
-                  <div className="mb-4 bg-blue-50 p-3 rounded-lg border border-blue-200">
-                    <h5 className="text-xs font-bold mb-2 text-blue-700 flex items-center">
-                      <span className="w-3 h-3 bg-blue-600 rounded-full mr-2"></span>
-                      Oído Izquierdo
-                    </h5>
-                    <div className="flex items-center mb-1">
-                      <svg width="20" height="20" className="mr-2">
-                        <path d="M 5 5 L 15 15 M 5 15 L 15 5" stroke="#0066cc" strokeWidth="2" />
-                      </svg>
-                      <span className="text-xs text-gray-700">Vía Aérea</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="text-lg text-blue-600 mr-2 font-bold">{">"}</span>
-                      <span className="text-xs text-gray-700">Vía Ósea</span>
-                    </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-red-600 mr-1 font-bold">{"<"}</span>
+                    <span className="text-xs text-gray-700">Vía Ósea</span>
                   </div>
+                </div>
 
-                  {/* Líneas */}
-                  <div className="bg-gray-50 p-2 rounded-lg border border-gray-200">
-                    <h5 className="text-xs font-bold mb-2 text-gray-700">Conexiones:</h5>
-                    <div className="flex items-center mb-1">
-                      <div className="w-6 h-0.5 bg-red-600 mr-2"></div>
-                      <span className="text-xs text-gray-600">Línea derecha</span>
-                    </div>
-                    <div className="flex items-center">
-                      <div
-                        className="w-6 h-0.5 bg-blue-600 mr-2"
-                        style={{
-                          backgroundImage:
-                            "repeating-linear-gradient(to right, #0066cc 0, #0066cc 3px, transparent 3px, transparent 6px)",
-                        }}
-                      ></div>
-                      <span className="text-xs text-gray-600">Línea izquierda</span>
-                    </div>
+                {/* Oído izquierdo */}
+                <div className="bg-blue-50 p-2 rounded-lg border border-blue-200">
+                  <h5 className="font-bold mb-1 text-blue-700 flex items-center text-xs">
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-1"></span>
+                    Oído Izquierdo
+                  </h5>
+                  <div className="flex items-center mb-1">
+                    <svg width="16" height="16" className="mr-1">
+                      <path d="M 4 4 L 12 12 M 4 12 L 12 4" stroke="#0066cc" strokeWidth="2" />
+                    </svg>
+                    <span className="text-xs text-gray-700">Vía Aérea</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-sm text-blue-600 mr-1 font-bold">{">"}</span>
+                    <span className="text-xs text-gray-700">Vía Ósea</span>
+                  </div>
+                </div>
+
+                {/* Líneas */}
+                <div className="bg-gray-50 p-2 rounded-lg border border-gray-200">
+                  <h5 className="font-bold mb-1 text-gray-700 text-xs">Conexiones:</h5>
+                  <div className="flex items-center mb-1">
+                    <div className="w-4 h-0.5 bg-red-600 mr-1"></div>
+                    <span className="text-xs text-gray-600">Línea derecha</span>
+                  </div>
+                  <div className="flex items-center">
+                    <div
+                      className="w-4 h-0.5 bg-blue-600 mr-1"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(to right, #0066cc 0, #0066cc 2px, transparent 2px, transparent 4px)",
+                      }}
+                    ></div>
+                    <span className="text-xs text-gray-600">Línea izquierda</span>
+                  </div>
+                </div>
+
+                {/* Estado actual */}
+                <div className="bg-green-50 p-2 rounded-lg border border-green-200">
+                  <h5 className="font-bold mb-1 text-green-700 text-xs">Estado:</h5>
+                  <div className="text-xs space-y-0.5">
+                    <div>{frecuenciaSeleccionada} Hz</div>
+                    <div>{intensidad} dB HL</div>
+                    <div className="capitalize">{oido}</div>
+                    <div className="capitalize">{viaSeleccionada}</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Botones más juntos y reorganizados */}
-            {/* Primera fila - Tone/Warble */}
-            <button
-              className="absolute left-[100px] top-[380px] w-[80px] h-[45px] bg-[#2C2C2C] rounded-lg border-t border-black flex flex-col shadow-lg"n
-              onClick={() => {
-                const nuevoTipo = tipoTono === "pure" ? "warble" : "pure"
-                setTipoTono(nuevoTipo)
-                toast({
-                  title: `Modo ${nuevoTipo === "pure" ? "Tono Puro" : "Warble"} activado`,
-                  description: `Ahora reproduciendo ${nuevoTipo === "pure" ? "tonos puros" : "tonos warble"}`,
-                })
-              }}
-            >
-              <div className="absolute left-[6px] top-[-25px] text-xs font-semibold">Tone</div>
-              <div className="absolute left-[42px] top-[-25px] text-xs font-semibold">Warble</div>
-              <div className="absolute left-[40px] top-[0px] h-full w-[1px] bg-black"></div>
-              {tipoTono === "pure" ? (
-                <div className="absolute left-[10px] top-[20px] w-[25px] h-[3px] bg-green-400 rounded shadow-sm"></div>
-              ) : (
-                <div className="absolute left-[45px] top-[20px] w-[25px] h-[3px] bg-green-400 rounded shadow-sm"></div>
-              )}
-            </button>
-
-            {/* Botones de respuesta al lado del Tone/Warble */}
-            <div className="absolute left-[200px] top-[380px] flex gap-2">
-              <button
-                className="w-[80px] h-[45px] bg-[#FFD65C] rounded-lg shadow-lg hover:bg-[#FFD040] transition-colors font-semibold text-sm transition duration-200 ease-in-out hover:scale-105"
-                onClick={guardarResultado}
-                disabled={modoAutomatico}
-              >
-                Guardar
-              </button>
-
-              <button
-                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors transition duration-200 ease-in-out hover:scale-105"
-                onClick={() => cambiarIntensidad("bajar")}
-                disabled={modoAutomatico}
-              >
-                Subir Tono
-              </button>
-
-              <button
-                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors transition duration-200 ease-in-out hover:scale-105"
-                onClick={() => cambiarIntensidad("subir")}
-                disabled={modoAutomatico}
-              >
-                Bajar Tono
-              </button>
-            </div>
-
-            {/* Segunda fila - Botones de oído y vía más juntos */}
-            <div className="absolute left-[80px] top-[450px] flex gap-2">
-              <div className="flex flex-col items-center">
-                <span className="mb-1 text-xs text-black font-semibold">Oído Derecho</span>
+            {/* Controles responsive */}
+            <div className="space-y-4">
+              {/* Primera fila de controles */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {/* Botón Tone/Warble */}
                 <button
-                  className="relative w-[70px] h-[45px] bg-[#C00F0C] rounded-lg shadow-lg hover:bg-[#A00A08] transition-colors transition duration-200 ease-in-out hover:scale-105"
-                  onClick={() => cambiarOido("derecho")}
-                >
-                  <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                  {oido === "derecho" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
-                </button>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <span className="mb-1 text-xs text-black font-semibold">Oído Izquierdo</span>
-                <button
-                  className="relative w-[70px] h-[45px] bg-[#1D0990] rounded-lg shadow-lg hover:bg-[#150770] transition-colors transition duration-200 ease-in-out hover:scale-105"
-                  onClick={() => cambiarOido("izquierdo")}
-                >
-                  <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                  {oido === "izquierdo" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
-                </button>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <span className="mb-1 text-xs text-black font-semibold">Vía Ósea/Aérea</span>
-                <button
-                  className="relative w-[70px] h-[45px] bg-[#00BFFF] rounded-lg shadow-lg hover:bg-[#00A5E6] transition-colors transition duration-200 ease-in-out hover:scale-105"
+                  className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#2C2C2C] rounded-lg border-t border-black shadow-lg relative"
                   onClick={() => {
-                    if (viaSeleccionada === "osea") {
-                      setViaSeleccionada("aerea")
-                    } else {
-                      cambiarVia("osea")
-                    }
+                    const nuevoTipo = tipoTono === "pure" ? "warble" : "pure"
+                    setTipoTono(nuevoTipo)
+                    toast({
+                      title: `Modo ${nuevoTipo === "pure" ? "Tono Puro" : "Warble"} activado`,
+                      description: `Ahora reproduciendo ${nuevoTipo === "pure" ? "tonos puros" : "tonos warble"}`,
+                    })
                   }}
                 >
-                  <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                  {viaSeleccionada === "osea" && (
-                    <div className="absolute inset-1 border-2 border-white rounded-md"></div>
+                  <div className="absolute top-[-20px] left-1 text-xs font-semibold text-gray-700">Tone</div>
+                  <div className="absolute top-[-20px] right-1 text-xs font-semibold text-gray-700">Warble</div>
+                  <div className="absolute left-1/2 top-0 h-full w-[1px] bg-black transform -translate-x-0.5"></div>
+                  {tipoTono === "pure" ? (
+                    <div className="absolute left-2 top-1/2 w-6 h-1 bg-green-400 rounded shadow-sm transform -translate-y-0.5"></div>
+                  ) : (
+                    <div className="absolute right-2 top-1/2 w-6 h-1 bg-green-400 rounded shadow-sm transform -translate-y-0.5"></div>
                   )}
                 </button>
+
+                {/* Botón Guardar */}
+                <Button
+                  className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#FFD65C] hover:bg-[#FFD040] text-black font-semibold text-sm transition-all duration-200 hover:scale-105"
+                  onClick={guardarResultado}
+                  disabled={modoAutomatico}
+                >
+                  Guardar
+                </Button>
+
+                {/* Botones de intensidad */}
+                <Button
+                  className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#2C2C2C] hover:bg-[#3C3C3C] text-white text-xs font-semibold transition-all duration-200 hover:scale-105"
+                  onClick={() => cambiarIntensidad("bajar")}
+                  disabled={modoAutomatico}
+                >
+                  Subir Tono
+                </Button>
+
+                <Button
+                  className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#2C2C2C] hover:bg-[#3C3C3C] text-white text-xs font-semibold transition-all duration-200 hover:scale-105"
+                  onClick={() => cambiarIntensidad("subir")}
+                  disabled={modoAutomatico}
+                >
+                  Bajar Tono
+                </Button>
               </div>
-            </div>
 
-            {/* Perillas grandes */}
-            <div
-              className="absolute left-[500px] top-[380px] w-[130px] h-[130px] bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors"
-              onClick={() => !modoAutomatico && cambiarFrecuencia("bajar")}
-            >
-              <div
-                className="absolute w-3 h-12 bg-white rounded top-[25px] left-[65px] shadow-sm"
-                style={{
-                  transformOrigin: "center bottom",
-                  transform: `translateX(-50%) rotate(${frecuencias.indexOf(frecuenciaSeleccionada) * 20 - 100}deg)`,
-                }}
-              ></div>
-              <div className="absolute inset-8 border-2 border-gray-600 rounded-full"></div>
-              <div className="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 text-xs font-semibold text-center">
-                Frecuencia ←
+              {/* Segunda fila de controles */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {/* Botones de oído */}
+                <div className="flex flex-col items-center">
+                  <span className="mb-1 text-xs text-black font-semibold">Oído Derecho</span>
+                  <button
+                    className={`w-16 h-12 bg-[#C00F0C] hover:bg-[#A00A08] rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative ${
+                      oido === "derecho" ? "ring-2 ring-white ring-inset" : ""
+                    }`}
+                    onClick={() => cambiarOido("derecho")}
+                  >
+                    <div className="absolute left-1/2 top-0 h-full w-[1px] bg-black transform -translate-x-0.5"></div>
+                  </button>
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <span className="mb-1 text-xs text-black font-semibold">Oído Izquierdo</span>
+                  <button
+                    className={`w-16 h-12 bg-[#1D0990] hover:bg-[#150770] rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative ${
+                      oido === "izquierdo" ? "ring-2 ring-white ring-inset" : ""
+                    }`}
+                    onClick={() => cambiarOido("izquierdo")}
+                  >
+                    <div className="absolute left-1/2 top-0 h-full w-[1px] bg-black transform -translate-x-0.5"></div>
+                  </button>
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <span className="mb-1 text-xs text-black font-semibold">Vía Ósea/Aérea</span>
+                  <button
+                    className={`w-16 h-12 bg-[#00BFFF] hover:bg-[#00A5E6] rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative ${
+                      viaSeleccionada === "osea" ? "ring-2 ring-white ring-inset" : ""
+                    }`}
+                    onClick={() => {
+                      if (viaSeleccionada === "osea") {
+                        setViaSeleccionada("aerea")
+                      } else {
+                        cambiarVia("osea")
+                      }
+                    }}
+                  >
+                    <div className="absolute left-1/2 top-0 h-full w-[1px] bg-black transform -translate-x-0.5"></div>
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div
-              className={`absolute left-[660px] top-[420px] w-[80px] h-[80px] rounded-full border-4 border-gray-700 cursor-pointer transition-all shadow-xl transition duration-200 ease-in-out hover:scale-105 ${
-                reproduciendo
-                  ? "bg-green-600 hover:bg-green-700 shadow-green-400/50"
-                  : esperandoRespuesta
-                    ? "bg-yellow-600 hover:bg-yellow-700 shadow-yellow-400/50"
-                    : "bg-[#2C2C2C] hover:bg-gray-800"
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
-              onClick={handleReproducir}
-            >
-              <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-1 h-4 bg-white rounded"></div>
-              {reproduciendo && (
-                <div className="absolute inset-1 border-2 border-green-300 rounded-full animate-pulse"></div>
-              )}
-              {esperandoRespuesta && !reproduciendo && (
-                <div className="absolute inset-1 border-2 border-yellow-300 rounded-full animate-pulse"></div>
-              )}
-            </div>
+              {/* Tercera fila - Controles principales */}
+              <div className="flex flex-wrap gap-4 justify-center items-center">
+                {/* Perilla frecuencia izquierda */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="w-20 h-20 sm:w-24 sm:h-24 bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors relative"
+                    onClick={() => !modoAutomatico && cambiarFrecuencia("bajar")}
+                  >
+                    <div
+                      className="absolute w-1 h-8 bg-white rounded top-4 left-1/2 shadow-sm transform -translate-x-1/2"
+                      style={{
+                        transformOrigin: "center bottom",
+                        transform: `translateX(-50%) rotate(${frecuencias.indexOf(frecuenciaSeleccionada) * 20 - 100}deg)`,
+                      }}
+                    ></div>
+                    <div className="absolute inset-4 border-2 border-gray-600 rounded-full"></div>
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-center">Frecuencia ←</div>
+                </div>
 
-            <div
-              className="absolute left-[820px] top-[380px] w-[130px] h-[130px] bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors"
-              onClick={() => !modoAutomatico && cambiarFrecuencia("subir")}
-            >
-              <div
-                className="absolute w-3 h-12 bg-white rounded top-[25px] left-[65px] shadow-sm"
-                style={{
-                  transformOrigin: "center bottom",
-                  transform: `translateX(-50%) rotate(${frecuencias.indexOf(frecuenciaSeleccionada) * 20 - 100}deg)`,
-                }}
-              ></div>
-              <div className="absolute inset-8 border-2 border-gray-600 rounded-full"></div>
-              <div className="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 text-xs font-semibold text-center">
-                Frecuencia →
+                {/* Botón reproducir */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-gray-700 cursor-pointer transition-all shadow-xl hover:scale-105 relative ${
+                      reproduciendo
+                        ? "bg-green-600 hover:bg-green-700 shadow-green-400/50"
+                        : esperandoRespuesta
+                          ? "bg-yellow-600 hover:bg-yellow-700 shadow-yellow-400/50"
+                          : "bg-[#2C2C2C] hover:bg-gray-800"
+                    }`}
+                    onClick={handleReproducir}
+                  >
+                    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-1 h-6 bg-white rounded"></div>
+                    {reproduciendo && (
+                      <div className="absolute inset-1 border-2 border-green-300 rounded-full animate-pulse"></div>
+                    )}
+                    {esperandoRespuesta && !reproduciendo && (
+                      <div className="absolute inset-1 border-2 border-yellow-300 rounded-full animate-pulse"></div>
+                    )}
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-center">REPRODUCIR</div>
+                </div>
+
+                {/* Perilla frecuencia derecha */}
+                <div className="flex flex-col items-center">
+                  <div
+                    className="w-20 h-20 sm:w-24 sm:h-24 bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors relative"
+                    onClick={() => !modoAutomatico && cambiarFrecuencia("subir")}
+                  >
+                    <div
+                      className="absolute w-1 h-8 bg-white rounded top-4 left-1/2 shadow-sm transform -translate-x-1/2"
+                      style={{
+                        transformOrigin: "center bottom",
+                        transform: `translateX(-50%) rotate(${frecuencias.indexOf(frecuenciaSeleccionada) * 20 - 100}deg)`,
+                      }}
+                    ></div>
+                    <div className="absolute inset-4 border-2 border-gray-600 rounded-full"></div>
+                  </div>
+                  <div className="mt-2 text-xs font-semibold text-center">Frecuencia →</div>
+                </div>
               </div>
             </div>
 
@@ -1087,11 +1012,12 @@ export default function Simulador() {
           </div>
         </div>
 
-        {/* Panel lateral de resultados */}
-        <div className="w-full lg:w-1/4">
-          <div className="bg-white p-4 rounded-lg shadow-md">
+        {/* Panel lateral de resultados - Responsive */}
+        <div className="w-full xl:w-1/4">
+          <div className="bg-white p-3 sm:p-4 rounded-lg shadow-md">
             <h2 className="text-lg font-bold mb-3">Resultados</h2>
 
+            {/* Estado actual */}
             <div className="mb-4">
               <h3 className="text-sm font-bold mb-1">Estado Actual</h3>
               <div className="text-xs space-y-1 p-2 bg-gray-50 rounded">
@@ -1145,7 +1071,7 @@ export default function Simulador() {
               </div>
             )}
 
-            {/* Tabla de umbrales */}
+            {/* Tabla de umbrales responsive */}
             <div className="mb-4">
               <h3 className="text-sm font-bold mb-1">Umbrales (dB HL)</h3>
               <div className="overflow-x-auto">
@@ -1221,22 +1147,19 @@ export default function Simulador() {
             )}
 
             {/* Botones de acción */}
-            <div className="mt-4 flex gap-2">
+            <div className="flex flex-col gap-2">
               <Button
                 size="sm"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-xs transition duration-200 ease-in-out hover:scale-105"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-xs transition-all duration-200 hover:scale-105"
                 onClick={() => toast({ title: "Guardar", description: "Resultados guardados correctamente" })}
               >
-                Guardar
+                Guardar Resultados
               </Button>
-            </div>
 
-            {/* Botón de reinicio */}
-            <div className="mt-2">
               <Button
                 size="sm"
                 variant="destructive"
-                className="w-full text-xs transition duration-200 ease-in-out hover:scale-105"
+                className="w-full text-xs transition-all duration-200 hover:scale-105"
                 onClick={() => {
                   setResultados({
                     derecho: { aerea: {}, osea: {} },
@@ -1257,13 +1180,14 @@ export default function Simulador() {
           </div>
         </div>
       </div>
-      {/* Instrucciones movidas arriba */}
-      <div className="mb-6 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-500">
+
+      {/* Instrucciones responsive */}
+      <div className="mt-6 bg-white p-3 sm:p-4 rounded-lg shadow-md border-l-4 border-blue-500">
         <h3 className="text-lg font-bold mb-3 text-blue-700">📋 Instrucciones del Audiómetro</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
           <div className="bg-blue-50 p-3 rounded-lg">
             <h4 className="font-semibold mb-2 text-blue-800">🎛️ Controles principales:</h4>
-            <ul className="space-y-1 text-gray-700">
+            <ul className="space-y-1 text-gray-700 text-xs sm:text-sm">
               <li>
                 • <strong>Perillas izquierda/derecha:</strong> Cambiar frecuencia
               </li>
@@ -1280,7 +1204,7 @@ export default function Simulador() {
           </div>
           <div className="bg-green-50 p-3 rounded-lg">
             <h4 className="font-semibold mb-2 text-green-800">✅ Respuestas:</h4>
-            <ul className="space-y-1 text-gray-700">
+            <ul className="space-y-1 text-gray-700 text-xs sm:text-sm">
               <li>
                 • <strong>Guardar:</strong> Almacenar umbral encontrado
               </li>
@@ -1296,7 +1220,21 @@ export default function Simulador() {
             </ul>
           </div>
           <div className="bg-purple-50 p-3 rounded-lg">
-            <h4 className="font-semibold mb-2 text-purple-800">⚙️ Modos de operación:</h4>
+            <h4 className="font-semibold mb-2 text-purple-800">⚙️ Características:</h4>
+            <ul className="space-y-1 text-gray-700 text-xs sm:text-sm">
+              <li>
+                • <strong>Responsive:</strong> Se adapta a móviles
+              </li>
+              <li>
+                • <strong>Audiograma:</strong> Visualización en tiempo real
+              </li>
+              <li>
+                • <strong>Historial:</strong> Registro de todas las pruebas
+              </li>
+              <li>
+                • <strong>Símbolos:</strong> Estándar audiológico
+              </li>
+            </ul>
           </div>
         </div>
       </div>

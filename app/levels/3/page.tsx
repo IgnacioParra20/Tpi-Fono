@@ -11,6 +11,7 @@ import { Activity, ArrowLeft, CheckCircle, Volume2 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+
 const pathologies = [
   {
     id: 1,
@@ -132,8 +133,8 @@ export default function Level3Page() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.user) {
           setUser(data.user)
         } else {
@@ -170,14 +171,8 @@ export default function Level3Page() {
 
     ears.forEach((ear) => {
       for (let i = 0; i < 7; i++) {
-        totalError += Math.abs(
-          userAudiogram[ear].airConduction[i] -
-            pathology.targetPattern[ear].airConduction[i]
-        )
-        totalError += Math.abs(
-          userAudiogram[ear].boneConduction[i] -
-            pathology.targetPattern[ear].boneConduction[i]
-        )
+        totalError += Math.abs(userAudiogram[ear].airConduction[i] - pathology.targetPattern[ear].airConduction[i])
+        totalError += Math.abs(userAudiogram[ear].boneConduction[i] - pathology.targetPattern[ear].boneConduction[i])
       }
     })
 
@@ -221,7 +216,7 @@ export default function Level3Page() {
 
           if (!res.ok) {
             console.error("Fallo al actualizar el progreso del usuario")
-          } 
+          }
         } catch (error) {
           console.error("Error al actualizar progreso:", error)
         }
@@ -245,17 +240,16 @@ export default function Level3Page() {
     setScore(0)
   }
 
-if (!user) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
-      <div className="flex flex-col items-center space-y-4">
-        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-lg text-gray-700 font-medium">Cargando...</p>
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-lg text-gray-700 font-medium">Cargando...</p>
+        </div>
       </div>
-    </div>
-  )
-}
-
+    )
+  }
 
   if (showResult) {
     return (
@@ -358,10 +352,26 @@ if (!user) {
             <Progress value={progress} className="h-2" />
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-4">
-            {/* Controles Oído Derecho - Izquierda */}
-            <div className="lg:col-span-1">
-              <Card>
+          {/* Información de la patología e instrucciones - Separadas */}
+          <div className="mb-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">{pathology.name}</CardTitle>
+                <CardDescription className="text-base">{pathology.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Alert>
+                  <AlertDescription className="text-base font-medium">{pathology.instructions}</AlertDescription>
+                </Alert>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Layout principal responsive */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Controles Oído Derecho */}
+            <div className="lg:col-span-3">
+              <Card className="h-full">
                 <CardHeader className="py-3">
                   <CardTitle className="flex items-center justify-between text-red-600">
                     Oído Derecho
@@ -371,15 +381,15 @@ if (!user) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {pathology.targetPattern.frequencies.map((freq, index) => (
-                      <div key={`right-${freq}`} className="p-1 bg-red-50 rounded border border-red-100">
-                        <h4 className="font-medium mb-1 text-red-800 text-xs">{freq} Hz</h4>
+                      <div key={`right-${freq}`} className="p-3 bg-red-50 rounded-lg border border-red-100">
+                        <h4 className="font-medium mb-2 text-red-800 text-sm">{freq} Hz</h4>
 
-                        <div className="space-y-1">
+                        <div className="space-y-3">
                           <div>
-                            <Label className="text-xs text-gray-600 mb-1 block flex items-center">
-                              <span className="w-3 h-3 border-2 border-red-500 rounded-full mr-1"></span>
+                            <Label className="text-sm text-gray-600 mb-2 block flex items-center">
+                              <span className="w-3 h-3 border-2 border-red-500 rounded-full mr-2"></span>
                               CA: {userAudiogram.rightEar.airConduction[index]} dB
                             </Label>
                             <Slider
@@ -388,13 +398,13 @@ if (!user) {
                               max={100}
                               min={-10}
                               step={5}
-                              className="w-full h-1"
+                              className="w-full"
                             />
                           </div>
 
                           <div>
-                            <Label className="text-xs text-gray-600 mb-1 block flex items-center">
-                              <span className="text-red-500 font-bold mr-1 text-sm">{"<"}</span>
+                            <Label className="text-sm text-gray-600 mb-2 block flex items-center">
+                              <span className="text-red-500 font-bold mr-2 text-base">{"<"}</span>
                               CO: {userAudiogram.rightEar.boneConduction[index]} dB
                             </Label>
                             <Slider
@@ -403,85 +413,87 @@ if (!user) {
                               max={100}
                               min={-10}
                               step={5}
-                              className="w-full h-1"
+                              className="w-full"
                             />
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
+
                   {/* Leyenda de símbolos */}
-                  <div className="mt-2 px-2 pb-2">
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="w-3 h-3 border-2 border-red-500 rounded-full mr-1 inline-block"></span>
-                      <span className="font-semibold">CA</span>
-                      <span className="text-gray-500">(Canal Aéreo)</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs mt-1">
-                      <span className="text-red-500 font-bold mr-1 text-sm">{"<"}</span>
-                      <span className="font-semibold">CO</span>
-                      <span className="text-gray-500">(Canal Óseo)</span>
+                  <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                    <h5 className="font-semibold text-sm mb-2">Símbolos:</h5>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="w-3 h-3 border-2 border-red-500 rounded-full bg-white"></span>
+                        <span className="font-medium">CA</span>
+                        <span className="text-gray-500">(Conducción Aérea)</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-red-500 font-bold text-base">{"<"}</span>
+                        <span className="font-medium">CO</span>
+                        <span className="text-gray-500">(Conducción Ósea)</span>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Visualización del Audiograma - Centro */}
-            <div className="lg:col-span-1.25">
-              <Card className="w-full h-full">
+            {/* Audiograma - Más grande y centrado */}
+            <div className="lg:col-span-6">
+              <Card className="h-full">
                 <CardHeader className="py-3">
-                  <CardTitle className="text-center">{pathology.name}</CardTitle>
-                  <CardDescription className="text-center">{pathology.description}</CardDescription>
+                  <CardTitle className="text-center text-lg">Audiograma</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <Alert className="mb-4">
-                    <AlertDescription>{pathology.instructions}</AlertDescription>
-                  </Alert>
-
-                  <div className="bg-white border rounded-lg p-4" style={{ height: "350px", width: "350px"  }}>
-                    <AudiogramChart
-                      frequencies={pathology.targetPattern.frequencies}
-                      rightEar={userAudiogram.rightEar}
-                      leftEar={userAudiogram.leftEar}
-                    />
+                <CardContent className="flex flex-col items-center">
+                  <div className="bg-white border-2 rounded-lg p-4 w-full max-w-2xl">
+                    <div className="aspect-square w-full max-w-[500px] mx-auto">
+                      <AudiogramChart
+                        frequencies={pathology.targetPattern.frequencies}
+                        rightEar={userAudiogram.rightEar}
+                        leftEar={userAudiogram.leftEar}
+                      />
+                    </div>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-2 gap-4 text-xs">
-                    <div className="space-y-1">
+                  {/* Leyenda del audiograma */}
+                  <div className="mt-4 grid grid-cols-2 gap-6 text-sm w-full max-w-md">
+                    <div className="space-y-2">
                       <h4 className="font-semibold text-red-600">Oído Derecho</h4>
-                      <div className="flex items-center space-x-1">
-                        <div className="w-3 h-3 border-2 border-red-500 rounded-full bg-white"></div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-red-500 rounded-full bg-white"></div>
                         <span>CA</span>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <span className="text-red-500 font-bold">{"<"}</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-red-500 font-bold text-base">{"<"}</span>
                         <span>CO</span>
                       </div>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                       <h4 className="font-semibold text-blue-600">Oído Izquierdo</h4>
-                      <div className="flex items-center space-x-1">
-                        <span className="text-blue-500 font-bold">X</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-blue-500 font-bold text-base">X</span>
                         <span>CA</span>
                       </div>
-                      <div className="flex items-center space-x-1">
-                        <span className="text-blue-500 font-bold">{">"}</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-blue-500 font-bold text-base">{">"}</span>
                         <span>CO</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-4 flex justify-between">
+                  {/* Botones de navegación */}
+                  <div className="mt-6 flex justify-between w-full max-w-md">
                     <Button
                       variant="outline"
-                      size="sm"
                       disabled={currentPathology === 0}
                       onClick={() => setCurrentPathology(currentPathology - 1)}
                     >
                       Anterior
                     </Button>
-                    <Button size="sm" onClick={handleNext}>
+                    <Button onClick={handleNext}>
                       {currentPathology === pathologies.length - 1 ? "Finalizar" : "Siguiente"}
                     </Button>
                   </div>
@@ -489,9 +501,9 @@ if (!user) {
               </Card>
             </div>
 
-            {/* Controles Oído Izquierdo - Derecha */}
-            <div className="lg:col-span-1">
-              <Card>
+            {/* Controles Oído Izquierdo */}
+            <div className="lg:col-span-3">
+              <Card className="h-full">
                 <CardHeader className="py-3">
                   <CardTitle className="flex items-center justify-between text-blue-600">
                     Oído Izquierdo
@@ -501,15 +513,15 @@ if (!user) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {pathology.targetPattern.frequencies.map((freq, index) => (
-                      <div key={`left-${freq}`} className="p-1 bg-blue-50 rounded border border-blue-100">
-                        <h4 className="font-medium mb-1 text-blue-800 text-xs">{freq} Hz</h4>
+                      <div key={`left-${freq}`} className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                        <h4 className="font-medium mb-2 text-blue-800 text-sm">{freq} Hz</h4>
 
-                        <div className="space-y-1">
+                        <div className="space-y-3">
                           <div>
-                            <Label className="text-xs text-gray-600 mb-1 block flex items-center">
-                              <span className="text-blue-500 font-bold mr-1 text-sm">X</span>
+                            <Label className="text-sm text-gray-600 mb-2 block flex items-center">
+                              <span className="text-blue-500 font-bold mr-2 text-base">X</span>
                               CA: {userAudiogram.leftEar.airConduction[index]} dB
                             </Label>
                             <Slider
@@ -518,13 +530,13 @@ if (!user) {
                               max={100}
                               min={-10}
                               step={5}
-                              className="w-full h-1"
+                              className="w-full"
                             />
                           </div>
 
                           <div>
-                            <Label className="text-xs text-gray-600 mb-1 block flex items-center">
-                              <span className="text-blue-500 font-bold mr-1 text-sm">{">"}</span>
+                            <Label className="text-sm text-gray-600 mb-2 block flex items-center">
+                              <span className="text-blue-500 font-bold mr-2 text-base">{">"}</span>
                               CO: {userAudiogram.leftEar.boneConduction[index]} dB
                             </Label>
                             <Slider
@@ -533,24 +545,28 @@ if (!user) {
                               max={100}
                               min={-10}
                               step={5}
-                              className="w-full h-1"
+                              className="w-full"
                             />
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
+
                   {/* Leyenda de símbolos */}
-                  <div className="mt-2 px-2 pb-2">
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="text-blue-500 font-bold mr-1 text-sm">X</span>
-                      <span className="font-semibold">CA</span>
-                      <span className="text-gray-500">(Canal Aéreo)</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs mt-1">
-                      <span className="text-blue-500 font-bold mr-1 text-sm">{">"}</span>
-                      <span className="font-semibold">CO</span>
-                      <span className="text-gray-500">(Canal Óseo)</span>
+                  <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                    <h5 className="font-semibold text-sm mb-2">Símbolos:</h5>
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-blue-500 font-bold text-base">X</span>
+                        <span className="font-medium">CA</span>
+                        <span className="text-gray-500">(Conducción Aérea)</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-blue-500 font-bold text-base">{">"}</span>
+                        <span className="font-medium">CO</span>
+                        <span className="text-gray-500">(Conducción Ósea)</span>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -563,7 +579,7 @@ if (!user) {
   )
 }
 
-// Componente del gráfico del audiograma
+// Componente del gráfico del audiograma mejorado y responsive
 function AudiogramChart({
   frequencies,
   rightEar,
@@ -576,36 +592,50 @@ function AudiogramChart({
   const dbLevels = [-10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
   const getXPosition = (index: number) => {
-    return 60 + index * (100 / (frequencies.length - 1)) * 3.8
+    return 80 + index * (340 / (frequencies.length - 1))
   }
 
   const getYPosition = (dbValue: number) => {
-    return 40 + ((dbValue + 10) / 110) * 400
+    return 60 + ((dbValue + 10) / 110) * 360
   }
 
   return (
     <div className="relative w-full h-full">
-      <svg width="100%" height="100%" viewBox="0 0 500 500">
-        {/* Grid lines */}
+      <svg width="100%" height="100%" viewBox="0 0 500 500" className="border rounded">
+        {/* Título */}
+        <text x="250" y="30" textAnchor="middle" fontSize="16" fill="#374151" fontWeight="bold">
+          Audiograma
+        </text>
+
+        <text x="30" y="250" textAnchor="middle" fontSize="14" fill="#374151" transform="rotate(-90 30 250)">
+          dB HL
+        </text>
+
+        <text x="250" y="490" textAnchor="middle" fontSize="14" fill="#374151">
+          Frecuencia (Hz)
+        </text>
+
+        {/* Grid lines horizontales */}
         {dbLevels.map((db, index) => (
           <line
             key={`h-${db}`}
-            x1="60"
-            y1={40 + (index * 400) / 11}
-            x2="440"
-            y2={40 + (index * 400) / 11}
+            x1="80"
+            y1={60 + (index * 360) / 11}
+            x2="420"
+            y2={60 + (index * 360) / 11}
             stroke="#e5e7eb"
             strokeWidth="1"
           />
         ))}
 
+        {/* Grid lines verticales */}
         {frequencies.map((_, index) => (
           <line
             key={`v-${index}`}
             x1={getXPosition(index)}
-            y1="40"
+            y1="60"
             x2={getXPosition(index)}
-            y2="440"
+            y2="420"
             stroke="#e5e7eb"
             strokeWidth="1"
           />
@@ -613,14 +643,30 @@ function AudiogramChart({
 
         {/* Frequency labels */}
         {frequencies.map((freq, index) => (
-          <text key={`freq-${freq}`} x={getXPosition(index)} y="30" textAnchor="middle" fontSize="12" fill="#374151">
+          <text
+            key={`freq-${freq}`}
+            x={getXPosition(index)}
+            y="45"
+            textAnchor="middle"
+            fontSize="12"
+            fill="#374151"
+            fontWeight="500"
+          >
             {freq}
           </text>
         ))}
 
         {/* dB HL labels */}
         {dbLevels.map((db, index) => (
-          <text key={`db-${db}`} x="50" y={40 + (index * 400) / 11 + 4} textAnchor="end" fontSize="12" fill="#374151">
+          <text
+            key={`db-${db}`}
+            x="70"
+            y={60 + (index * 360) / 11 + 4}
+            textAnchor="end"
+            fontSize="12"
+            fill="#374151"
+            fontWeight="500"
+          >
             {db}
           </text>
         ))}
@@ -630,7 +676,7 @@ function AudiogramChart({
           points={rightEar.airConduction.map((db, index) => `${getXPosition(index)},${getYPosition(db)}`).join(" ")}
           fill="none"
           stroke="#ef4444"
-          strokeWidth="2"
+          strokeWidth="3"
         />
 
         {/* Right ear bone conduction line */}
@@ -638,8 +684,8 @@ function AudiogramChart({
           points={rightEar.boneConduction.map((db, index) => `${getXPosition(index)},${getYPosition(db)}`).join(" ")}
           fill="none"
           stroke="#ef4444"
-          strokeWidth="2"
-          strokeDasharray="5,5"
+          strokeWidth="3"
+          strokeDasharray="8,4"
         />
 
         {/* Left ear air conduction line */}
@@ -647,7 +693,7 @@ function AudiogramChart({
           points={leftEar.airConduction.map((db, index) => `${getXPosition(index)},${getYPosition(db)}`).join(" ")}
           fill="none"
           stroke="#3b82f6"
-          strokeWidth="2"
+          strokeWidth="3"
         />
 
         {/* Left ear bone conduction line */}
@@ -655,8 +701,8 @@ function AudiogramChart({
           points={leftEar.boneConduction.map((db, index) => `${getXPosition(index)},${getYPosition(db)}`).join(" ")}
           fill="none"
           stroke="#3b82f6"
-          strokeWidth="2"
-          strokeDasharray="5,5"
+          strokeWidth="3"
+          strokeDasharray="8,4"
         />
 
         {/* Right ear air conduction symbols (circles) */}
@@ -665,10 +711,10 @@ function AudiogramChart({
             key={`right-air-${index}`}
             cx={getXPosition(index)}
             cy={getYPosition(db)}
-            r="6"
+            r="8"
             fill="white"
             stroke="#ef4444"
-            strokeWidth="2"
+            strokeWidth="3"
           />
         ))}
 
@@ -677,9 +723,9 @@ function AudiogramChart({
           <text
             key={`right-bone-${index}`}
             x={getXPosition(index)}
-            y={getYPosition(db) + 4}
+            y={getYPosition(db) + 6}
             textAnchor="middle"
-            fontSize="14"
+            fontSize="18"
             fill="#ef4444"
             fontWeight="bold"
           >
@@ -692,9 +738,9 @@ function AudiogramChart({
           <text
             key={`left-air-${index}`}
             x={getXPosition(index)}
-            y={getYPosition(db) + 4}
+            y={getYPosition(db) + 6}
             textAnchor="middle"
-            fontSize="14"
+            fontSize="18"
             fill="#3b82f6"
             fontWeight="bold"
           >
@@ -707,9 +753,9 @@ function AudiogramChart({
           <text
             key={`left-bone-${index}`}
             x={getXPosition(index)}
-            y={getYPosition(db) + 4}
+            y={getYPosition(db) + 6}
             textAnchor="middle"
-            fontSize="14"
+            fontSize="18"
             fill="#3b82f6"
             fontWeight="bold"
           >
