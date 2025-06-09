@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 interface UserData {
+  id: string
   name: string
   email: string
   age: string
@@ -33,17 +34,7 @@ export default function ProfilePage() {
   const [success, setSuccess] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-
-  // Mapeo bidireccional para los valores de género
-  const genderMap: Record<string, string> = {
-    "masculino": "male",
-    "femenino": "female",
-    "otro": "non-binary",
-    "male": "masculino",
-    "female": "femenino",
-    "non-binary": "otro"
-  }
-
+  
   useEffect(() => {
     const userData = localStorage.getItem("user")
     if (!userData) {
@@ -63,7 +54,7 @@ export default function ProfilePage() {
           setFormData({
             name: data.user.name,
             age: data.user.age,
-            gender: data.user.gender || "prefer-not-to-say" // Convertir el género a formato del Select
+            gender: data.user.gender || "Prefiero no decirlo" // Convertir el género a formato del Select
           })
         } else {
           router.push("/login")
@@ -84,25 +75,54 @@ export default function ProfilePage() {
     try {
       if (!user) return
 
-      const updatedUser = {
-        ...user,
-        ...formData,
-        gender: genderMap[formData.gender] // Convertir el género de vuelta al formato de la base de datos
+
+      // NOTA: El password no se puede modificar desde aquí, así que enviamos el actual
+      const payload = {
+        id: user.id, // El id debe estar presente en el objeto user
+        name: formData.name,
+        email: user.email,
+        password: (user as any).password || "", // Si no está, enviar string vacío
+        age: formData.age,
+        gender: formData.gender
       }
 
-      localStorage.setItem("user", JSON.stringify(updatedUser))
-      setUser(updatedUser)
-      setSuccess("¡Perfil actualizado correctamente!")
+      const res = await fetch("/api/users/updateUser", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      const data = await res.json()
+
+      if (res.ok && data.success) {
+        const updatedUser = {
+          ...user,
+          ...formData,
+          id: payload.id,
+          password: payload.password // mantener el password actual
+        }
+        setUser(updatedUser)
+        setSuccess("¡Perfil actualizado correctamente!")
+      } else {
+        setSuccess(data.error || "Error al actualizar el perfil")
+      }
     } catch (err) {
-      console.error("Error al actualizar el perfil")
+      setSuccess("Error al actualizar el perfil")
     } finally {
       setIsLoading(false)
     }
   }
 
-  if (!user) {
-    return <div>Cargando...</div>
-  }
+if (!user) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-lg text-gray-700 font-medium">Cargando...</p>
+      </div>
+    </div>
+  )
+}
+
 
 return (
   <div

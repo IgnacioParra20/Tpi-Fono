@@ -14,123 +14,116 @@ import { useEffect, useState } from "react"
 const questions = [
   {
     id: 1,
-    question: "¿Qué es un fonema?",
+    question: "¿Qué representa el color azul en un audiograma?",
     options: [
-      "Una letra escrita",
-      "Una estructura silábica",
-      "Un tipo de vocal",
-      "Una unidad de sonido que distingue significado"
+      "Vía ósea derecha",
+      "Vía aérea izquierda",
+      "Oído derecho",
+      "Enmascaramiento"
     ],
-    correct: 1 //2
-
+    correct: 1
   },
   {
     id: 2,
-    question: "¿Cuál de los siguientes es un ejemplo de un par mínimo?",
+    question: "El símbolo “X” en un audiograma representa:",
     options: [
-      "perro/cachorro",
-      "feliz/triste",
-      "correr/corriendo",
-      "gato/pato"
+      "Oído derecho",
+      "Vía ósea izquierda",
+      "Vía aérea izquierda",
+      "Oído no testeado"
     ],
-    correct: 2 //3
+    correct: 2
   },
   {
     id: 3,
-    question: "¿Qué significan las siglas AFI?",
+    question: "¿Qué se mide con un audiómetro?",
     options: [
-      "Alfabeto Fonético Internacional",
-      "Análisis Fonético Interno",
-      "Asociación de Fonología Internacional",
-      "Academia Internacional de Pronunciación"
-
+      "La intensidad de la voz",
+      "La frecuencia de resonancia",
+      "El umbral auditivo",
+      "La presión timpánica"
     ],
-    correct: 2 //3
-
+    correct: 2
   },
   {
     id: 4,
-    question: "¿Qué característica distingue a las consonantes sonoras de las sordas?",
+    question: "¿Cuál de los siguientes componentes NO pertenece al audiómetro?",
     options: [
-      "Redondeo de labios",
-      "Posición de la lengua",
-      "Vibración de las cuerdas vocales",
-      "Dirección del flujo de aire"
+      "Otoscopio",
+      "Interruptor de estímulo",
+      "Generador de tono puro",
+      "Selector de transductor"
     ],
-    correct: 0 //1
-
+    correct: 0
   },
   {
     id: 5,
-    question: "¿Cuál es la diferencia entre fonética y fonología?",
+    question: "¿Qué vía se representa con los símbolos < y > en un audiograma?",
     options: [
-      "La fonética estudia las vocales y la fonología las consonantes",
-      "La fonética es teórica y la fonología práctica",
-      "Estudian lo mismo",
-      "La fonética estudia los sonidos y la fonología los patrones sonoros"
+      "Vía aérea",
+      "Vía ósea ",
+      "Vía mixta",
+      "Oído externo",
     ],
-
-    correct: 1 //2
-
+    correct: 1
   },
   {
     id: 6,
-    question: "¿Cuál de estos es un punto de articulación?",
+    question: "¿Qué es el ensordecimiento?",
     options: [
-      "Nasal",
-      "Sonoro",
-      "Alveolar",
-      "Alto"
+      "Pérdida súbita de la audición",
+      "Necesidad de mayor intensidad para oír después de un estímulo previo",
+      "Presencia de acúfeno",
+      "Dificultad para discriminar palabras"
     ],
-    correct: 1 //2
+    correct: 1
   },
   {
     id: 7,
-    question: "¿Qué es la variación alofónica?",
+    question: "¿Qué indica el fenómeno del reclutamiento?",
     options: [
-      "Diferentes lenguas usando el mismo sonido",
-      "Diferentes significados de la misma palabra",
-      "Diferentes formas de escribir el mismo sonido",
-      "Diferentes pronunciaciones del mismo fonema"
+      "Falta de percepción auditiva",
+      "Percepción anormal de los sonidos suaves",
+      "Hipersensibilidad al silencio",
+      "Disminución del umbral de disconfort"
     ],
-    correct: 3 //4
+    correct: 3
   },
   {
     id: 8,
-    question: "¿Qué característica vocálica se refiere a la altura de la lengua?",
+    question: "Según Diamante, ¿cuántos dB se suman para el enmascaramiento por vía aérea?",
     options: [
-      "Anterior/Posterior",
-      "Alta/Media/Baja",
-      "Tensa/Relajada",
-      "Redondeada/No redondeada"
+      "15",
+      "30",
+      "25",
+      "10"
     ],
-    correct: 1 //2
+    correct: 1
   },
   {
     id: 9,
-    question: "¿Qué es la conciencia fonológica?",
+    question: "¿Qué mide la acufenometría?",
     options: [
-      "La capacidad de leer rápidamente",
-      "La capacidad de reconocer y manipular sonidos en el lenguaje",
-      "La capacidad de hablar con claridad",
-      "La capacidad de deletrear correctamente"
+      "El umbral de dolor",
+      "El nivel de ensordecimiento",
+      "La frecuencia e intensidad del acúfeno",
+      "La percepción de la voz en ruido"
     ],
-    correct: 2 //3
+    correct: 2
   },
   {
     id: 10,
-    question: "¿Qué proceso implica que los sonidos se vuelvan más similares a los sonidos cercanos?",
+    question: "¿Qué autor plantea reglas específicas de ensordecimiento para la vía ósea?",
     options: [
-      "Inserción",
-      "Asimilación",
-      "Metátesis",
-      "Eliminación"
+      "Vicente Cursio",
+      "Helms",
+      "Katz",
+      "Hall"
     ],
-    correct: 0 //1
+
+    correct: 0
   }
 ]
-
-
 
 export default function Level1Page() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -222,9 +215,17 @@ export default function Level1Page() {
     setScore(0)
   }
 
- if (!user) {
-    return <div>Cargando...</div>
-  }
+if (!user) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-lg text-gray-700 font-medium">Cargando...</p>
+      </div>
+    </div>
+  )
+}
+
 
   if (showResult) {
     return (
@@ -233,7 +234,11 @@ export default function Level1Page() {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center space-x-4">
               <Link href="/dashboard">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="transition-transform duration-200 hover:scale-105 hover:shadow-md text-base font-bold px-6 py-3 border-gray-300 text-gray-700"
+                >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver al Panel de Niveles
                 </Button>
@@ -349,13 +354,13 @@ export default function Level1Page() {
                   disabled={currentQuestion === 0}
                   onClick={() => setCurrentQuestion(currentQuestion - 1)}
                 >
-                  Previous
+                  Anterior
                 </Button>
                 <Button 
                   onClick={handleNext}
                   disabled={!selectedAnswer}
                 >
-                  {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
+                  {currentQuestion === questions.length - 1 ? "Terminar" : "Siguiente"}
                 </Button>
               </div>
             </CardContent>

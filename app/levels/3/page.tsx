@@ -245,9 +245,17 @@ export default function Level3Page() {
     setScore(0)
   }
 
-  if (!user) {
-    return <div>Cargando...</div>
-  }
+if (!user) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-lg text-gray-700 font-medium">Cargando...</p>
+      </div>
+    </div>
+  )
+}
+
 
   if (showResult) {
     return (
@@ -256,9 +264,13 @@ export default function Level3Page() {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center space-x-4">
               <Link href="/dashboard">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="transition-transform duration-200 hover:scale-105 hover:shadow-md text-base font-bold px-6 py-3 border-gray-300 text-gray-700"
+                >
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Volver al Panel
+                  Volver al Panel de Niveles
                 </Button>
               </Link>
               <div className="flex items-center space-x-2">

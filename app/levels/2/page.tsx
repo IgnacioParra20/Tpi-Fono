@@ -168,10 +168,17 @@ useEffect(() => {
     setScore(0)
     setSelectedPosition(null)
   }
+if (!user) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-lg text-gray-700 font-medium">Cargando...</p>
+      </div>
+    </div>
+  )
+}
 
-  if (!user) {
-    return <div>Cargando...</div>
-  }
 
   if (showResult) {
   return (
@@ -179,12 +186,16 @@ useEffect(() => {
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
-            <Link href="/dashboard">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Volver al Panel
-              </Button>
-            </Link>
+              <Link href="/dashboard">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="transition-transform duration-200 hover:scale-105 hover:shadow-md text-base font-bold px-6 py-3 border-gray-300 text-gray-700"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Volver al Panel de Niveles
+                </Button>
+              </Link>
             <div className="flex items-center space-x-2">
               <Volume2 className="h-8 w-8 text-indigo-600" />
               <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
