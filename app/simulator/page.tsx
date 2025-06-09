@@ -559,7 +559,9 @@ export default function Simulador() {
                     Nivel de Audición (dB HL)
                   </text>
 
+
                   {/* Indicador de frecuencia actual */}
+
                   {(() => {
                     const freqPositions: Record<number, number> = {
                       125: 100,
@@ -1005,6 +1007,8 @@ export default function Simulador() {
                 </div>
               </div>
             </div>
+
+            <div className="absolute left-[655px] top-[515px] text-sm text-center font-semibold">REPRODUCIR TONO</div>
           </div>
         </div>
 
