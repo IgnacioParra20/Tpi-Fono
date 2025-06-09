@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
-import { ArrowLeft, Play, Square } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
 
@@ -532,6 +532,13 @@ export default function Simulador() {
     return { derecho: resultadoDerecho, izquierdo: resultadoIzquierdo }
   }
 
+  useEffect(() => {
+    // Si el usuario no viene del dashboard, redirige
+    if (document.referrer && !document.referrer.includes("/dashboard")) {
+      router.replace("/dashboard")
+    }
+  }, [router])
+
   return (
     <div className="min-h-screen bg-[#F4F4F5] p-4">
       <div className="mb-4 flex items-center">
@@ -543,27 +550,26 @@ export default function Simulador() {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4">
-        {/* Panel principal del audiómetro */}
+        {/* Panel principal del audiómetro - Audiograma más grande */}
         <div className="w-full lg:w-3/4">
-          <div className="relative w-full h-[812px] bg-[#F4F4F5] rounded-lg border border-[#E4E4E7] overflow-hidden">
-            {/* Área de visualización del audiograma */}
-            <div className="relative w-[641px] h-[240px] bg-white border border-black">
+          <div className="relative w-full h-[900px] bg-[#F4F4F5] rounded-lg border border-[#E4E4E7] overflow-hidden">
+            {/* Área de visualización del audiograma - Más grande */}
+            <div className="relative w-[750px] h-[320px] bg-white border-2 border-black shadow-lg">
               {/* Audiograma */}
-              <svg width="100%" height="100%" viewBox="0 0 641 240">
+              <svg width="100%" height="100%" viewBox="0 0 750 320">
                 {/* Fondo del audiograma */}
-                <rect x="0" y="0" width="641" height="240" fill="white" />
+                <rect x="0" y="0" width="750" height="320" fill="white" />
 
                 {/* Líneas horizontales principales (cada 20 dB) */}
                 {Array.from({ length: 8 }, (_, i) => (
                   <line
                     key={`h-main-${i}`}
-                    x1="40"
-                    y1={20 + i * 25}
-                    x2="800"
-                    y2={20 + i * 25}
+                    x1="50"
+                    y1={30 + i * 35}
+                    x2="700"
+                    y2={30 + i * 35}
                     stroke={i === 1 ? "#000" : "#666"}
                     strokeWidth={i === 1 ? "2" : "1"}
-                    strokeDasharray={i === 1 ? "none" : "none"}
                   />
                 ))}
 
@@ -571,10 +577,10 @@ export default function Simulador() {
                 {Array.from({ length: 7 }, (_, i) => (
                   <line
                     key={`h-sec-${i}`}
-                    x1="40"
-                    y1={32.5 + i * 25}
-                    x2="800"
-                    y2={32.5 + i * 25}
+                    x1="50"
+                    y1={47.5 + i * 35}
+                    x2="700"
+                    y2={47.5 + i * 35}
                     stroke="#ccc"
                     strokeWidth="0.5"
                     strokeDasharray="2,2"
@@ -583,14 +589,14 @@ export default function Simulador() {
 
                 {/* Líneas verticales principales (octavas) */}
                 {[125, 250, 500, 1000, 2000, 4000, 8000].map((freq, i) => {
-                  const positions = [80, 140, 200, 280, 360, 440, 520]
+                  const positions = [100, 180, 260, 360, 460, 560, 660]
                   return (
                     <line
                       key={`v-main-${freq}`}
                       x1={positions[i]}
-                      y1="20"
+                      y1="30"
                       x2={positions[i]}
-                      y2="195"
+                      y2="275"
                       stroke="#666"
                       strokeWidth="1"
                     />
@@ -599,19 +605,19 @@ export default function Simulador() {
 
                 {/* Etiquetas de frecuencia */}
                 {[
-                  { freq: 125, x: 80 },
-                  { freq: 250, x: 140 },
-                  { freq: 500, x: 200 },
-                  { freq: 1000, x: 280 },
-                  { freq: 2000, x: 360 },
-                  { freq: 4000, x: 440 },
-                  { freq: 8000, x: 520 },
+                  { freq: 125, x: 100 },
+                  { freq: 250, x: 180 },
+                  { freq: 500, x: 260 },
+                  { freq: 1000, x: 360 },
+                  { freq: 2000, x: 460 },
+                  { freq: 4000, x: 560 },
+                  { freq: 8000, x: 660 },
                 ].map(({ freq, x }) => (
                   <text
                     key={`freq-${freq}`}
                     x={x}
-                    y="215"
-                    fontSize="10"
+                    y="295"
+                    fontSize="12"
                     textAnchor="middle"
                     fill={freq === frecuenciaSeleccionada ? "#0066cc" : "#333"}
                     fontWeight={freq === frecuenciaSeleccionada ? "bold" : "normal"}
@@ -624,9 +630,9 @@ export default function Simulador() {
                 {Array.from({ length: 8 }, (_, i) => (
                   <text
                     key={`db-${i}`}
-                    x="30"
-                    y={25 + i * 25}
-                    fontSize="10"
+                    x="35"
+                    y={35 + i * 35}
+                    fontSize="12"
                     textAnchor="end"
                     fill="#333"
                     fontWeight="500"
@@ -636,61 +642,62 @@ export default function Simulador() {
                 ))}
 
                 {/* Título del eje X */}
-                <text x="320" y="235" fontSize="12" textAnchor="middle" fontWeight="bold" fill="#333">
-                  Frequency (Hz)
+                <text x="375" y="315" fontSize="14" textAnchor="middle" fontWeight="bold" fill="#333">
+                  Frecuencia (Hz)
                 </text>
 
                 {/* Título del eje Y */}
                 <text
-                  x="15"
-                  y="115"
-                  fontSize="12"
+                  x="20"
+                  y="160"
+                  fontSize="14"
                   textAnchor="middle"
                   fontWeight="bold"
                   fill="#333"
-                  transform="rotate(-90, 15, 120)"
+                  transform="rotate(-90, 20, 160)"
                 >
-                  Hearing Level (dB HL)
+                  Nivel de Audición (dB HL)
                 </text>
 
                 {/* Indicador de frecuencia actual */}
                 {(() => {
                   const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
+                    125: 100,
+                    250: 180,
+                    500: 260,
+                    1000: 360,
+                    2000: 460,
+                    4000: 560,
+                    8000: 660,
                   }
-                  const x = freqPositions[frecuenciaSeleccionada] || 280
-                  return <rect x={x - 2} y="18" width="4" height="179" fill="#0066cc" opacity="0.3" />
+                  const x = freqPositions[frecuenciaSeleccionada] || 360
+                  return <rect x={x - 3} y="28" width="6" height="249" fill="#0066cc" opacity="0.3" />
                 })()}
 
                 {/* Indicador de intensidad actual */}
                 {(() => {
-                  const y = 20 + (intensidad + 10) * 1.25
-                  return <rect x="38" y={y - 2} width="764" height="4" fill="#ff6600" opacity="0.3" />
+                  const y = 30 + (intensidad + 10) * 1.75
+                  return <rect x="48" y={y - 3} width="654" height="6" fill="#ff6600" opacity="0.3" />
                 })()}
 
+                {/* Líneas conectoras y símbolos - Actualizados para el audiograma más grande */}
                 {/* Líneas conectoras para oído derecho (vía aérea) */}
                 <g>
                   {(() => {
                     const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
+                      125: 100,
+                      250: 180,
+                      500: 260,
+                      1000: 360,
+                      2000: 460,
+                      4000: 560,
+                      8000: 660,
                     }
                     const puntos = Object.entries(resultados.derecho.aerea)
                       .filter(([_, valor]) => valor !== null)
                       .map(([freq, valor]) => ({
                         x: freqPositions[Number(freq)],
-                        y: 20 + (valor! + 10) * 1.25,
+                        y: 30 + (valor! + 10) * 1.75,
                         freq: Number(freq),
                       }))
                       .sort((a, b) => a.freq - b.freq)
@@ -706,7 +713,7 @@ export default function Simulador() {
                           x2={punto.x}
                           y2={punto.y}
                           stroke="#cc0000"
-                          strokeWidth="2"
+                          strokeWidth="3"
                         />
                       )
                     })
@@ -717,19 +724,19 @@ export default function Simulador() {
                 <g>
                   {(() => {
                     const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
+                      125: 100,
+                      250: 180,
+                      500: 260,
+                      1000: 360,
+                      2000: 460,
+                      4000: 560,
+                      8000: 660,
                     }
                     const puntos = Object.entries(resultados.izquierdo.aerea)
                       .filter(([_, valor]) => valor !== null)
                       .map(([freq, valor]) => ({
                         x: freqPositions[Number(freq)],
-                        y: 20 + (valor! + 10) * 1.25,
+                        y: 30 + (valor! + 10) * 1.75,
                         freq: Number(freq),
                       }))
                       .sort((a, b) => a.freq - b.freq)
@@ -745,47 +752,7 @@ export default function Simulador() {
                           x2={punto.x}
                           y2={punto.y}
                           stroke="#0066cc"
-                          strokeWidth="2"
-                          strokeDasharray="4,2"
-                        />
-                      )
-                    })
-                  })()}
-                </g>
-
-                {/* Líneas conectoras para oído derecho (vía ósea) */}
-                <g>
-                  {(() => {
-                    const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
-                    }
-                    const puntos = Object.entries(resultados.derecho.osea)
-                      .filter(([_, valor]) => valor !== null)
-                      .map(([freq, valor]) => ({
-                        x: freqPositions[Number(freq)],
-                        y: 20 + (valor! + 10) * 1.25,
-                        freq: Number(freq),
-                      }))
-                      .sort((a, b) => a.freq - b.freq)
-
-                    return puntos.map((punto, i) => {
-                      if (i === 0) return null
-                      const puntoAnterior = puntos[i - 1]
-                      return (
-                        <line
-                          key={`line-right-bone-${punto.freq}`}
-                          x1={puntoAnterior.x}
-                          y1={puntoAnterior.y}
-                          x2={punto.x}
-                          y2={punto.y}
-                          stroke="#cc0000"
-                          strokeWidth="2"
+                          strokeWidth="3"
                           strokeDasharray="6,3"
                         />
                       )
@@ -793,120 +760,78 @@ export default function Simulador() {
                   })()}
                 </g>
 
-                {/* Líneas conectoras para oído izquierdo (vía ósea) */}
-                <g>
-                  {(() => {
-                    const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
-                    }
-                    const puntos = Object.entries(resultados.izquierdo.osea)
-                      .filter(([_, valor]) => valor !== null)
-                      .map(([freq, valor]) => ({
-                        x: freqPositions[Number(freq)],
-                        y: 20 + (valor! + 10) * 1.25,
-                        freq: Number(freq),
-                      }))
-                      .sort((a, b) => a.freq - b.freq)
-
-                    return puntos.map((punto, i) => {
-                      if (i === 0) return null
-                      const puntoAnterior = puntos[i - 1]
-                      return (
-                        <line
-                          key={`line-left-bone-${punto.freq}`}
-                          x1={puntoAnterior.x}
-                          y1={puntoAnterior.y}
-                          x2={punto.x}
-                          y2={punto.y}
-                          stroke="#0066cc"
-                          strokeWidth="2"
-                          strokeDasharray="6,3"
-                        />
-                      )
-                    })
-                  })()}
-                </g>
-
-                {/* Símbolos para oído derecho (vía aérea) - Círculos */}
+                {/* Símbolos para oído derecho (vía aérea) - Círculos más grandes */}
                 {Object.entries(resultados.derecho.aerea)
                   .filter(([_, valor]) => valor !== null)
                   .map(([freq, valor]) => {
                     const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
+                      125: 100,
+                      250: 180,
+                      500: 260,
+                      1000: 360,
+                      2000: 460,
+                      4000: 560,
+                      8000: 660,
                     }
                     const x = freqPositions[Number(freq)]
-                    const y = 20 + (valor! + 10) * 1.25
+                    const y = 30 + (valor! + 10) * 1.75
                     return (
                       <g key={`right-air-${freq}`}>
-                        <circle cx={x} cy={y} r="6" fill="white" stroke="#cc0000" strokeWidth="2" />
-                        <text x={x} y={y + 3} fontSize="8" textAnchor="middle" fill="#cc0000" fontWeight="bold"></text>
+                        <circle cx={x} cy={y} r="8" fill="white" stroke="#cc0000" strokeWidth="3" />
                       </g>
                     )
                   })}
 
-                {/* Símbolos para oído izquierdo (vía aérea) - X */}
+                {/* Símbolos para oído izquierdo (vía aérea) - X más grandes */}
                 {Object.entries(resultados.izquierdo.aerea)
                   .filter(([_, valor]) => valor !== null)
                   .map(([freq, valor]) => {
                     const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
+                      125: 100,
+                      250: 180,
+                      500: 260,
+                      1000: 360,
+                      2000: 460,
+                      4000: 560,
+                      8000: 660,
                     }
                     const x = freqPositions[Number(freq)]
-                    const y = 20 + (valor! + 10) * 1.25
+                    const y = 30 + (valor! + 10) * 1.75
                     return (
                       <g key={`left-air-${freq}`}>
-                        <rect x={x - 6} y={y - 6} width="12" height="12" fill="white" stroke="none" />
+                        <rect x={x - 8} y={y - 8} width="16" height="16" fill="white" stroke="none" />
                         <path
-                          d={`M ${x - 5} ${y - 5} L ${x + 5} ${y + 5} M ${x - 5} ${y + 5} L ${x + 5} ${y - 5}`}
+                          d={`M ${x - 7} ${y - 7} L ${x + 7} ${y + 7} M ${x - 7} ${y + 7} L ${x + 7} ${y - 7}`}
                           stroke="#0066cc"
-                          strokeWidth="2.5"
+                          strokeWidth="3"
                           strokeLinecap="round"
                         />
-                        <text x={x + 10} y={y + 3} fontSize="7" fill="#0066cc" fontWeight="bold"></text>
                       </g>
                     )
                   })}
 
-                {/* Símbolos para oído derecho (vía ósea) - Corchetes angulares */}
+                {/* Símbolos para vía ósea - más grandes */}
                 {Object.entries(resultados.derecho.osea)
                   .filter(([_, valor]) => valor !== null)
                   .map(([freq, valor]) => {
                     const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
+                      125: 100,
+                      250: 180,
+                      500: 260,
+                      1000: 360,
+                      2000: 460,
+                      4000: 560,
+                      8000: 660,
                     }
                     const x = freqPositions[Number(freq)]
-                    const y = 20 + (valor! + 10) * 1.25
+                    const y = 30 + (valor! + 10) * 1.75
                     return (
                       <text
                         key={`right-bone-${freq}`}
                         x={x}
-                        y={y + 4}
+                        y={y + 6}
                         textAnchor="middle"
-                        fontSize="16"
+                        fontSize="20"
                         fill="#cc0000"
                         fontWeight="bold"
                       >
@@ -915,28 +840,27 @@ export default function Simulador() {
                     )
                   })}
 
-                {/* Símbolos para oído izquierdo (vía ósea) - Corchetes cuadrados */}
                 {Object.entries(resultados.izquierdo.osea)
                   .filter(([_, valor]) => valor !== null)
                   .map(([freq, valor]) => {
                     const freqPositions: Record<number, number> = {
-                      125: 80,
-                      250: 140,
-                      500: 200,
-                      1000: 280,
-                      2000: 360,
-                      4000: 440,
-                      8000: 520,
+                      125: 100,
+                      250: 180,
+                      500: 260,
+                      1000: 360,
+                      2000: 460,
+                      4000: 560,
+                      8000: 660,
                     }
                     const x = freqPositions[Number(freq)]
-                    const y = 20 + (valor! + 10) * 1.25
+                    const y = 30 + (valor! + 10) * 1.75
                     return (
                       <text
                         key={`left-bone-${freq}`}
                         x={x}
-                        y={y + 4}
+                        y={y + 6}
                         textAnchor="middle"
-                        fontSize="16"
+                        fontSize="20"
                         fill="#0066cc"
                         fontWeight="bold"
                       >
@@ -945,57 +869,74 @@ export default function Simulador() {
                     )
                   })}
               </svg>
-              {/* Leyenda al costado del audiograma */}
-              <div className="absolute left-[660px] top-[20px]">
-                <svg width="190" height="110">
-                  <rect x="0" y="0" width="190" height="110" rx="10" fill="white" opacity="1" stroke="#ccc" />
-                  <text x="10" y="18" fontSize="12" fontWeight="bold">
-                    LEYENDA AUDIOMETRÍA
-                  </text>
+
+              {/* Leyenda mejorada al costado del audiograma */}
+              <div className="absolute left-[760px] top-[0px]">
+                <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl shadow-lg border-2 border-blue-200 w-[220px]">
+                  <div className="mb-3"></div>
+
                   {/* Oído derecho */}
-                  <text x="10" y="35" fontSize="9" fontWeight="bold" fill="#cc0000">
-                    Oído Derecho
-                  </text>
-                  <circle cx="20" cy="45" r="4" stroke="#cc0000" fill="white" strokeWidth="2" />
-                  <text x="35" y="48" fontSize="8">
-                    Vía Aérea
-                  </text>
-                  <text x="20" y="62" fontSize="12" fill="#cc0000">
-                    &lt;
-                  </text>
-                  <text x="35" y="62" fontSize="8">
-                    Vía Ósea
-                  </text>
+                  <div className="mb-4 bg-red-50 p-3 rounded-lg border border-red-200">
+                    <h5 className="text-xs font-bold mb-2 text-red-700 flex items-center">
+                      <span className="w-3 h-3 bg-red-600 rounded-full mr-2"></span>
+                      Oído Derecho
+                    </h5>
+                    <div className="flex items-center mb-1">
+                      <svg width="20" height="20" className="mr-2">
+                        <circle cx="10" cy="10" r="6" stroke="#cc0000" fill="white" strokeWidth="2" />
+                      </svg>
+                      <span className="text-xs text-gray-700">Vía Aérea</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-lg text-red-600 mr-2 font-bold">{"<"}</span>
+                      <span className="text-xs text-gray-700">Vía Ósea</span>
+                    </div>
+                  </div>
+
                   {/* Oído izquierdo */}
-                  <text x="100" y="35" fontSize="9" fontWeight="bold" fill="#0066cc">
-                    Oído Izquierdo
-                  </text>
-                  <path d="M 110 42 L 120 52 M 110 52 L 120 42" stroke="#0066cc" strokeWidth="2" />
-                  <text x="130" y="48" fontSize="8">
-                    Vía Aérea
-                  </text>
-                  <text x="110" y="62" fontSize="12" fill="#0066cc">
-                    &gt;
-                  </text>
-                  <text x="130" y="62" fontSize="8">
-                    Vía Ósea
-                  </text>
+                  <div className="mb-4 bg-blue-50 p-3 rounded-lg border border-blue-200">
+                    <h5 className="text-xs font-bold mb-2 text-blue-700 flex items-center">
+                      <span className="w-3 h-3 bg-blue-600 rounded-full mr-2"></span>
+                      Oído Izquierdo
+                    </h5>
+                    <div className="flex items-center mb-1">
+                      <svg width="20" height="20" className="mr-2">
+                        <path d="M 5 5 L 15 15 M 5 15 L 15 5" stroke="#0066cc" strokeWidth="2" />
+                      </svg>
+                      <span className="text-xs text-gray-700">Vía Aérea</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-lg text-blue-600 mr-2 font-bold">{">"}</span>
+                      <span className="text-xs text-gray-700">Vía Ósea</span>
+                    </div>
+                  </div>
+
                   {/* Líneas */}
-                  <line x1="10" y1="80" x2="30" y2="80" stroke="#cc0000" strokeWidth="2" />
-                  <text x="35" y="83" fontSize="8">
-                    Línea oído derecho
-                  </text>
-                  <line x1="100" y1="80" x2="120" y2="80" stroke="#0066cc" strokeWidth="2" strokeDasharray="4,2" />
-                  <text x="125" y="83" fontSize="8">
-                    Línea oído izquierdo
-                  </text>
-                </svg>
+                  <div className="bg-gray-50 p-2 rounded-lg border border-gray-200">
+                    <h5 className="text-xs font-bold mb-2 text-gray-700">Conexiones:</h5>
+                    <div className="flex items-center mb-1">
+                      <div className="w-6 h-0.5 bg-red-600 mr-2"></div>
+                      <span className="text-xs text-gray-600">Línea derecha</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div
+                        className="w-6 h-0.5 bg-blue-600 mr-2"
+                        style={{
+                          backgroundImage:
+                            "repeating-linear-gradient(to right, #0066cc 0, #0066cc 3px, transparent 3px, transparent 6px)",
+                        }}
+                      ></div>
+                      <span className="text-xs text-gray-600">Línea izquierda</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Primera fila de botones */}
+            {/* Botones más juntos y reorganizados */}
+            {/* Primera fila - Tone/Warble */}
             <button
-              className="absolute left-[172px] top-[381px] w-[75px] h-[40px] bg-[#2C2C2C] rounded-lg border-t border-black flex flex-col"
+              className="absolute left-[100px] top-[380px] w-[80px] h-[45px] bg-[#2C2C2C] rounded-lg border-t border-black flex flex-col shadow-lg"
               onClick={() => {
                 const nuevoTipo = tipoTono === "pure" ? "warble" : "pure"
                 setTipoTono(nuevoTipo)
@@ -1005,70 +946,28 @@ export default function Simulador() {
                 })
               }}
             >
-              <div className="absolute left-[4px] top-[-23px] text-xs">Tone</div>
-              <div className="absolute left-[38px] top-[-23px] text-xs">Warble</div>
-              <div className="absolute left-[35px] top-[0px] h-full w-[1px] bg-black"></div>
-              {/* Indicador visual del modo activo */}
+              <div className="absolute left-[6px] top-[-25px] text-xs font-semibold">Tone</div>
+              <div className="absolute left-[42px] top-[-25px] text-xs font-semibold">Warble</div>
+              <div className="absolute left-[40px] top-[0px] h-full w-[1px] bg-black"></div>
               {tipoTono === "pure" ? (
-                <div className="absolute left-[8px] top-[15px] w-[25px] h-[2px] bg-green-400 rounded"></div>
+                <div className="absolute left-[10px] top-[20px] w-[25px] h-[3px] bg-green-400 rounded shadow-sm"></div>
               ) : (
-                <div className="absolute left-[42px] top-[15px] w-[25px] h-[2px] bg-green-400 rounded"></div>
+                <div className="absolute left-[45px] top-[20px] w-[25px] h-[3px] bg-green-400 rounded shadow-sm"></div>
               )}
             </button>
 
-            {/* Segunda fila de botones */}
-            <div className="absolute left-[171px] top-[459px] flex flex-col items-center">
-              <span className="mb-1 text-xs text-black">Oído Derecho</span>
+            {/* Botones de respuesta al lado del Tone/Warble */}
+            <div className="absolute left-[200px] top-[380px] flex gap-2">
               <button
-                className="relative w-[75px] h-[40px] bg-[#C00F0C] rounded-lg"
-                onClick={() => cambiarOido("derecho")}
+                className="w-[80px] h-[45px] bg-[#FFD65C] rounded-lg shadow-lg hover:bg-[#FFD040] transition-colors font-semibold text-sm"
+                onClick={guardarResultado}
+                disabled={modoAutomatico}
               >
-                <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                {oido === "derecho" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
+                Guardar
               </button>
-            </div>
-
-            <div className="absolute left-[260px] top-[459px] flex flex-col items-center">
-              <span className="mb-1 text-xs text-black">Oído Izquierdo</span>
-              <button
-                className="relative w-[75px] h-[40px] bg-[#1D0990] rounded-lg"
-                onClick={() => cambiarOido("izquierdo")}
-              >
-                <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                {oido === "izquierdo" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
-              </button>
-            </div>
-
-            <div className="absolute left-[349px] top-[459px] flex flex-col items-center">
-              <span className="mb-1 text-xs text-black">Vía Ósea/Aérea</span>
-              <button
-                className="relative w-[75px] h-[40px] bg-[#00BFFF] rounded-lg"
-                onClick={() => {
-                  if (viaSeleccionada === "osea") {
-                    setViaSeleccionada("aerea")
-                  } else {
-                    cambiarVia("osea")
-                  }
-                }}
-              >
-                <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
-                {viaSeleccionada === "osea" && (
-                  <div className="absolute inset-1 border-2 border-white rounded-md"></div>
-                )}
-              </button>
-            </div>
-
-            {/* Botones de respuesta */}
-            <button
-              className="absolute left-[598.54px] top-[545px] w-[75.45px] h-[40px] bg-[#FFD65C] rounded-lg"
-              onClick={guardarResultado}
-              disabled={modoAutomatico}
-            >
-              <div className="absolute left-[22.13px] top-[-15px] text-xs">Guardar</div>
-            </button>
 
               <button
-                className="absolute left-[598.54px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
+                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors"
                 onClick={() => cambiarIntensidad("bajar")}
                 disabled={modoAutomatico}
               >
@@ -1076,53 +975,78 @@ export default function Simulador() {
               </button>
 
               <button
-                className="absolute left-[687.07px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
+                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors"
                 onClick={() => cambiarIntensidad("subir")}
                 disabled={modoAutomatico}
               >
                 Bajar Tono
               </button>
+            </div>
 
-            <button
-              className="absolute left-[687.07px] top-[623px] w-[75.45px] h-[40px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs"
-              onClick={() => cambiarIntensidad("subir")}
-              disabled={modoAutomatico}
-            >
-              Bajar Tono
-            </button>
+            {/* Segunda fila - Botones de oído y vía más juntos */}
+            <div className="absolute left-[80px] top-[450px] flex gap-2">
+              <div className="flex flex-col items-center">
+                <span className="mb-1 text-xs text-black font-semibold">Oído Derecho</span>
+                <button
+                  className="relative w-[70px] h-[45px] bg-[#C00F0C] rounded-lg shadow-lg hover:bg-[#A00A08] transition-colors"
+                  onClick={() => cambiarOido("derecho")}
+                >
+                  <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
+                  {oido === "derecho" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <span className="mb-1 text-xs text-black font-semibold">Oído Izquierdo</span>
+                <button
+                  className="relative w-[70px] h-[45px] bg-[#1D0990] rounded-lg shadow-lg hover:bg-[#150770] transition-colors"
+                  onClick={() => cambiarOido("izquierdo")}
+                >
+                  <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
+                  {oido === "izquierdo" && <div className="absolute inset-1 border-2 border-white rounded-md"></div>}
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <span className="mb-1 text-xs text-black font-semibold">Vía Ósea/Aérea</span>
+                <button
+                  className="relative w-[70px] h-[45px] bg-[#00BFFF] rounded-lg shadow-lg hover:bg-[#00A5E6] transition-colors"
+                  onClick={() => {
+                    if (viaSeleccionada === "osea") {
+                      setViaSeleccionada("aerea")
+                    } else {
+                      cambiarVia("osea")
+                    }
+                  }}
+                >
+                  <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
+                  {viaSeleccionada === "osea" && (
+                    <div className="absolute inset-1 border-2 border-white rounded-md"></div>
+                  )}
+                </button>
+              </div>
+            </div>
 
             {/* Perillas grandes */}
             <div
-              className="absolute left-[109px] top-[601px] w-[124px] h-[124px] bg-[#2C2C2C] rounded-full cursor-pointer"
+              className="absolute left-[500px] top-[380px] w-[130px] h-[130px] bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors"
               onClick={() => !modoAutomatico && cambiarFrecuencia("bajar")}
             >
               <div
-                className="absolute w-2 h-10 bg-white rounded top-[20px] left-[62px]"
+                className="absolute w-3 h-12 bg-white rounded top-[25px] left-[65px] shadow-sm"
                 style={{
                   transformOrigin: "center bottom",
                   transform: `translateX(-50%) rotate(${frecuencias.indexOf(frecuenciaSeleccionada) * 20 - 100}deg)`,
                 }}
               ></div>
-              <div className="absolute inset-8 border border-gray-600 rounded-full"></div>
+              <div className="absolute inset-8 border-2 border-gray-600 rounded-full"></div>
+              <div className="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 text-xs font-semibold text-center">
+                Frecuencia ←
+              </div>
             </div>
 
             <div
-              className="absolute left-[950px] top-[601px] w-[124px] h-[124px] bg-[#2C2C2C] rounded-full cursor-pointer"
-              onClick={() => !modoAutomatico && cambiarFrecuencia("subir")}
-            >
-              <div
-                className="absolute w-2 h-10 bg-white rounded top-[20px] left-[62px]"
-                style={{
-                  transformOrigin: "center bottom",
-                  transform: `translateX(-50%) rotate(${frecuencias.indexOf(frecuenciaSeleccionada) * 20 - 100}deg)`,
-                }}
-              ></div>
-              <div className="absolute inset-8 border border-gray-600 rounded-full"></div>
-            </div>
-
-            {/* Botón central - Tone Switch */}
-            <button
-              className={`absolute left-[280px] top-[644px] w-[67px] h-[67px] rounded-full border-4 border-gray-700 cursor-pointer transition-all shadow-lg ${
+              className={`absolute left-[660px] top-[420px] w-[80px] h-[80px] rounded-full border-4 border-gray-700 cursor-pointer transition-all shadow-xl ${
                 reproduciendo
                   ? "bg-green-600 hover:bg-green-700 shadow-green-400/50"
                   : esperandoRespuesta
@@ -1130,24 +1054,34 @@ export default function Simulador() {
                     : "bg-[#2C2C2C] hover:bg-gray-800"
               } disabled:opacity-50 disabled:cursor-not-allowed`}
               onClick={handleReproducir}
-              disabled={modoAutomatico && !esperandoRespuesta}
             >
-              <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-1 h-3 bg-white rounded"></div>
+              <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-1 h-4 bg-white rounded"></div>
               {reproduciendo && (
                 <div className="absolute inset-1 border-2 border-green-300 rounded-full animate-pulse"></div>
               )}
               {esperandoRespuesta && !reproduciendo && (
                 <div className="absolute inset-1 border-2 border-yellow-300 rounded-full animate-pulse"></div>
               )}
-              <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2">
-                {reproduciendo ? <Square className="h-3 w-3 text-white" /> : <Play className="h-3 w-3 text-white" />}
-              </div>
-            </button>
-            <div className="absolute left-[277px] top-[725px] text-xs text-center">
-              Tone Switch/
-              <br />
-              Enter
             </div>
+
+            <div
+              className="absolute left-[820px] top-[380px] w-[130px] h-[130px] bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors"
+              onClick={() => !modoAutomatico && cambiarFrecuencia("subir")}
+            >
+              <div
+                className="absolute w-3 h-12 bg-white rounded top-[25px] left-[65px] shadow-sm"
+                style={{
+                  transformOrigin: "center bottom",
+                  transform: `translateX(-50%) rotate(${frecuencias.indexOf(frecuenciaSeleccionada) * 20 - 100}deg)`,
+                }}
+              ></div>
+              <div className="absolute inset-8 border-2 border-gray-600 rounded-full"></div>
+              <div className="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 text-xs font-semibold text-center">
+                Frecuencia →
+              </div>
+            </div>
+
+            <div className="absolute left-[655px] top-[515px] text-sm text-center font-semibold">REPRODUCIR TONO</div>
           </div>
         </div>
 
@@ -1321,14 +1255,13 @@ export default function Simulador() {
           </div>
         </div>
       </div>
-
-      {/* Instrucciones */}
-      <div className="mt-4 bg-white p-4 rounded-lg shadow-md">
-        <h3 className="text-sm font-bold mb-2">Instrucciones del Audiómetro</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div>
-            <h4 className="font-semibold mb-1">Controles principales:</h4>
-            <ul className="space-y-1">
+      {/* Instrucciones movidas arriba */}
+      <div className="mb-6 bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-500">
+        <h3 className="text-lg font-bold mb-3 text-blue-700">📋 Instrucciones del Audiómetro</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+          <div className="bg-blue-50 p-3 rounded-lg">
+            <h4 className="font-semibold mb-2 text-blue-800">🎛️ Controles principales:</h4>
+            <ul className="space-y-1 text-gray-700">
               <li>
                 • <strong>Perillas izquierda/derecha:</strong> Cambiar frecuencia
               </li>
@@ -1336,41 +1269,38 @@ export default function Simulador() {
                 • <strong>Botón central:</strong> Reproducir tono
               </li>
               <li>
-                • <strong>Right/Left Insert:</strong> Seleccionar oído
+                • <strong>Botones de oído:</strong> Seleccionar derecho/izquierdo
               </li>
               <li>
-                • <strong>R Bone L:</strong> Seleccionar vía ósea
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-1">Respuestas:</h4>
-            <ul className="space-y-1">
-              <li>
-                • <strong>Store:</strong> Guardar umbral
-              </li>
-              <li>
-                • <strong>No Resp:</strong> Paciente no escuchó
-              </li>
-              <li>
-                • <strong>Incorrect:</strong> Borrar punto / Bajar intensidad
-              </li>
-              <li>
-                • <strong>Correct/Up:</strong> Paciente escuchó / Subir intensidad
+                • <strong>Botón azul:</strong> Cambiar vía ósea/aérea
               </li>
             </ul>
           </div>
-          <div>
-            <h4 className="font-semibold mb-1">Modos:</h4>
-            <ul className="space-y-1">
+          <div className="bg-green-50 p-3 rounded-lg">
+            <h4 className="font-semibold mb-2 text-green-800">✅ Respuestas:</h4>
+            <ul className="space-y-1 text-gray-700">
               <li>
-                • <strong>Automático:</strong> Búsqueda automática de umbrales
+                • <strong>Guardar:</strong> Almacenar umbral encontrado
               </li>
               <li>
-                • <strong>Manual:</strong> Control total del operador
+                • <strong>SÍ/NO:</strong> Respuesta del paciente
               </li>
               <li>
-                • <strong>Mask on/off:</strong> Activar/desactivar enmascaramiento
+                • <strong>Subir/Bajar Tono:</strong> Ajustar intensidad
+              </li>
+              <li>
+                • <strong>Panel lateral:</strong> Ver resultados en tiempo real
+              </li>
+            </ul>
+          </div>
+          <div className="bg-purple-50 p-3 rounded-lg">
+            <h4 className="font-semibold mb-2 text-purple-800">⚙️ Modos de operación:</h4>
+            <ul className="space-y-1 text-gray-700">
+              <li>
+                • <strong>Tono/Warble:</strong> Tipo de señal de prueba
+              </li>
+              <li>
+                • <strong>Enmascaramiento:</strong> Para pruebas complejas
               </li>
             </ul>
           </div>
