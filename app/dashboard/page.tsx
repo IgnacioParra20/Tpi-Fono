@@ -193,35 +193,32 @@ if (!user) {
     >
 <header>
   <div className="container mx-auto px-4 py-4">
-    <div className="flex items-center justify-between">
-      
+    <div className="flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
       {/* Cuadro blanco solo para Fono al Día */}
-      <div className="bg-white px-4 py-2 rounded-xl shadow-md flex items-center space-x-2">
-        <Volume2 className="h-8 w-8 text-indigo-600" />
-        <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
+      <div className="bg-white px-4 py-2 rounded-xl shadow-md flex items-center space-x-2 mb-2 md:mb-0">
+        <Volume2 className="h-7 w-7 md:h-8 md:w-8 text-indigo-600" />
+        <span className="text-xl md:text-2xl font-bold text-gray-900">Fono al Día</span>
       </div>
-
-<div className="flex items-center space-x-4">
-  <Link href="/profile">
-    <Button
-      variant="outline"
-      size="sm"
-      className="transition-transform transition-shadow duration-200 hover:scale-105 hover:shadow-md"
-    >
-      <Settings className="h-4 w-4 mr-2" />
-      Perfil
-    </Button>
-  </Link>
-
-  <Button
-    variant="outline"
-    size="sm"
-    onClick={handleLogout}
-    className="transition-transform transition-shadow duration-200 hover:scale-105 hover:shadow-md"
-  >
-    Cerrar sesión
-  </Button>
-</div>
+      <div className="flex flex-col md:flex-row items-center gap-2">
+        <Link href="/profile">
+          <Button
+            variant="outline"
+            size="sm"
+            className="transition-transform transition-shadow duration-200 hover:scale-105 hover:shadow-md w-full md:w-auto"
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            Perfil
+          </Button>
+        </Link>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleLogout}
+          className="transition-transform transition-shadow duration-200 hover:scale-105 hover:shadow-md w-full md:w-auto"
+        >
+          Cerrar sesión
+        </Button>
+      </div>
     </div>
   </div>
 </header>
