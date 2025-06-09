@@ -9,27 +9,34 @@ export default function LandingPage() {
       className="min-h-screen bg-gradient-to-br from-blue-50/80 via-indigo-100/80 to-indigo-200/80 bg-cover bg-center"
       style={{ backgroundImage: "url('/fondo-textura.png')" }}
     >
-      {/* Header */}
       <header className="container mx-auto px-4 py-6">
-        <nav className="flex items-center justify-between">
+        <nav className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-2 w-fit opacity-0 animate-fade-in">
             <Volume2 className="h-8 w-8 text-indigo-600" />
             <span className="text-2xl font-bold text-gray-900">Fono al Día</span>
           </div>
-          <div className="space-x-4 opacity-0 animate-fade-in delay-100">
+
+          {/* Botones responsivos */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 opacity-0 animate-fade-in delay-100">
             <Link href="/login">
-              <Button variant="outline" className="transition-transform duration-200 hover:scale-105 active:scale-95">
+              <Button
+                variant="outline"
+                className="transition-transform duration-200 hover:scale-105 active:scale-95 w-full sm:w-auto"
+              >
                 Iniciar Sesión
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="transition-transform duration-200 hover:scale-105 active:scale-95">
+              <Button
+                className="transition-transform duration-200 hover:scale-105 active:scale-95 w-full sm:w-auto"
+              >
                 Empieza Hoy
               </Button>
             </Link>
           </div>
         </nav>
       </header>
+
 
       {/* Sección Principal */}
       <main className="container mx-auto px-4 py-12">
