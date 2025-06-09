@@ -532,6 +532,13 @@ export default function Simulador() {
     return { derecho: resultadoDerecho, izquierdo: resultadoIzquierdo }
   }
 
+  useEffect(() => {
+    // Si el usuario no viene del dashboard, redirige
+    if (document.referrer && !document.referrer.includes("/dashboard")) {
+      router.replace("/dashboard")
+    }
+  }, [router])
+
   return (
     <div className="min-h-screen bg-[#F4F4F5] p-4">
       <div className="mb-4 flex items-center">
