@@ -938,7 +938,7 @@ export default function Simulador() {
             {/* Botones más juntos y reorganizados */}
             {/* Primera fila - Tone/Warble */}
             <button
-              className="absolute left-[100px] top-[380px] w-[80px] h-[45px] bg-[#2C2C2C] rounded-lg border-t border-black flex flex-col shadow-lg"n
+              className="absolute left-[100px] top-[380px] w-[80px] h-[45px] bg-[#2C2C2C] rounded-lg border-t border-black flex flex-col shadow-lg"
               onClick={() => {
                 const nuevoTipo = tipoTono === "pure" ? "warble" : "pure"
                 setTipoTono(nuevoTipo)
