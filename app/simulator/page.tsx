@@ -37,13 +37,6 @@ export default function Simulador() {
   const [intensidadEnmascaramiento, setIntensidadEnmascaramiento] = useState(60)
   const [tipoTono, setTipoTono] = useState<"pure" | "warble">("pure")
 
-  // Estados del protocolo
-  const [modoAutomatico, setModoAutomatico] = useState(false)
-  const [esperandoRespuesta, setEsperandoRespuesta] = useState(false)
-  const [ultimaRespuesta, setUltimaRespuesta] = useState<"si" | "no" | null>(null)
-  const [secuenciaUmbral, setSecuenciaUmbral] = useState<number[]>([])
-  const [umbralEncontrado, setUmbralEncontrado] = useState(false)
-
   // Estados de resultados
   const [resultados, setResultados] = useState<{
     derecho: { aerea: Record<number, number | null>; osea: Record<number, number | null> }
@@ -128,8 +121,8 @@ export default function Simulador() {
       oscillatorRef.current.type = "sine"
 
       // Calcular volumen basado en intensidad (simulado)
-      const volumen = Math.max(0, Math.min(1, (intensidadDb + 10) / 130))
-      gainNodeRef.current.gain.setValueAtTime(volumen * 0.1, audioContextRef.current.currentTime)
+      const volumen = Math.max(0.1, Math.min(1, (intensidadDb + 10) / 100))
+      gainNodeRef.current.gain.setValueAtTime(volumen * 0.3, audioContextRef.current.currentTime)
 
       // Aplicar modulación si es warble
       if (tipoTono === "warble") {
@@ -204,45 +197,60 @@ export default function Simulador() {
       gainNodeRef.current = null
     }
     setReproduciendo(false)
-    setEsperandoRespuesta(false)
   }
 
   // Manejar reproducción de estímulo
-const handleReproducir = async () => {
-  // Si el contexto está suspendido, reanúdalo
-  if (audioContextRef.current && audioContextRef.current.state === "suspended") {
-    await audioContextRef.current.resume();
+  const handleReproducir = async () => {
+    // Inicializar AudioContext si no existe
+    if (!audioContextRef.current) {
+      try {
+        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+      } catch (error) {
+        toast({
+          title: "Audio no disponible",
+          description: "No se puede inicializar el audio en este dispositivo.",
+          variant: "destructive",
+        })
+        return
+      }
+    }
+
+    // Si el contexto está suspendido, reanúdalo (importante para móviles)
+    if (audioContextRef.current.state === "suspended") {
+      try {
+        await audioContextRef.current.resume()
+      } catch (error) {
+        toast({
+          title: "Error de audio",
+          description: "No se pudo activar el audio. Intente nuevamente.",
+          variant: "destructive",
+        })
+        return
+      }
+    }
+
+    if (reproduciendo) {
+      detenerTono()
+      return
+    }
+
+    setReproduciendo(true)
+    reproducirTono(frecuenciaSeleccionada, intensidad, 1000)
+    setTimeout(() => {
+      setReproduciendo(false)
+    }, 1000)
   }
-  if (reproduciendo) {
-    detenerTono();
-    return;
-  }
-  setReproduciendo(true);
-  setEsperandoRespuesta(true);
-  reproducirTono(frecuenciaSeleccionada, intensidad, 1000);
-  setTimeout(() => {
-    setReproduciendo(false);
-  }, 1000);
-};
 
   // Guardar resultado/umbral
   const guardarResultado = () => {
     const nuevosResultados = { ...resultados }
     nuevosResultados[oido][viaSeleccionada][frecuenciaSeleccionada] = intensidad
     setResultados(nuevosResultados)
-    setUmbralEncontrado(true)
 
     toast({
       title: "Umbral guardado",
       description: `${frecuenciaSeleccionada} Hz: ${intensidad} dB HL (${oido}, ${viaSeleccionada})`,
     })
-
-    // Avanzar a siguiente frecuencia automáticamente
-    if (modoAutomatico) {
-      setTimeout(() => {
-        avanzarSiguienteFrecuencia()
-      }, 500)
-    }
   }
 
   // Borrar resultado
@@ -250,116 +258,11 @@ const handleReproducir = async () => {
     const nuevosResultados = { ...resultados }
     nuevosResultados[oido][viaSeleccionada][frecuenciaSeleccionada] = null
     setResultados(nuevosResultados)
-    setUmbralEncontrado(false)
 
     toast({
       title: "Umbral borrado",
       description: `${frecuenciaSeleccionada} Hz (${oido}, ${viaSeleccionada})`,
     })
-  }
-
-  // Registrar respuesta del paciente
-  const registrarRespuesta = (respuesta: "si" | "no") => {
-    setUltimaRespuesta(respuesta)
-    setEsperandoRespuesta(false)
-
-    // Agregar al historial
-    const nuevaPrueba = {
-      frecuencia: frecuenciaSeleccionada,
-      intensidad: intensidad,
-      oido: oido,
-      via: viaSeleccionada,
-      respuesta: respuesta,
-      timestamp: new Date(),
-    }
-    setHistorialPruebas((prev) => [...prev, nuevaPrueba])
-
-    // Lógica de búsqueda de umbral automática
-    if (modoAutomatico) {
-      buscarUmbralAutomatico(respuesta)
-    } else {
-      // Sugerir siguiente intensidad
-      if (respuesta === "si") {
-        // Paciente escuchó, bajar intensidad
-        const nuevaIntensidad = Math.max(-10, intensidad - protocoloAudiometria.pasoFino)
-        setIntensidad(nuevaIntensidad)
-        toast({
-          title: "Respuesta: SÍ",
-          description: `Sugerencia: Bajar a ${nuevaIntensidad} dB HL`,
-        })
-      } else {
-        // Paciente no escuchó, subir intensidad
-        const nuevaIntensidad = Math.min(120, intensidad + protocoloAudiometria.pasoIntensidad)
-        setIntensidad(nuevaIntensidad)
-        toast({
-          title: "Respuesta: NO",
-          description: `Sugerencia: Subir a ${nuevaIntensidad} dB HL`,
-        })
-      }
-    }
-  }
-
-  // Búsqueda automática de umbral
-  const buscarUmbralAutomatico = (respuesta: "si" | "no") => {
-    const nuevaSecuencia = [...secuenciaUmbral, intensidad]
-    setSecuenciaUmbral(nuevaSecuencia)
-
-    if (respuesta === "si") {
-      // Paciente escuchó, bajar intensidad
-      const nuevaIntensidad = Math.max(-10, intensidad - protocoloAudiometria.pasoFino)
-      setIntensidad(nuevaIntensidad)
-
-      // Si ya bajamos mucho, podríamos haber encontrado el umbral
-      if (nuevaSecuencia.length >= 3) {
-        const ultimasRespuestas = historialPruebas.slice(-2)
-        if (
-          ultimasRespuestas.length >= 2 &&
-          ultimasRespuestas[0].respuesta === "no" &&
-          ultimasRespuestas[1].respuesta === "si"
-        ) {
-          // Encontramos el umbral (última intensidad donde escuchó)
-          guardarResultado()
-          return
-        }
-      }
-    } else {
-      // Paciente no escuchó, subir intensidad
-      const nuevaIntensidad = Math.min(120, intensidad + protocoloAudiometria.pasoIntensidad)
-      setIntensidad(nuevaIntensidad)
-    }
-
-    // Continuar automáticamente después de un breve delay
-    setTimeout(() => {
-      if (intensidad <= 120) {
-        handleReproducir()
-      }
-    }, 1500)
-  }
-
-  // Avanzar a siguiente frecuencia
-  const avanzarSiguienteFrecuencia = () => {
-    const frecuenciasObligatorias = protocoloAudiometria.frecuenciasObligatorias
-    const indiceActual = frecuenciasObligatorias.indexOf(frecuenciaSeleccionada)
-
-    if (indiceActual < frecuenciasObligatorias.length - 1) {
-      const siguienteFrecuencia = frecuenciasObligatorias[indiceActual + 1]
-      setFrecuenciaSeleccionada(siguienteFrecuencia)
-      setIntensidad(protocoloAudiometria.intensidadInicial)
-      setSecuenciaUmbral([])
-      setUmbralEncontrado(false)
-
-      toast({
-        title: "Siguiente frecuencia",
-        description: `Ahora probando ${siguienteFrecuencia} Hz`,
-      })
-    } else {
-      // Completamos todas las frecuencias
-      setModoAutomatico(false)
-      toast({
-        title: "Audiometría completada",
-        description: "Se han probado todas las frecuencias obligatorias",
-      })
-    }
   }
 
   // Cambiar frecuencia manualmente
@@ -386,10 +289,6 @@ const handleReproducir = async () => {
 
   // Resetear estado de prueba
   const resetearEstadoPrueba = () => {
-    setSecuenciaUmbral([])
-    setUmbralEncontrado(false)
-    setUltimaRespuesta(null)
-    setEsperandoRespuesta(false)
     detenerTono()
   }
 
@@ -413,50 +312,30 @@ const handleReproducir = async () => {
     })
   }
 
-  // Iniciar modo automático
-  const iniciarModoAutomatico = () => {
-    setModoAutomatico(true)
-    setFrecuenciaSeleccionada(protocoloAudiometria.frecuenciasObligatorias[0])
-    setIntensidad(protocoloAudiometria.intensidadInicial)
-    resetearEstadoPrueba()
-
-    toast({
-      title: "Modo automático iniciado",
-      description: "Comenzando audiometría automática",
-    })
-
-    // Iniciar primera prueba
-    setTimeout(() => {
-      handleReproducir()
-    }, 1000)
-  }
-
   return (
     <div
       className="min-h-screen bg-gradient-to-br from-blue-50/80 via-indigo-100/80 to-indigo-200/80 bg-cover bg-center p-2 sm:p-4"
       style={{ backgroundImage: "url('/fondo-textura.png')" }}
     >
-        {/* Header responsive */}
-        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
-          {/* Botón de volver */}
-          <div className="bg-white rounded-lg shadow transition-transform hover:scale-105 border border-gray-200 px-3 py-2 w-fit">
-            <Button
-              variant="ghost"
-              onClick={() => router.push("/dashboard")}
-              className="flex items-center text-sm sm:text-base font-semibold text-gray-700 hover:text-blue-700 transition-colors p-1 sm:p-2"
-            >
-              <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="hidden sm:inline">Volver al Panel de Niveles</span>
-            </Button>
-          </div>
-
-          {/* Título alineado a la derecha */}
-          <div className="bg-white p-4 rounded-lg shadow-md w-fit ml-auto">
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900">
-              Simulador de Audiómetro
-            </h1>
-          </div>
+      {/* Header responsive */}
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+        {/* Botón de volver */}
+        <div className="bg-white rounded-lg shadow transition-transform hover:scale-105 border border-gray-200 px-3 py-2 w-fit">
+          <Button
+            variant="ghost"
+            onClick={() => router.push("/dashboard")}
+            className="flex items-center text-sm sm:text-base font-semibold text-gray-700 hover:text-blue-700 transition-colors p-1 sm:p-2"
+          >
+            <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="hidden sm:inline">Volver al Panel de Niveles</span>
+          </Button>
         </div>
+
+        {/* Título alineado a la derecha */}
+        <div className="bg-white p-4 rounded-lg shadow-md w-fit ml-auto">
+          <h1 className="text-lg sm:text-xl font-bold text-gray-900">Simulador de Audiómetro</h1>
+        </div>
+      </div>
 
       {/* Layout principal responsive */}
       <div className="flex flex-col xl:flex-row gap-4">
@@ -980,20 +859,10 @@ const handleReproducir = async () => {
                   )}
                 </button>
 
-                {/* Botón Guardar */}
-                <Button
-                  className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#FFD65C] hover:bg-[#FFD040] text-black font-semibold text-sm transition-all duration-200 hover:scale-105"
-                  onClick={guardarResultado}
-                  disabled={modoAutomatico}
-                >
-                  Guardar
-                </Button>
-
                 {/* Botones de intensidad */}
                 <Button
                   className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#2C2C2C] hover:bg-[#3C3C3C] text-white text-xs font-semibold transition-all duration-200 hover:scale-105"
                   onClick={() => cambiarIntensidad("bajar")}
-                  disabled={modoAutomatico}
                 >
                   Subir Tono
                 </Button>
@@ -1001,7 +870,6 @@ const handleReproducir = async () => {
                 <Button
                   className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#2C2C2C] hover:bg-[#3C3C3C] text-white text-xs font-semibold transition-all duration-200 hover:scale-105"
                   onClick={() => cambiarIntensidad("subir")}
-                  disabled={modoAutomatico}
                 >
                   Bajar Tono
                 </Button>
@@ -1052,14 +920,13 @@ const handleReproducir = async () => {
                 </div>
               </div>
 
-
               {/* Tercera fila - Controles principales */}
               <div className="flex flex-wrap gap-4 justify-center items-center">
                 {/* Perilla frecuencia izquierda */}
                 <div className="flex flex-col items-center">
                   <div
                     className="w-20 h-20 sm:w-24 sm:h-24 bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors relative"
-                    onClick={() => !modoAutomatico && cambiarFrecuencia("bajar")}
+                    onClick={() => cambiarFrecuencia("bajar")}
                   >
                     <div
                       className="absolute w-1 h-8 bg-white rounded top-4 left-1/2 shadow-sm transform -translate-x-1/2"
@@ -1079,18 +946,13 @@ const handleReproducir = async () => {
                     className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-gray-700 cursor-pointer transition-all shadow-xl hover:scale-105 relative ${
                       reproduciendo
                         ? "bg-green-600 hover:bg-green-700 shadow-green-400/50"
-                        : esperandoRespuesta
-                          ? "bg-yellow-600 hover:bg-yellow-700 shadow-yellow-400/50"
-                          : "bg-[#2C2C2C] hover:bg-gray-800"
+                        : "bg-[#2C2C2C] hover:bg-gray-800"
                     }`}
                     onClick={handleReproducir}
                   >
                     <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-1 h-6 bg-white rounded"></div>
                     {reproduciendo && (
                       <div className="absolute inset-1 border-2 border-green-300 rounded-full animate-pulse"></div>
-                    )}
-                    {esperandoRespuesta && !reproduciendo && (
-                      <div className="absolute inset-1 border-2 border-yellow-300 rounded-full animate-pulse"></div>
                     )}
                   </div>
                   <div className="mt-2 text-xs font-semibold text-center">REPRODUCIR</div>
@@ -1100,7 +962,7 @@ const handleReproducir = async () => {
                 <div className="flex flex-col items-center">
                   <div
                     className="w-20 h-20 sm:w-24 sm:h-24 bg-[#2C2C2C] rounded-full cursor-pointer shadow-xl hover:bg-[#3C3C3C] transition-colors relative"
-                    onClick={() => !modoAutomatico && cambiarFrecuencia("subir")}
+                    onClick={() => cambiarFrecuencia("subir")}
                   >
                     <div
                       className="absolute w-1 h-8 bg-white rounded top-4 left-1/2 shadow-sm transform -translate-x-1/2"
@@ -1143,39 +1005,16 @@ const handleReproducir = async () => {
                   Tipo de tono: <span className="font-bold">{tipoTono === "pure" ? "Simple" : "Ondas"}</span>
                 </div>
                 <div>
-                  Modo: <span className="font-bold">{modoAutomatico ? "Automático" : "Manual"}</span>
+                  Modo: <span className="font-bold">Manual</span>
                 </div>
                 <div>
                   Estado:{" "}
-                  <span
-                    className={`font-bold ${
-                      reproduciendo ? "text-green-600" : esperandoRespuesta ? "text-yellow-600" : "text-gray-600"
-                    }`}
-                  >
-                    {reproduciendo ? "REPRODUCIENDO" : esperandoRespuesta ? "ESPERANDO RESPUESTA" : "LISTO"}
+                  <span className={`font-bold ${reproduciendo ? "text-green-600" : "text-gray-600"}`}>
+                    {reproduciendo ? "REPRODUCIENDO" : "LISTO"}
                   </span>
                 </div>
               </div>
             </div>
-
-            {/* Respuesta del paciente */}
-            {esperandoRespuesta && (
-              <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-                <p className="text-sm font-medium text-yellow-800 mb-2">¿El paciente escuchó el tono?</p>
-                <div className="flex justify-center gap-4">
-                  <Button
-                    onClick={() => registrarRespuesta("si")}
-                    className="bg-green-600 hover:bg-green-700"
-                    size="sm"
-                  >
-                    SÍ
-                  </Button>
-                  <Button onClick={() => registrarRespuesta("no")} className="bg-red-600 hover:bg-red-700" size="sm">
-                    NO
-                  </Button>
-                </div>
-              </div>
-            )}
 
             {/* Tabla de umbrales responsive */}
             <div className="mb-4">
@@ -1256,14 +1095,6 @@ const handleReproducir = async () => {
             <div className="flex flex-col gap-2">
               <Button
                 size="sm"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-xs transition-all duration-200 hover:scale-105"
-                onClick={() => toast({ title: "Guardar", description: "Resultados guardados correctamente" })}
-              >
-                Guardar Resultados
-              </Button>
-
-              <Button
-                size="sm"
                 variant="destructive"
                 className="w-full text-xs transition-all duration-200 hover:scale-105"
                 onClick={() => {
@@ -1272,7 +1103,6 @@ const handleReproducir = async () => {
                     izquierdo: { aerea: {}, osea: {} },
                   })
                   setHistorialPruebas([])
-                  setModoAutomatico(false)
                   resetearEstadoPrueba()
                   toast({
                     title: "Audiometría reiniciada",
