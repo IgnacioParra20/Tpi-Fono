@@ -127,8 +127,31 @@ export default function DashboardPage() {
     router.push("/")
   }
 
-  if (loading) return <div>Cargando...</div>
-  if (!user) return <div>No se encontró el usuario.</div>
+if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
+      <div className="flex flex-col items-center space-y-4">
+        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-lg text-gray-700 font-semibold">Cargando...</p>
+      </div>
+    </div>
+  )
+}
+
+if (!user) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#F4F4F5]">
+      <div className="bg-white p-6 rounded-xl shadow-md flex flex-col items-center space-y-4">
+        <Volume2 className="h-10 w-10 text-red-500" />
+        <p className="text-lg font-medium text-gray-800">No se encontró el usuario.</p>
+        <Button onClick={() => router.push("/login")} variant="outline">
+          Ir al inicio de sesión
+        </Button>
+      </div>
+    </div>
+  )
+}
+
 
   const levels = [
     {
