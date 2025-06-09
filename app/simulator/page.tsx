@@ -532,21 +532,22 @@ export default function Simulador() {
     return { derecho: resultadoDerecho, izquierdo: resultadoIzquierdo }
   }
 
-  useEffect(() => {
-    // Si el usuario no viene del dashboard, redirige
-    if (document.referrer && !document.referrer.includes("/dashboard")) {
-      router.replace("/dashboard")
-    }
-  }, [router])
-
   return (
     <div className="min-h-screen bg-[#F4F4F5] p-4">
-      <div className="mb-4 flex items-center">
-        <Button variant="ghost" onClick={() => router.push("/dashboard")} className="mr-2">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Volver al Panel de Niveles
-        </Button>
-        <h1 className="text-xl font-bold">Simulador de Audiómetro</h1>
+      <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        {/* Botón con cuadro blanco y animación */}
+        <div className="bg-white rounded-lg shadow transition-transform hover:scale-105 border border-gray-200 px-4 py-2">
+          <Button
+            variant="ghost"
+            onClick={() => router.push("/dashboard")}
+            className="flex items-center text-base font-semibold text-gray-700 hover:text-blue-700 transition-colors transition duration-200 ease-in-out hover:scale-105"
+          >
+            <ArrowLeft className="mr-2 h-5 w-5" />
+            Volver al Panel de Niveles
+          </Button>
+        </div>
+        {/* Título separado */}
+        <h1 className="text-xl font-bold ml-0 sm:ml-6 mt-2 sm:mt-0">Simulador de Audiómetro</h1>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4">
@@ -959,7 +960,7 @@ export default function Simulador() {
             {/* Botones de respuesta al lado del Tone/Warble */}
             <div className="absolute left-[200px] top-[380px] flex gap-2">
               <button
-                className="w-[80px] h-[45px] bg-[#FFD65C] rounded-lg shadow-lg hover:bg-[#FFD040] transition-colors font-semibold text-sm"
+                className="w-[80px] h-[45px] bg-[#FFD65C] rounded-lg shadow-lg hover:bg-[#FFD040] transition-colors font-semibold text-sm transition duration-200 ease-in-out hover:scale-105"
                 onClick={guardarResultado}
                 disabled={modoAutomatico}
               >
@@ -967,7 +968,7 @@ export default function Simulador() {
               </button>
 
               <button
-                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors"
+                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors transition duration-200 ease-in-out hover:scale-105"
                 onClick={() => cambiarIntensidad("bajar")}
                 disabled={modoAutomatico}
               >
@@ -975,7 +976,7 @@ export default function Simulador() {
               </button>
 
               <button
-                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors"
+                className="w-[75px] h-[45px] bg-[#2C2C2C] rounded-lg text-white flex items-center justify-center text-xs font-semibold shadow-lg hover:bg-[#3C3C3C] transition-colors transition duration-200 ease-in-out hover:scale-105"
                 onClick={() => cambiarIntensidad("subir")}
                 disabled={modoAutomatico}
               >
@@ -988,7 +989,7 @@ export default function Simulador() {
               <div className="flex flex-col items-center">
                 <span className="mb-1 text-xs text-black font-semibold">Oído Derecho</span>
                 <button
-                  className="relative w-[70px] h-[45px] bg-[#C00F0C] rounded-lg shadow-lg hover:bg-[#A00A08] transition-colors"
+                  className="relative w-[70px] h-[45px] bg-[#C00F0C] rounded-lg shadow-lg hover:bg-[#A00A08] transition-colors transition duration-200 ease-in-out hover:scale-105"
                   onClick={() => cambiarOido("derecho")}
                 >
                   <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
@@ -999,7 +1000,7 @@ export default function Simulador() {
               <div className="flex flex-col items-center">
                 <span className="mb-1 text-xs text-black font-semibold">Oído Izquierdo</span>
                 <button
-                  className="relative w-[70px] h-[45px] bg-[#1D0990] rounded-lg shadow-lg hover:bg-[#150770] transition-colors"
+                  className="relative w-[70px] h-[45px] bg-[#1D0990] rounded-lg shadow-lg hover:bg-[#150770] transition-colors transition duration-200 ease-in-out hover:scale-105"
                   onClick={() => cambiarOido("izquierdo")}
                 >
                   <div className="absolute left-[35px] top-0 h-full w-[1px] bg-black"></div>
@@ -1010,7 +1011,7 @@ export default function Simulador() {
               <div className="flex flex-col items-center">
                 <span className="mb-1 text-xs text-black font-semibold">Vía Ósea/Aérea</span>
                 <button
-                  className="relative w-[70px] h-[45px] bg-[#00BFFF] rounded-lg shadow-lg hover:bg-[#00A5E6] transition-colors"
+                  className="relative w-[70px] h-[45px] bg-[#00BFFF] rounded-lg shadow-lg hover:bg-[#00A5E6] transition-colors transition duration-200 ease-in-out hover:scale-105"
                   onClick={() => {
                     if (viaSeleccionada === "osea") {
                       setViaSeleccionada("aerea")
@@ -1046,7 +1047,7 @@ export default function Simulador() {
             </div>
 
             <div
-              className={`absolute left-[660px] top-[420px] w-[80px] h-[80px] rounded-full border-4 border-gray-700 cursor-pointer transition-all shadow-xl ${
+              className={`absolute left-[660px] top-[420px] w-[80px] h-[80px] rounded-full border-4 border-gray-700 cursor-pointer transition-all shadow-xl transition duration-200 ease-in-out hover:scale-105 ${
                 reproduciendo
                   ? "bg-green-600 hover:bg-green-700 shadow-green-400/50"
                   : esperandoRespuesta
@@ -1222,7 +1223,7 @@ export default function Simulador() {
             <div className="mt-4 flex gap-2">
               <Button
                 size="sm"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-xs"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-xs transition duration-200 ease-in-out hover:scale-105"
                 onClick={() => toast({ title: "Guardar", description: "Resultados guardados correctamente" })}
               >
                 Guardar
@@ -1234,7 +1235,7 @@ export default function Simulador() {
               <Button
                 size="sm"
                 variant="destructive"
-                className="w-full text-xs"
+                className="w-full text-xs transition duration-200 ease-in-out hover:scale-105"
                 onClick={() => {
                   setResultados({
                     derecho: { aerea: {}, osea: {} },
@@ -1295,14 +1296,6 @@ export default function Simulador() {
           </div>
           <div className="bg-purple-50 p-3 rounded-lg">
             <h4 className="font-semibold mb-2 text-purple-800">⚙️ Modos de operación:</h4>
-            <ul className="space-y-1 text-gray-700">
-              <li>
-                • <strong>Tono/Warble:</strong> Tipo de señal de prueba
-              </li>
-              <li>
-                • <strong>Enmascaramiento:</strong> Para pruebas complejas
-              </li>
-            </ul>
           </div>
         </div>
       </div>
