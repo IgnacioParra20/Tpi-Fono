@@ -236,8 +236,8 @@ if (!user) {
       Continúa tu aprendizaje en fonología. Elige un nivel para comenzar.
     </p>
   </div>
-  {/* Estadísticas del usuario */}
-  <div className="grid md:grid-cols-4 gap-4 mb-8">
+    {/* Estadísticas del usuario */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
     <Card>
       <CardContent className="p-4">
         <div>
@@ -262,15 +262,8 @@ if (!user) {
         </div>
       </CardContent>
     </Card>
-    <Card>
-      <CardContent className="p-4">
-        <div>
-          <p className="text-sm text-gray-600">Edad</p>
-          <p className="font-semibold">{user.age} años</p>
-        </div>
-      </CardContent>
-    </Card>
   </div>
+
 
   {/* Niveles de aprendizaje */}
   <div className="grid md:grid-cols-3 gap-6">

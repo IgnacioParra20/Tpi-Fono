@@ -35,11 +35,11 @@ export default function LandingPage() {
       <main className="container mx-auto px-4 py-12">
         <div className="bg-white p-8 rounded-xl shadow-lg text-center mb-16 transition-all duration-700 ease-out opacity-0 animate-fade-in">
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Domina la Fonología con Aprendizaje Interactivo
+            Domina la Fonoaudiología con Aprendizaje Interactivo
           </h1>
           <p className="text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
-            Mejora tus habilidades en fonología a través de niveles progresivos: desde conceptos básicos hasta análisis avanzados de audiometría. 
-            Ideal para estudiantes de fonoaudiología y audiología.
+            Mejora tus habilidades en Audiología y Fonoaudiología a través de niveles progresivos: desde conceptos básicos hasta análisis avanzados de audiometría. 
+            Ideal para estudiantes de la carrera.
           </p>
           <Link href="/signup">
             <Button size="lg" className="text-lg px-8 py-3 transition-transform duration-200 hover:scale-105 active:scale-95">
