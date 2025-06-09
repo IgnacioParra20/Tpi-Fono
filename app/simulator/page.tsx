@@ -431,22 +431,31 @@ export default function Simulador() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F4F4F5] p-2 sm:p-4">
-      {/* Header responsive */}
-      <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-        <div className="bg-white rounded-lg shadow transition-transform hover:scale-105 border border-gray-200 px-3 py-2">
-          <Button
-            variant="ghost"
-            onClick={() => router.push("/dashboard")}
-            className="flex items-center text-sm sm:text-base font-semibold text-gray-700 hover:text-blue-700 transition-colors p-1 sm:p-2"
-          >
-            <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="hidden sm:inline">Volver al Panel de Niveles</span>
-            <span className="sm:hidden">Volver</span>
-          </Button>
+    <div
+      className="min-h-screen bg-gradient-to-br from-blue-50/80 via-indigo-100/80 to-indigo-200/80 bg-cover bg-center p-2 sm:p-4"
+      style={{ backgroundImage: "url('/fondo-textura.png')" }}
+    >
+        {/* Header responsive */}
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+          {/* Botón de volver */}
+          <div className="bg-white rounded-lg shadow transition-transform hover:scale-105 border border-gray-200 px-3 py-2 w-fit">
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/dashboard")}
+              className="flex items-center text-sm sm:text-base font-semibold text-gray-700 hover:text-blue-700 transition-colors p-1 sm:p-2"
+            >
+              <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="hidden sm:inline">Volver al Panel de Niveles</span>
+            </Button>
+          </div>
+
+          {/* Título alineado a la derecha */}
+          <div className="bg-white p-4 rounded-lg shadow-md w-fit ml-auto">
+            <h1 className="text-lg sm:text-xl font-bold text-gray-900">
+              Simulador de Audiómetro
+            </h1>
+          </div>
         </div>
-        <h1 className="text-lg sm:text-xl font-bold">Simulador de Audiómetro</h1>
-      </div>
 
       {/* Layout principal responsive */}
       <div className="flex flex-col xl:flex-row gap-4">
@@ -559,9 +568,7 @@ export default function Simulador() {
                     Nivel de Audición (dB HL)
                   </text>
 
-
                   {/* Indicador de frecuencia actual */}
-
                   {(() => {
                     const freqPositions: Record<number, number> = {
                       125: 100,
@@ -656,6 +663,86 @@ export default function Simulador() {
                             stroke="#0066cc"
                             strokeWidth="3"
                             strokeDasharray="6,3"
+                          />
+                        )
+                      })
+                    })()}
+                  </g>
+
+                  {/* Líneas conectoras para oído derecho (vía ósea) */}
+                  <g>
+                    {(() => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const puntos = Object.entries(resultados.derecho.osea)
+                        .filter(([_, valor]) => valor !== null)
+                        .map(([freq, valor]) => ({
+                          x: freqPositions[Number(freq)],
+                          y: 30 + (valor! + 10) * 1.75,
+                          freq: Number(freq),
+                        }))
+                        .sort((a, b) => a.freq - b.freq)
+
+                      return puntos.map((punto, i) => {
+                        if (i === 0) return null
+                        const puntoAnterior = puntos[i - 1]
+                        return (
+                          <line
+                            key={`line-right-bone-${punto.freq}`}
+                            x1={puntoAnterior.x}
+                            y1={puntoAnterior.y}
+                            x2={punto.x}
+                            y2={punto.y}
+                            stroke="#cc0000"
+                            strokeWidth="3"
+                            strokeDasharray="4,4"
+                          />
+                        )
+                      })
+                    })()}
+                  </g>
+
+                  {/* Líneas conectoras para oído izquierdo (vía ósea) */}
+                  <g>
+                    {(() => {
+                      const freqPositions: Record<number, number> = {
+                        125: 100,
+                        250: 180,
+                        500: 260,
+                        1000: 360,
+                        2000: 460,
+                        4000: 560,
+                        8000: 660,
+                      }
+                      const puntos = Object.entries(resultados.izquierdo.osea)
+                        .filter(([_, valor]) => valor !== null)
+                        .map(([freq, valor]) => ({
+                          x: freqPositions[Number(freq)],
+                          y: 30 + (valor! + 10) * 1.75,
+                          freq: Number(freq),
+                        }))
+                        .sort((a, b) => a.freq - b.freq)
+
+                      return puntos.map((punto, i) => {
+                        if (i === 0) return null
+                        const puntoAnterior = puntos[i - 1]
+                        return (
+                          <line
+                            key={`line-left-bone-${punto.freq}`}
+                            x1={puntoAnterior.x}
+                            y1={puntoAnterior.y}
+                            x2={punto.x}
+                            y2={punto.y}
+                            stroke="#0066cc"
+                            strokeWidth="3"
+                            strokeDasharray="4,4"
                           />
                         )
                       })
@@ -819,7 +906,27 @@ export default function Simulador() {
                   <h5 className="font-bold mb-1 text-gray-700 text-xs">Conexiones:</h5>
                   <div className="flex items-center mb-1">
                     <div className="w-4 h-0.5 bg-red-600 mr-1"></div>
-                    <span className="text-xs text-gray-600">Línea derecha</span>
+                    <span className="text-xs text-gray-600">Aérea derecha</span>
+                  </div>
+                  <div className="flex items-center mb-1">
+                    <div
+                      className="w-4 h-0.5 bg-blue-600 mr-1"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(to right, #0066cc 0, #0066cc 2px, transparent 2px, transparent 4px)",
+                      }}
+                    ></div>
+                    <span className="text-xs text-gray-600">Aérea izquierda</span>
+                  </div>
+                  <div className="flex items-center mb-1">
+                    <div
+                      className="w-4 h-0.5 bg-red-600 mr-1"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(to right, #cc0000 0, #cc0000 2px, transparent 2px, transparent 4px)",
+                      }}
+                    ></div>
+                    <span className="text-xs text-gray-600">Ósea derecha</span>
                   </div>
                   <div className="flex items-center">
                     <div
@@ -829,7 +936,7 @@ export default function Simulador() {
                           "repeating-linear-gradient(to right, #0066cc 0, #0066cc 2px, transparent 2px, transparent 4px)",
                       }}
                     ></div>
-                    <span className="text-xs text-gray-600">Línea izquierda</span>
+                    <span className="text-xs text-gray-600">Ósea izquierda</span>
                   </div>
                 </div>
 
@@ -850,7 +957,7 @@ export default function Simulador() {
             <div className="space-y-4">
               {/* Primera fila de controles */}
               <div className="flex flex-wrap gap-2 justify-center">
-                {/* Botón Tone/Warble */}
+                {/* Botón Simple/Ondas */}
                 <button
                   className="flex-1 min-w-[80px] max-w-[120px] h-12 bg-[#2C2C2C] rounded-lg border-t border-black shadow-lg relative"
                   onClick={() => {
@@ -862,8 +969,8 @@ export default function Simulador() {
                     })
                   }}
                 >
-                  <div className="absolute top-[-20px] left-1 text-xs font-semibold text-gray-700">Tone</div>
-                  <div className="absolute top-[-20px] right-1 text-xs font-semibold text-gray-700">Warble</div>
+                  <div className="absolute top-[-20px] left-1 text-xs font-semibold text-gray-700">Simple</div>
+                  <div className="absolute top-[-20px] right-1 text-xs font-semibold text-gray-700">Ondas</div>
                   <div className="absolute left-1/2 top-0 h-full w-[1px] bg-black transform -translate-x-0.5"></div>
                   {tipoTono === "pure" ? (
                     <div className="absolute left-2 top-1/2 w-6 h-1 bg-green-400 rounded shadow-sm transform -translate-y-0.5"></div>
@@ -901,37 +1008,36 @@ export default function Simulador() {
 
               {/* Segunda fila de controles */}
               <div className="flex flex-wrap gap-2 justify-center">
-                {/* Botones de oído */}
+                {/* Botón Oído Derecho */}
                 <div className="flex flex-col items-center">
                   <span className="mb-1 text-xs text-black font-semibold">Oído Derecho</span>
                   <button
-                    className={`w-16 h-12 bg-[#C00F0C] hover:bg-[#A00A08] rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative ${
-                      oido === "derecho" ? "ring-2 ring-white ring-inset" : ""
-                    }`}
+                    className={`w-16 h-12 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative
+                      ${oido === "derecho" ? "bg-[#8B0B09] ring-4 ring-red-400" : "bg-[#C00F0C] hover:bg-[#A00A08]"}`}
                     onClick={() => cambiarOido("derecho")}
                   >
                     <div className="absolute left-1/2 top-0 h-full w-[1px] bg-black transform -translate-x-0.5"></div>
                   </button>
                 </div>
 
+                {/* Botón Oído Izquierdo */}
                 <div className="flex flex-col items-center">
                   <span className="mb-1 text-xs text-black font-semibold">Oído Izquierdo</span>
                   <button
-                    className={`w-16 h-12 bg-[#1D0990] hover:bg-[#150770] rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative ${
-                      oido === "izquierdo" ? "ring-2 ring-white ring-inset" : ""
-                    }`}
+                    className={`w-16 h-12 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative
+                      ${oido === "izquierdo" ? "bg-[#0F066B] ring-4 ring-blue-400" : "bg-[#1D0990] hover:bg-[#150770]"}`}
                     onClick={() => cambiarOido("izquierdo")}
                   >
                     <div className="absolute left-1/2 top-0 h-full w-[1px] bg-black transform -translate-x-0.5"></div>
                   </button>
                 </div>
 
+                {/* Botón Vía Ósea/Aérea */}
                 <div className="flex flex-col items-center">
                   <span className="mb-1 text-xs text-black font-semibold">Vía Ósea/Aérea</span>
                   <button
-                    className={`w-16 h-12 bg-[#00BFFF] hover:bg-[#00A5E6] rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative ${
-                      viaSeleccionada === "osea" ? "ring-2 ring-white ring-inset" : ""
-                    }`}
+                    className={`w-16 h-12 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 relative
+                      ${viaSeleccionada === "osea" ? "bg-[#008AC0] ring-4 ring-cyan-400" : "bg-[#00BFFF] hover:bg-[#00A5E6]"}`}
                     onClick={() => {
                       if (viaSeleccionada === "osea") {
                         setViaSeleccionada("aerea")
@@ -944,6 +1050,7 @@ export default function Simulador() {
                   </button>
                 </div>
               </div>
+
 
               {/* Tercera fila - Controles principales */}
               <div className="flex flex-wrap gap-4 justify-center items-center">
@@ -1007,8 +1114,6 @@ export default function Simulador() {
                 </div>
               </div>
             </div>
-
-            <div className="absolute left-[655px] top-[515px] text-sm text-center font-semibold">REPRODUCIR TONO</div>
           </div>
         </div>
 
@@ -1034,7 +1139,7 @@ export default function Simulador() {
                   Vía: <span className="font-bold">{viaSeleccionada === "aerea" ? "Aérea" : "Ósea"}</span>
                 </div>
                 <div>
-                  Tipo de tono: <span className="font-bold">{tipoTono === "pure" ? "Puro" : "Warble"}</span>
+                  Tipo de tono: <span className="font-bold">{tipoTono === "pure" ? "Simple" : "Ondas"}</span>
                 </div>
                 <div>
                   Modo: <span className="font-bold">{modoAutomatico ? "Automático" : "Manual"}</span>
@@ -1222,9 +1327,6 @@ export default function Simulador() {
           <div className="bg-purple-50 p-3 rounded-lg">
             <h4 className="font-semibold mb-2 text-purple-800">⚙️ Características:</h4>
             <ul className="space-y-1 text-gray-700 text-xs sm:text-sm">
-              <li>
-                • <strong>Responsive:</strong> Se adapta a móviles
-              </li>
               <li>
                 • <strong>Audiograma:</strong> Visualización en tiempo real
               </li>
