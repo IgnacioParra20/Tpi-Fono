@@ -208,21 +208,22 @@ export default function Simulador() {
   }
 
   // Manejar reproducción de estímulo
-  const handleReproducir = () => {
-    if (reproduciendo) {
-      detenerTono()
-      return
-    }
-
-    setReproduciendo(true)
-    setEsperandoRespuesta(true)
-    reproducirTono(frecuenciaSeleccionada, intensidad, 1000)
-
-    // Auto-detener después de 1 segundo
-    setTimeout(() => {
-      setReproduciendo(false)
-    }, 1000)
+const handleReproducir = async () => {
+  // Si el contexto está suspendido, reanúdalo
+  if (audioContextRef.current && audioContextRef.current.state === "suspended") {
+    await audioContextRef.current.resume();
   }
+  if (reproduciendo) {
+    detenerTono();
+    return;
+  }
+  setReproduciendo(true);
+  setEsperandoRespuesta(true);
+  reproducirTono(frecuenciaSeleccionada, intensidad, 1000);
+  setTimeout(() => {
+    setReproduciendo(false);
+  }, 1000);
+};
 
   // Guardar resultado/umbral
   const guardarResultado = () => {
