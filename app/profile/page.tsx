@@ -34,7 +34,7 @@ export default function ProfilePage() {
   const [success, setSuccess] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-
+  
   useEffect(() => {
     const userData = localStorage.getItem("user")
     if (!userData) {
@@ -74,6 +74,7 @@ export default function ProfilePage() {
 
     try {
       if (!user) return
+
 
       // NOTA: El password no se puede modificar desde aquí, así que enviamos el actual
       const payload = {
