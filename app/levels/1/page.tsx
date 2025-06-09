@@ -341,13 +341,13 @@ export default function Level1Page() {
                   disabled={currentQuestion === 0}
                   onClick={() => setCurrentQuestion(currentQuestion - 1)}
                 >
-                  Previous
+                  Anterior
                 </Button>
                 <Button 
                   onClick={handleNext}
                   disabled={!selectedAnswer}
                 >
-                  {currentQuestion === questions.length - 1 ? "Finish" : "Next"}
+                  {currentQuestion === questions.length - 1 ? "Terminar" : "Siguiente"}
                 </Button>
               </div>
             </CardContent>
