@@ -233,7 +233,11 @@ if (!user) {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center space-x-4">
               <Link href="/dashboard">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="transition-transform duration-200 hover:scale-105 hover:shadow-md text-base font-bold px-6 py-3 border-gray-300 text-gray-700"
+                >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver al Panel de Niveles
                 </Button>
